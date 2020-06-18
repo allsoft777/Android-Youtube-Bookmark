@@ -61,6 +61,13 @@ class LoginViewModel(
 
     fun fetchProfileData() {
         Logger.d(TAG, "fetchProfileData")
+        if (auth!!.currentUser == null) {
+            Logger.v(TAG, "fetchProfileData - auth.getCurrentUser is null")
+            handleDataLoading(false)
+            myProfileData.value = null
+            return
+        }
+
         val userInfoVO: MyProfileData? = sharedPref.getUserInfo()
         if (userInfoVO != null && !TextUtils.isEmpty(userInfoVO.email)) {
             Logger.d(TAG, "fetchProfileData - already cached.")
