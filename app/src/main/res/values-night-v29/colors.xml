@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary_text">#F5F5F5</color>
+    <color name="second_text">#E0E0E0</color>
+    <color name="default_background">#080808</color>
+    <color name="default_background_2nd">#252525</color>
+    <color name="detail_view_refresh_ic">@color/grey_800</color>
+    <color name="detail_view_refresh_container_background">@color/grey_700</color>
+    <color name="default_divider">@color/grey_800</color>
+</resources>

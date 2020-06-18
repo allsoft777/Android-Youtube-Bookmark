@@ -1,0 +1,40 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <string name="app_name" translatable="false">유튜브 북마크</string>
+    <string name="com.crashlytics.useFirebaseAppId" translatable="false" tools:ignore="ExtraTranslation">true</string>
+    <string name="sans_serif_medium" translatable="false">sans-serif-medium</string>
+    <string name="sans_serif" translatable="false">sans-serif</string>
+    <string name="sans_serif_light" translatable="false">sans-serif-light</string>
+
+    <string name="add">추가</string>
+    <string name="delete">삭제</string>
+    <string name="modify">수정</string>
+    <string name="cancel">취소</string>
+    <string name="done">완료</string>
+    <string name="settings">설정</string>
+    <string name="player">플레이어</string>
+    <string name="query">조회</string>
+    <string name="movie_info">영상 정보</string>
+    <string name="save">저장</string>
+    <string name="profile">프로필</string>
+    <string name="category_management">카테고리 관리</string>
+    <string name="bookmark_management">북마크 관리</string>
+    <string name="select_category">카테고리</string>
+    <string name="input_movie_url">영상 URL</string>
+
+    <string name="msg_input_youtube_url_correctly">유튜브 영상의 url을 제대로 입력해주세요.</string>
+    <string name="msg_input_youtube_url">유튜브 영상의 url을 입력해주세요.</string>
+    <string name="msg_input_category_name">카테고리명을 입력해주세요.</string>
+    <string name="msg_selected_category">카테고리를 선택해주세요.</string>
+    <string name="msg_already_existed_category">입력하신 카테고리가 이미 존재합니다.</string>
+    <string name="msg_failed_to_fetch_category_list">카테고리 조회하는것을 실패하였습니다.</string>
+    <string name="msg_database_updated">업데이트 하였습니다.</string>
+    <string name="msg_database_deleted">삭제하였습니다.</string>
+    <string name="msg_database_inserted">추가하였습니다.</string>
+    <string name="msg_login_successfully">성공적으로 로그인하였습니다.</string>
+
+    <string name="login_to_user_service1">서비스를 이용하려면</string>
+    <string name="login_to_user_service2">로그인을 해주세요.</string>
+    <string name="login_with_google_account">Google 계정으로 로그인</string>
+
+</resources>

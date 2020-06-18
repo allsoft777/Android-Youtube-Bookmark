@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="bookmark"
+            type="com.owllife.youtubebookmark.domain.entity.BookMarkEntity"/>
+
+        <variable
+            name="viewmodel"
+            type="com.owllife.youtubebookmark.presentation.main.BookMarkListViewModel"/>
+    </data>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="@drawable/list_item_background"
+        android:onClick="@{() -> viewmodel.openBookmarkEvent(bookmark)}"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            bind:thumbnail="@{bookmark}"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginEnd="13dp"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/PrimaryLabelTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{bookmark.title}"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

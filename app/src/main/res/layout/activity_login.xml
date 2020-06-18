@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="android.text.TextUtils"/>
+
+        <import type="android.view.View"/>
+
+        <variable
+            name="viewModel"
+            type="com.owllife.youtubebookmark.presentation.login.LoginViewModel"/>
+    </data>
+
+    <LinearLayout
+        android:id="@+id/root_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"
+        android:gravity="center">
+
+        <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_gravity="center"
+            android:background="@drawable/rounded_default_white_color_background"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/common_dialog_padding"
+            android:paddingBottom="@dimen/common_dialog_padding">
+
+            <ImageView
+                android:id="@+id/ic_close"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="end"
+                android:layout_marginStart="@dimen/common_dialog_padding"
+                android:layout_marginEnd="@dimen/common_dialog_padding"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/ic_close"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginEnd="@dimen/common_dialog_padding"
+                android:fontFamily="@string/sans_serif_light"
+                android:includeFontPadding="false"
+                android:text="@string/login_to_user_service1"
+                android:textColor="@color/second_text"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="@dimen/common_dialog_padding"
+                android:fontFamily="@string/sans_serif_medium"
+                android:includeFontPadding="false"
+                android:text="@string/login_to_user_service2"
+                android:textColor="@color/second_text"
+                android:textSize="25sp"/>
+
+            <LinearLayout
+                android:id="@+id/login_trigger_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="60dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="invisible">
+
+                <LinearLayout
+                    android:id="@+id/google_account_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/login_btn"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:layout_marginStart="@dimen/common_dialog_padding"
+                        android:src="@drawable/ic_account_google"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@string/sans_serif"
+                        android:gravity="center"
+                        android:includeFontPadding="false"
+                        android:text="@string/login_with_google_account"
+                        android:textColor="@color/second_text"
+                        android:textSize="14sp"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</layout>
