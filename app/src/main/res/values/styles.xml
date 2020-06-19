@@ -108,4 +108,39 @@
         <item name="android:fontFamily">@string/sans_serif</item>
     </style>
 
+    <style name="InputDialogLabelTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/second_text</item>
+        <item name="android:fontFamily">@string/sans_serif</item>
+    </style>
+
+    <style name="CommonDataTextStyle1">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/second_text</item>
+        <item name="android:fontFamily">@string/sans_serif_medium</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="OutlineButtonStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:fontFamily">@string/sans_serif_light</item>
+        <item name="android:background">@drawable/rounded_white_button_grey_outline_selector</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
 </resources>

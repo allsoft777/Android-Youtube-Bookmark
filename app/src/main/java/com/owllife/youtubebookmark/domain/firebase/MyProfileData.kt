@@ -1,31 +1,34 @@
 package com.owllife.youtubebookmark.domain.firebase
 
-import android.os.Parcelable
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.PropertyName
 import com.google.firebase.firestore.ServerTimestamp
 import com.owllife.youtubebookmark.domain.firebase.FirestoreTable.UserProfile
-import kotlinx.android.parcel.Parcelize
 
 /**
  * @author owllife.dev
  * @since 20. 6. 17
  */
-@Parcelize
-data class MyProfileData(
-    @PropertyName(value = UserProfile.PHOTO_URL)
-    var photoUrl: String? = null,
+class MyProfileData(
 
-    @PropertyName(value = UserProfile.DISPLAY_NAME)
-    var displayName: String? = null,
+    @get:PropertyName(UserProfile.PHOTO_URL)
+    @set:PropertyName(UserProfile.PHOTO_URL)
+    var photoUrl: String = "",
 
-    @PropertyName(value = UserProfile.EMAIL)
+    @get:PropertyName(UserProfile.DISPLAY_NAME)
+    @set:PropertyName(UserProfile.DISPLAY_NAME)
+    var displayName: String = "",
+
+    @get:PropertyName(UserProfile.EMAIL)
+    @set:PropertyName(UserProfile.EMAIL)
     var email: String? = null,
 
     @ServerTimestamp
-    @PropertyName(value = UserProfile.CREATED_TS)
+    @get:PropertyName(UserProfile.CREATED_TS)
+    @set:PropertyName(UserProfile.CREATED_TS)
     var createdTs: Timestamp? = null,
 
-    @PropertyName(value = UserProfile.MEMBERSHIP_LEVEL)
+    @get:PropertyName(UserProfile.MEMBERSHIP_LEVEL)
+    @set:PropertyName(UserProfile.MEMBERSHIP_LEVEL)
     var membershipLevel: Int = 0
-) : Parcelable
+)

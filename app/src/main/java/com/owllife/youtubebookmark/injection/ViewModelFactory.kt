@@ -6,17 +6,13 @@ import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
-import com.owllife.youtubebookmark.data.firebase.ProfileRemoteRepository
-import com.owllife.youtubebookmark.data.pref.SharedPreferenceRepository
-import com.owllife.youtubebookmark.data.pref.SharedPreferenceWrapperImpl
-import com.owllife.youtubebookmark.domain.interactor.FetchMyProfileUseCase
-import com.owllife.youtubebookmark.domain.interactor.InsertProfileDataUseCase
 import com.owllife.youtubebookmark.presentation.category.EditCategoryViewModel
 import com.owllife.youtubebookmark.presentation.editbookmark.EditBookMarkViewModel
 import com.owllife.youtubebookmark.presentation.login.LoginViewModel
 import com.owllife.youtubebookmark.presentation.main.BookMarkListViewModel
 import com.owllife.youtubebookmark.presentation.main.MainViewModel
 import com.owllife.youtubebookmark.presentation.player.YoutubePlayerViewModel
+import com.owllife.youtubebookmark.presentation.profile.ProfileViewModel
 
 /**
  * @author owllife.dev
@@ -38,38 +34,40 @@ class ViewModelFactory(
             isAssignableFrom(EditCategoryViewModel::class.java) ->
                 EditCategoryViewModel(
                     appContext,
-                    DataInjection.provideCategoryLocalRepository(appContext)
+                    provideCategoryLocalRepository(appContext)
                 )
             isAssignableFrom(MainViewModel::class.java) ->
                 MainViewModel(
                     appContext,
-                    DataInjection.provideCategoryLocalRepository(appContext),
-                    DataInjection.provideBookmarkLocalRepository(appContext)
+                    provideCategoryLocalRepository(appContext)
                 )
             isAssignableFrom(YoutubePlayerViewModel::class.java) ->
                 YoutubePlayerViewModel(appContext)
             isAssignableFrom(EditBookMarkViewModel::class.java) ->
                 EditBookMarkViewModel(
                     appContext,
-                    DataInjection.provideCategoryLocalRepository(appContext),
-                    DataInjection.provideBookmarkLocalRepository(appContext),
-                    DataInjection.provideYoutubeRemoteRepository(appContext)
+                    provideCategoryLocalRepository(appContext),
+                    provideBookmarkLocalRepository(appContext),
+                    provideYoutubeRemoteRepository(appContext)
                 )
             isAssignableFrom(BookMarkListViewModel::class.java) ->
                 BookMarkListViewModel(
                     appContext,
-                    DataInjection.provideBookmarkLocalRepository(appContext)
+                    provideBookmarkLocalRepository(appContext)
                 )
             isAssignableFrom(LoginViewModel::class.java) -> {
-                val profileRepo = ProfileRemoteRepository()
                 LoginViewModel(
                     appContext,
-                    SharedPreferenceRepository.getInstance(
-                        appContext,
-                        SharedPreferenceWrapperImpl()
-                    ),
-                    FetchMyProfileUseCase(profileRepo),
-                    InsertProfileDataUseCase(profileRepo)
+                    provideFetchMyProfileUseCase(appContext),
+                    provideInsertProfileDataUseCase(),
+                    provideSignInWithGoogleUseCase()
+                )
+            }
+            isAssignableFrom(ProfileViewModel::class.java) -> {
+                ProfileViewModel(
+                    appContext,
+                    provideFetchMyProfileUseCase(appContext),
+                    provideSignOutUseCase(appContext)
                 )
             }
             else ->

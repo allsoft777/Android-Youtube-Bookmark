@@ -17,7 +17,6 @@ import com.owllife.youtubebookmark.domain.resp.YoutubeMovieResp
  * @author owllife.dev
  * @since 20. 6. 12
  */
-
 @BindingAdapter("thumbnail")
 fun renderThumbnail(view: ImageView, data: YoutubeMovieResp?) {
     if (data == null || data.items.isEmpty()) {
@@ -26,9 +25,9 @@ fun renderThumbnail(view: ImageView, data: YoutubeMovieResp?) {
 
     val thumbnails = data.items[0].snippet.thumbnails
     var url = thumbnails.default.url
-    if (!thumbnails.high.url.isEmpty()) {
+    if (thumbnails.high.url.isNotEmpty()) {
         url = thumbnails.high.url
-    } else if (!thumbnails.medium.url.isEmpty()) {
+    } else if (thumbnails.medium.url.isNotEmpty()) {
         url = thumbnails.medium.url
     }
 

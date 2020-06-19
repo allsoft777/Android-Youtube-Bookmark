@@ -10,13 +10,14 @@ import androidx.lifecycle.ViewModelProvider
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems
 import com.owllife.youtubebookmark.R
+import com.owllife.youtubebookmark.core.configureDefaultToolbar
 import com.owllife.youtubebookmark.databinding.ActivityMainBinding
 import com.owllife.youtubebookmark.injection.ViewModelFactory
 import com.owllife.youtubebookmark.presentation.category.EditCategoryActivity
 import com.owllife.youtubebookmark.presentation.common.BaseActivity
 import com.owllife.youtubebookmark.presentation.common.BaseViewModel
 import com.owllife.youtubebookmark.presentation.editbookmark.EditBookMarkActivity
-import com.owllife.youtubebookmark.presentation.login.LoginActivity
+import com.owllife.youtubebookmark.presentation.profile.ProfileActivity
 import com.owllife.youtubebookmark.presentation.util.PresentationConstants
 import kotlinx.android.synthetic.main.toolbar_title_only.*
 
@@ -30,9 +31,6 @@ class MainActivity : BaseActivity() {
         dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         dataBinding.lifecycleOwner = this
         dataBinding.viewmodel = getBaseViewModel() as MainViewModel
-        setSupportActionBar(toolbar)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(false)
-        supportActionBar!!.setDisplayShowTitleEnabled(false)
 
         viewModel?.let { vm ->
             vm.categoryList.observe(this, Observer {
@@ -42,6 +40,8 @@ class MainActivity : BaseActivity() {
         }
 
         dataBinding.viewPagerTab.setDefaultTabTextColor(getColor(R.color.primary_text))
+
+        configureDefaultToolbar(toolbar)
     }
 
     private fun configureViewPager() {
@@ -83,30 +83,22 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
+        when (item.itemId) {
             R.id.category_management -> {
                 launchCategoryManagementScreen()
-                true
             }
             R.id.bookmark_management -> {
                 launchBookmarkManagementScreen()
-                true
             }
             R.id.profile -> {
-                launchProfileScreen()
-                true
+                startActivity(ProfileActivity.callingIntent(this))
             }
-            else -> false
         }
+        return true
     }
 
     private fun launchCategoryManagementScreen() {
         val intent = Intent(this, EditCategoryActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun launchProfileScreen() {
-        val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
     }
 

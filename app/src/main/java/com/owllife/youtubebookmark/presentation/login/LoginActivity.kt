@@ -1,6 +1,7 @@
 package com.owllife.youtubebookmark.presentation.login
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -20,7 +21,14 @@ import com.owllife.youtubebookmark.presentation.data.FinishScreenData
  */
 class LoginActivity : BaseActivity() {
 
-    private val REQ_CODE_SIGN_IN = 1
+    companion object {
+        const val REQ_CODE_SIGN_IN = 1
+
+        fun callingIntent(context: Context) = run {
+            val intent = Intent(context, LoginActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+        }
+    }
 
     private lateinit var dataBinding: ActivityLoginBinding
     private var viewModel: LoginViewModel? = null
@@ -31,7 +39,7 @@ class LoginActivity : BaseActivity() {
         dataBinding.lifecycleOwner = this
         lazyInitViewModel()
         bindProfileData()
-        bindSigninBtn()
+        bindSignInBtn()
     }
 
     override fun getBaseViewModel(): BaseViewModel? {
@@ -46,7 +54,12 @@ class LoginActivity : BaseActivity() {
 
     override fun onStart() {
         super.onStart()
-        viewModel?.fetchProfileData()
+        viewModel?.loadProfile()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        overridePendingTransition(0, 0)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -62,7 +75,7 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun bindProfileData() {
-        viewModel?.myProfileData?.observe(this, Observer {
+        viewModel?.profileData?.observe(this, Observer {
             if (it == null || it.email.isNullOrEmpty()) {
                 dataBinding.loginTriggerContainer.visibility = View.VISIBLE
             } else {
@@ -71,15 +84,15 @@ class LoginActivity : BaseActivity() {
         })
     }
 
-    private fun bindSigninBtn() {
+    private fun bindSignInBtn() {
         dataBinding.googleAccountBtn.setOnClickListener {
             viewModel?.let {
-                val signInIntent = viewModel?.getGoogleSigninIntent()
+                val signInIntent = viewModel?.getGoogleSignInIntent()
                 startActivityForResult(signInIntent, REQ_CODE_SIGN_IN)
             }
         }
 
-        dataBinding.icClose.setOnClickListener{
+        dataBinding.icClose.setOnClickListener {
             finish()
         }
     }

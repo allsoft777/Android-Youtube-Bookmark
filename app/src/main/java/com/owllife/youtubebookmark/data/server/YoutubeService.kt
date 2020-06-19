@@ -3,7 +3,6 @@ package com.owllife.youtubebookmark.data.server
 import com.owllife.youtubebookmark.domain.resp.YoutubeMovieResp
 import retrofit2.Call
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 /**

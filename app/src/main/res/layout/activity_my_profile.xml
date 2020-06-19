@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View"/>
+
+        <import type="android.text.TextUtils"/>
+
+        <variable
+            name="viewModel"
+            type="com.owllife.youtubebookmark.presentation.profile.ProfileViewModel"/>
+    </data>
+
+    <LinearLayout
+        android:id="@+id/root_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/toolbar_title_only"/>
+
+        <LinearLayout
+            android:id="@+id/profile_info_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:visibility="@{viewModel.profileData == null ? View.GONE : View.VISIBLE, default=gone}">
+
+            <ImageView
+                android:id="@+id/profile_img"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                bind:profile_thumbnail="@{viewModel.profileData}"/>
+
+            <TextView
+                style="@style/InputDialogLabelTextStyle"
+                android:layout_marginTop="40dp"
+                android:text="@string/email"/>
+
+            <TextView
+                android:id="@+id/email"
+                style="@style/CommonDataTextStyle1"
+                android:text="@{viewModel.profileData.email}"/>
+
+            <TextView
+                style="@style/InputDialogLabelTextStyle"
+                android:layout_marginTop="20dp"
+                android:text="@string/display_name"/>
+
+            <TextView
+                android:id="@+id/display_name"
+                style="@style/CommonDataTextStyle1"
+                android:ellipsize="end"
+                android:text="@{viewModel.profileData.displayName}"/>
+
+            <TextView
+                android:id="@+id/logout"
+                style="@style/OutlineButtonStyle"
+                android:layout_gravity="end"
+                android:layout_marginTop="40dp"
+                android:onClick="@{v -> viewModel.logout()}"
+                android:text="@string/logout"
+                android:textColor="@color/second_text"
+                android:textSize="15sp"/>
+
+        </LinearLayout>
+    </LinearLayout>
+</layout>
