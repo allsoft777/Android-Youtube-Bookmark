@@ -13,14 +13,15 @@ import com.owllife.youtubebookmark.presentation.util.PresentationConstants
  * @since 20. 6. 11
  */
 class YoutubePlayerViewModel(
-    private val appContext: Context
+    appContext: Context
 ) : BaseViewModel(appContext) {
 
     private var _entity: MutableLiveData<BookMarkEntity> = MutableLiveData()
     var entity: LiveData<BookMarkEntity> = _entity
 
     fun loadData(intent: Intent) {
-        var data = intent.getParcelableExtra<BookMarkEntity>(PresentationConstants.KEY_BOOKMARK_ENTITY)
+        var data =
+            intent.getParcelableExtra<BookMarkEntity>(PresentationConstants.KEY_BOOKMARK_ENTITY)
         _entity.value = data
     }
 }

@@ -1,8 +1,6 @@
 package com.owllife.youtubebookmark.presentation.player
 
-import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
-import android.content.res.Configuration
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -11,6 +9,7 @@ import com.owllife.youtubebookmark.databinding.ActivityYoutubePlayerBinding
 import com.owllife.youtubebookmark.injection.ViewModelFactory
 import com.owllife.youtubebookmark.presentation.common.BaseActivity
 import com.owllife.youtubebookmark.presentation.common.BaseViewModel
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerFullScreenListener
 
 /**
  * @author owllife.dev
@@ -18,7 +17,6 @@ import com.owllife.youtubebookmark.presentation.common.BaseViewModel
  */
 class YoutubePlayerActivity : BaseActivity() {
 
-    private var TAG = YoutubePlayerActivity::class.java.simpleName
     private lateinit var dataBinding: ActivityYoutubePlayerBinding
     private var viewModel: YoutubePlayerViewModel? = null
 
@@ -28,6 +26,10 @@ class YoutubePlayerActivity : BaseActivity() {
         dataBinding.lifecycleOwner = this
         dataBinding.viewModel = viewModel
         viewModel?.loadData(intent)
+
+        lifecycle.addObserver(dataBinding.youtubePlayerView)
+
+        addFullScreenListenerToPlayer()
     }
 
     override fun getBaseViewModel(): BaseViewModel? {
@@ -40,12 +42,26 @@ class YoutubePlayerActivity : BaseActivity() {
         return viewModel
     }
 
-    @SuppressLint("SourceLockedOrientationActivity")
     override fun onBackPressed() {
-        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        } else {
-            super.onBackPressed()
+        if (dataBinding.youtubePlayerView.isFullScreen()) {
+            dataBinding.youtubePlayerView.exitFullScreen()
+            return
         }
+        super.onBackPressed()
+    }
+
+    private fun addFullScreenListenerToPlayer() {
+        dataBinding.youtubePlayerView.addFullScreenListener(object :
+            YouTubePlayerFullScreenListener {
+            override fun onYouTubePlayerEnterFullScreen() {
+                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                dataBinding.youtubePlayerView.enterFullScreen()
+            }
+
+            override fun onYouTubePlayerExitFullScreen() {
+                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                dataBinding.youtubePlayerView.exitFullScreen()
+            }
+        })
     }
 }
