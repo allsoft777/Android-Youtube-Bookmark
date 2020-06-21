@@ -17,6 +17,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <include layout="@layout/toolbar_title_only"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/category_list_view"
             android:layout_width="match_parent"

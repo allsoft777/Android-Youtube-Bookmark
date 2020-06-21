@@ -2,7 +2,9 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="RtlSymmetry">
 
     <data>
 
@@ -22,7 +24,7 @@
         app:cardCornerRadius="0dp"
         app:cardElevation="5dp">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
@@ -33,18 +35,40 @@
             android:paddingBottom="15dp">
 
             <ImageView
+                android:id="@+id/thumbnail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                bind:thumbnail="@{bookmark}"/>
+                bind:bookmark_thumbnail="@{bookmark}"/>
 
-            <TextView
-                style="@style/PrimaryLabelTextStyle"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="13dp"
-                android:text="@{bookmark.title}"/>
+                android:layout_below="@+id/thumbnail"
+                android:orientation="horizontal">
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/title"
+                    style="@style/PrimaryLabelTextStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="13dp"
+                    android:text="@{bookmark.title}"/>
+
+                <ImageView
+                    android:id="@+id/ic_more"
+                    android:layout_width="34dp"
+                    android:layout_height="29dp"
+                    android:foreground="@drawable/list_item_background"
+                    android:paddingStart="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="5dp"
+                    android:src="@drawable/ic_more"
+                    android:tint="@color/primary_text"
+                    bind:bookmark_item="@{bookmark}"
+                    bind:bookmark_viewmodel="@{viewmodel}"/>
+            </LinearLayout>
+        </RelativeLayout>
     </androidx.cardview.widget.CardView>
 </layout>

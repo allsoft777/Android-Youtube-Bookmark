@@ -41,11 +41,11 @@ class BookmarkLocalRepository(
         dao.insertNewBookmark(item)
     }
 
-    override suspend fun deleteBookmark(id: Int) {
-        return dao.deleteBookmark(id)
+    override suspend fun deleteBookmark(id: Int) = withContext(ioDispatcher) {
+        dao.deleteBookmark(id)
     }
 
-    override suspend fun updateBookmark(item: BookMarkEntity): Int {
-        return dao.updateBookmark(item)
+    override suspend fun updateBookmark(item: BookMarkEntity): Int = withContext(ioDispatcher) {
+        dao.updateBookmark(item)
     }
 }

@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.owllife.youtubebookmark.R
 import com.owllife.youtubebookmark.core.EventObserver
 import com.owllife.youtubebookmark.databinding.FragBookmarkListBinding
 import com.owllife.youtubebookmark.injection.ViewModelFactory
@@ -62,6 +64,7 @@ class BookMarkListFragment : Fragment() {
         }
         listAdapter = BookMarkListAdapter(dataBinding.viewmodel!!)
         dataBinding.bookmarkListview.adapter = listAdapter
+        bindOptionMenuLiveData()
     }
 
     private fun loadData() {
@@ -73,5 +76,22 @@ class BookMarkListFragment : Fragment() {
             return it.getInt(PresentationConstants.KEY_CATEGORY_ID, -1)
         }
         return -1
+    }
+
+    private fun bindOptionMenuLiveData() {
+        dataBinding.viewmodel?.let { vm ->
+            vm.getSelectedBookmarkData()?.observe(viewLifecycleOwner, Observer { it ->
+                val popup = PopupMenu(context, it.anchor)
+                popup.menuInflater.inflate(R.menu.menu_bookmark_list, popup.menu)
+                popup.setOnMenuItemClickListener {
+                    when (it.itemId) {
+                        R.id.delete -> vm.deleteSelectedBookmark()
+
+                    }
+                    true
+                }
+                popup.show()
+            })
+        }
     }
 }

@@ -16,6 +16,7 @@
         <item name="android:windowEnterTransition">@null</item>
         <item name="android:windowExitTransition">@null</item>
         <item name="android:statusBarColor">#000000</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
         <item name="android:actionOverflowButtonStyle">@style/ActionButtonOverflow</item>
     </style>
 
@@ -39,6 +40,10 @@
     <style name="AppTheme.ToolBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="PopupMenu" parent="android:Widget.Material.PopupMenu">
+        <item name="android:popupElevation">2dp</item>
+    </style>
 
     <style name="ActionButtonOverflow" parent="android:style/Widget.Holo.Light.ActionButton.Overflow">
         <item name="android:tint">@color/primary_text</item>

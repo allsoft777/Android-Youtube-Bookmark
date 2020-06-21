@@ -5,11 +5,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.owllife.youtubebookmark.R
+import com.owllife.youtubebookmark.core.configureDefaultToolbar
 import com.owllife.youtubebookmark.databinding.ActivityEditBookmarkBinding
 import com.owllife.youtubebookmark.injection.ViewModelFactory
 import com.owllife.youtubebookmark.presentation.common.BaseActivity
 import com.owllife.youtubebookmark.presentation.common.BaseViewModel
 import com.owllife.youtubebookmark.presentation.util.hideKeyboard
+import kotlinx.android.synthetic.main.toolbar_title_only.*
 
 /**
  * @author owllife.dev
@@ -41,6 +43,7 @@ class EditBookMarkActivity : BaseActivity() {
                 }
             })
         }
+        configureDefaultToolbar(toolbar, getString(R.string.bookmark_management))
     }
 
     override fun getBaseViewModel(): BaseViewModel? {

@@ -6,6 +6,8 @@
 
     <data>
 
+        <import type="android.view.View"/>
+
         <variable
             name="categoryId"
             type="Integer"/>
@@ -15,7 +17,7 @@
             type="com.owllife.youtubebookmark.presentation.main.BookMarkListViewModel"/>
     </data>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -24,8 +26,21 @@
             android:id="@+id/bookmark_listview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="@{viewmodel.bookmarkList.get(categoryId).size() == 0 ? View.GONE : View.VISIBLE, default = visible}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             bind:bookmark_list="@{viewmodel.bookmarkList.get(categoryId)}"/>
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/empty_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:fontFamily="@string/sans_serif"
+            android:includeFontPadding="false"
+            android:text="@string/no_items"
+            android:textColor="@color/second_text"
+            android:textSize="15sp"
+            android:visibility="@{viewmodel.bookmarkList.get(categoryId).size() == 0 ? View.VISIBLE : View.GONE, default = gone}"/>
+
+    </RelativeLayout>
 </layout>

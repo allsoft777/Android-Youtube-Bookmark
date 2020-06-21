@@ -24,6 +24,8 @@
         android:paddingTop="@dimen/common_activity_horizontal_margin"
         android:paddingEnd="@dimen/common_activity_horizontal_margin">
 
+        <include layout="@layout/toolbar_title_only"/>
+
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"

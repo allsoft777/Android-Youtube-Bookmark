@@ -38,6 +38,7 @@
     <string name="msg_database_inserted">추가하였습니다.</string>
     <string name="msg_sign_in_successfully">SignIn 하였습니다.</string>
     <string name="msg_sign_out_successfully">SignOut 하였습니다.</string>
+    <string name="no_items">항목이 없습니다.</string>
 
     <string name="login_to_user_service1">서비스를 이용하려면</string>
     <string name="login_to_user_service2">로그인을 해주세요.</string>

@@ -10,10 +10,12 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.owllife.youtubebookmark.R
+import com.owllife.youtubebookmark.core.configureDefaultToolbar
 import com.owllife.youtubebookmark.databinding.ActivityEditCategoryBinding
 import com.owllife.youtubebookmark.injection.ViewModelFactory
 import com.owllife.youtubebookmark.presentation.common.BaseActivity
 import com.owllife.youtubebookmark.presentation.common.BaseViewModel
+import kotlinx.android.synthetic.main.toolbar_title_only.*
 
 /**
  * @author owllife.dev
@@ -32,6 +34,7 @@ class EditCategoryActivity : BaseActivity() {
         dataBinding.viewmodel = getBaseViewModel() as EditCategoryViewModel
 
         configureListView(viewModel!!, dataBinding.categoryListView)
+        configureDefaultToolbar(toolbar, getString(R.string.bookmark_management))
         bindOptionMenuLiveData(this, this)
         viewModel?.let { vm ->
             vm.categoryList.observe(this, Observer {
