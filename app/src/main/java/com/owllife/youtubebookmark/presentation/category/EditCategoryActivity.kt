@@ -23,7 +23,6 @@ import com.owllife.youtubebookmark.presentation.common.BaseViewModel
 class EditCategoryActivity : BaseActivity() {
 
     private lateinit var dataBinding: ActivityEditCategoryBinding
-    private lateinit var listAdapter: CategoryAdapter
     private var viewModel: EditCategoryViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +31,7 @@ class EditCategoryActivity : BaseActivity() {
         dataBinding.lifecycleOwner = this
         dataBinding.viewmodel = getBaseViewModel() as EditCategoryViewModel
 
-        configureListView()
+        configureListView(viewModel!!, dataBinding.categoryListView)
         bindOptionMenuLiveData(this, this)
         viewModel?.let { vm ->
             vm.categoryList.observe(this, Observer {
@@ -64,14 +63,6 @@ class EditCategoryActivity : BaseActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun configureListView() {
-        val viewModel = dataBinding.viewmodel
-        if (viewModel != null) {
-            listAdapter = CategoryAdapter(viewModel)
-            dataBinding.categoryListView.adapter = listAdapter
-        }
     }
 
     private fun bindOptionMenuLiveData(

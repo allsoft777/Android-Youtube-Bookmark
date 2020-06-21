@@ -1,16 +1,8 @@
 package com.owllife.youtubebookmark.presentation.editbookmark
 
-import android.view.View
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ImageView
-import android.widget.Spinner
-import androidx.appcompat.widget.AppCompatSpinner
 import androidx.databinding.BindingAdapter
-import androidx.databinding.InverseBindingAdapter
 import com.bumptech.glide.Glide
-import com.owllife.youtubebookmark.data.logger.Logger
-import com.owllife.youtubebookmark.domain.entity.CategoryEntity
 import com.owllife.youtubebookmark.domain.resp.YoutubeMovieResp
 
 /**
@@ -24,37 +16,12 @@ fun renderThumbnail(view: ImageView, data: YoutubeMovieResp?) {
     }
 
     val thumbnails = data.items[0].snippet.thumbnails
-    var url = thumbnails.default.url
-    if (thumbnails.high.url.isNotEmpty()) {
+    var url = thumbnails.maxres.url
+    if (url.isEmpty() && thumbnails.high.url.isNotEmpty()) {
         url = thumbnails.high.url
-    } else if (thumbnails.medium.url.isNotEmpty()) {
-        url = thumbnails.medium.url
     }
 
     Glide.with(view.context)
         .load(url)
         .into(view)
-}
-
-@BindingAdapter("selectedValue")
-fun bindSpinnerData(
-    pAppCompatSpinner: Spinner, categoryList: List<CategoryEntity>
-) {
-    pAppCompatSpinner.onItemSelectedListener = object : OnItemSelectedListener {
-        override fun onItemSelected(
-            parent: AdapterView<*>?,
-            view: View?,
-            position: Int,
-            id: Long
-        ) {
-            Logger.d("KSI", position.toString())
-        }
-
-        override fun onNothingSelected(parent: AdapterView<*>?) {}
-    }
-}
-
-@InverseBindingAdapter(attribute = "selectedValue", event = "selectedValueAttrChanged")
-fun captureSelectedValue(pAppCompatSpinner: AppCompatSpinner): String? {
-    return pAppCompatSpinner.selectedItem as String
 }

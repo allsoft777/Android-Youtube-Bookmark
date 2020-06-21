@@ -26,3 +26,8 @@ fun setSelectedOptionItem(view: View, viewModel: EditCategoryViewModel, item: Ca
         viewModel.selectedOptionItem.value = data
     }
 }
+
+fun configureListView(viewModel: EditCategoryViewModel, categoryListView: RecyclerView) {
+    val listAdapter = CategoryAdapter(viewModel)
+    categoryListView.adapter = listAdapter
+}

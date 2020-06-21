@@ -1,6 +1,6 @@
 package com.owllife.youtubebookmark.presentation.player
 
-import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -9,7 +9,6 @@ import com.owllife.youtubebookmark.databinding.ActivityYoutubePlayerBinding
 import com.owllife.youtubebookmark.injection.ViewModelFactory
 import com.owllife.youtubebookmark.presentation.common.BaseActivity
 import com.owllife.youtubebookmark.presentation.common.BaseViewModel
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerFullScreenListener
 
 /**
  * @author owllife.dev
@@ -28,8 +27,8 @@ class YoutubePlayerActivity : BaseActivity() {
         viewModel?.loadData(intent)
 
         lifecycle.addObserver(dataBinding.youtubePlayerView)
-
-        addFullScreenListenerToPlayer()
+        initFullScreenListener(dataBinding.youtubePlayerView, this)
+        initPipMode(dataBinding.youtubePlayerView, this)
     }
 
     override fun getBaseViewModel(): BaseViewModel? {
@@ -50,18 +49,17 @@ class YoutubePlayerActivity : BaseActivity() {
         super.onBackPressed()
     }
 
-    private fun addFullScreenListenerToPlayer() {
-        dataBinding.youtubePlayerView.addFullScreenListener(object :
-            YouTubePlayerFullScreenListener {
-            override fun onYouTubePlayerEnterFullScreen() {
-                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                dataBinding.youtubePlayerView.enterFullScreen()
-            }
-
-            override fun onYouTubePlayerExitFullScreen() {
-                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                dataBinding.youtubePlayerView.exitFullScreen()
-            }
-        })
+    override fun onPictureInPictureModeChanged(
+        isInPictureInPictureMode: Boolean,
+        newConfig: Configuration?
+    ) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+        if (isInPictureInPictureMode) {
+            dataBinding.youtubePlayerView.enterFullScreen()
+            dataBinding.youtubePlayerView.getPlayerUiController().showUi(false)
+        } else {
+            dataBinding.youtubePlayerView.exitFullScreen()
+            dataBinding.youtubePlayerView.getPlayerUiController().showUi(true)
+        }
     }
 }

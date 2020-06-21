@@ -20,7 +20,7 @@ class YoutubePlayerViewModel(
     var entity: LiveData<BookMarkEntity> = _entity
 
     fun loadData(intent: Intent) {
-        var data =
+        val data =
             intent.getParcelableExtra<BookMarkEntity>(PresentationConstants.KEY_BOOKMARK_ENTITY)
         _entity.value = data
     }

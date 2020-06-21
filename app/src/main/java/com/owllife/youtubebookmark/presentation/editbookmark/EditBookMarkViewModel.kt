@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
  * @since 20. 6. 11
  */
 class EditBookMarkViewModel(
-    private val appContext: Context,
+    appContext: Context,
     private val categoryRepository: CategoryRepository,
     private val bookmarkRepository: BookmarkRepository,
     private val youtubeRemoteRepository: YoutubeRemoteRepository
@@ -66,7 +66,7 @@ class EditBookMarkViewModel(
 
     fun handleQueryBtn() {
         movieUrl.value =
-            "https://youtu.be/ywDBAKs3DFA" //"https://www.youtube.com/watch?v=MsGBOss88iw"
+            "https://www.youtube.com/watch?v=4bmUFRxNEIg"
         if (movieUrl.value.isNullOrEmpty()) {
             setToastText(getString(R.string.msg_input_youtube_url))
             return
@@ -118,11 +118,11 @@ class EditBookMarkViewModel(
             val categoryId = selectedCategory.value!!.id
             val videoId = _videoId
             var thumbnailUrl = ""
-            if (movieData.value!!.items[0].snippet.thumbnails.high != null) {
-                thumbnailUrl = movieData.value!!.items[0].snippet.thumbnails.high.url
+            if (movieData.value!!.items[0].snippet.thumbnails.maxres != null) {
+                thumbnailUrl = movieData.value!!.items[0].snippet.thumbnails.maxres.url
             }
-            if (thumbnailUrl.isEmpty() && movieData.value!!.items[0].snippet.thumbnails.medium != null) {
-                thumbnailUrl = movieData.value!!.items[0].snippet.thumbnails.medium.url
+            if (thumbnailUrl.isEmpty() && movieData.value!!.items[0].snippet.thumbnails.high != null) {
+                thumbnailUrl = movieData.value!!.items[0].snippet.thumbnails.high.url
             }
             if (thumbnailUrl.isEmpty()) {
                 thumbnailUrl = movieData.value!!.items[0].snippet.thumbnails.default.url
