@@ -14,6 +14,7 @@ import com.owllife.youtubebookmark.domain.entity.BookMarkEntity
 import com.owllife.youtubebookmark.domain.entity.CategoryEntity
 import com.owllife.youtubebookmark.domain.resp.YoutubeMovieResp
 import com.owllife.youtubebookmark.presentation.common.BaseViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 /**
@@ -27,10 +28,17 @@ class EditBookMarkViewModel(
     private val youtubeRemoteRepository: YoutubeRemoteRepository
 ) : BaseViewModel(appContext) {
 
-    // two-way data-binding
-    var selectedCategory: MutableLiveData<CategoryEntity> = MutableLiveData()
-    var movieUrl: MutableLiveData<String> = MutableLiveData()
-    var movieData: MutableLiveData<YoutubeMovieResp> = MutableLiveData()
+    private var _selectedCategory: MutableLiveData<CategoryEntity> = MutableLiveData()
+    var selectedCategory: LiveData<CategoryEntity> = _selectedCategory
+
+    private var _movieData: MutableLiveData<YoutubeMovieResp> = MutableLiveData()
+    var movieData: LiveData<YoutubeMovieResp> = _movieData
+
+    private var _movieUrl: MutableLiveData<String> = MutableLiveData()
+    var movieUrl: LiveData<String> = _movieUrl
+
+    private var _categoryManagement: MutableLiveData<Boolean> = MutableLiveData()
+    var categoryManagement: LiveData<Boolean> = MutableLiveData()
 
     private var _hideInputMethod: MutableLiveData<Boolean> = MutableLiveData()
     var hideInputMethod: LiveData<Boolean> = _hideInputMethod
@@ -44,28 +52,25 @@ class EditBookMarkViewModel(
     private var _videoId = String.empty()
 
     init {
-        viewModelScope.launch {
-            loadCategoryData()
-        }
+        loadCategoryData()
     }
 
-    private suspend fun loadCategoryData() {
-        handleDataLoading(true)
-        val result = categoryRepository.queryCategories()
-        if (result is Error) {
-            setToastText(getString(R.string.msg_failed_to_fetch_category_list))
-        } else {
-            _categoryList.value = (result as? ResultData.Success)?.data!!
+    private fun loadCategoryData() {
+        viewModelScope.launch(Dispatchers.IO) {
+            categoryList = categoryRepository.observeCategories()
         }
-        handleDataLoading(false)
     }
 
     fun onMovieUrlTextChanged() {
         _hideInputMethod.value = false
     }
 
+    fun handleCategoryManagement() {
+        _categoryManagement.value = true
+    }
+
     fun handleQueryBtn() {
-        movieUrl.value =
+        _movieUrl.value =
             "https://www.youtube.com/watch?v=4bmUFRxNEIg"
         if (movieUrl.value.isNullOrEmpty()) {
             setToastText(getString(R.string.msg_input_youtube_url))
@@ -82,7 +87,7 @@ class EditBookMarkViewModel(
                 _videoId = split[split.size - 1]
             }
         }
-        if (_videoId.isNullOrEmpty()) {
+        if (_videoId.isEmpty()) {
             setToastText(getString(R.string.msg_input_youtube_url_correctly))
             return
         }
@@ -94,7 +99,7 @@ class EditBookMarkViewModel(
             val resp = youtubeRemoteRepository.getMovieInfo(_videoId)
             if (resp is ResultData.Success) {
                 val data = resp.data
-                movieData.value = data
+                _movieData.value = data
             } else if (resp is ResultData.Failure) {
                 setToastText(resp.exception.message!!)
             }
@@ -103,7 +108,7 @@ class EditBookMarkViewModel(
     }
 
     fun setSelectedCategory(pos: Int) {
-        selectedCategory.value = categoryList.value?.get(pos);
+        _selectedCategory.value = categoryList.value?.get(pos);
     }
 
     fun saveToLocalDb() {

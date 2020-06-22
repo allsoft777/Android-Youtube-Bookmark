@@ -11,7 +11,9 @@
 
     <!-- Needed to apply DARK mode -->
     <color name="primary_text">#212121</color>
+    <color name="primary_text_disabled">@color/grey_500</color>
     <color name="second_text">#424242</color>
+
     <color name="default_background">@color/grey_100</color>
     <color name="default_background_2nd">@color/grey_100</color>
     <color name="default_divider">@color/grey_300</color>

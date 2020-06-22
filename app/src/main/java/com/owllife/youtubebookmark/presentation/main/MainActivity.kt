@@ -1,6 +1,5 @@
 package com.owllife.youtubebookmark.presentation.main
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -13,7 +12,6 @@ import com.owllife.youtubebookmark.R
 import com.owllife.youtubebookmark.core.configureDefaultToolbar
 import com.owllife.youtubebookmark.databinding.ActivityMainBinding
 import com.owllife.youtubebookmark.injection.ViewModelFactory
-import com.owllife.youtubebookmark.presentation.category.EditCategoryActivity
 import com.owllife.youtubebookmark.presentation.common.BaseActivity
 import com.owllife.youtubebookmark.presentation.common.BaseViewModel
 import com.owllife.youtubebookmark.presentation.editbookmark.EditBookMarkActivity
@@ -40,7 +38,6 @@ class MainActivity : BaseActivity() {
         }
 
         dataBinding.viewPagerTab.setDefaultTabTextColor(getColor(R.color.primary_text))
-
         configureDefaultToolbar(toolbar)
     }
 
@@ -84,26 +81,9 @@ class MainActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.category_management -> {
-                launchCategoryManagementScreen()
-            }
-            R.id.bookmark_management -> {
-                launchBookmarkManagementScreen()
-            }
-            R.id.profile -> {
-                startActivity(ProfileActivity.callingIntent(this))
-            }
+            R.id.bookmark_management -> startActivity(EditBookMarkActivity.callingIntent(this))
+            R.id.profile -> startActivity(ProfileActivity.callingIntent(this))
         }
         return true
-    }
-
-    private fun launchCategoryManagementScreen() {
-        val intent = Intent(this, EditCategoryActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun launchBookmarkManagementScreen() {
-        val intent = Intent(this, EditBookMarkActivity::class.java)
-        startActivity(intent)
     }
 }

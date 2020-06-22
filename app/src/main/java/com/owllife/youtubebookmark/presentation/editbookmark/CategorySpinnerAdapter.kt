@@ -25,7 +25,6 @@ class CategorySpinnerAdapter : ArrayAdapter<CategoryEntity> {
         this.viewModel = viewModel
     }
 
-    // 선택된 항목
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val holder = DropDownViewHolder.from(parent)
         val item = getItem(position)
@@ -33,7 +32,6 @@ class CategorySpinnerAdapter : ArrayAdapter<CategoryEntity> {
         return holder.itemView
     }
 
-    // 드랍다운의 항목
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
         val holder = DropDownViewHolder.from(parent)
         val item = getItem(position)

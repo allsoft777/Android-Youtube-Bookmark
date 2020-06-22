@@ -1,8 +1,10 @@
 package com.owllife.youtubebookmark.presentation.editbookmark
 
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.owllife.youtubebookmark.domain.entity.CategoryEntity
 import com.owllife.youtubebookmark.domain.resp.YoutubeMovieResp
 
 /**
@@ -24,4 +26,17 @@ fun renderThumbnail(view: ImageView, data: YoutubeMovieResp?) {
     Glide.with(view.context)
         .load(url)
         .into(view)
+}
+
+@BindingAdapter(value = ["selected_category", "youtube_movie_resp"], requireAll = true)
+fun renderSaveBtnEnableState(
+    view: TextView,
+    selectedCategory: CategoryEntity?,
+    youtubeData: YoutubeMovieResp?
+) {
+    if (selectedCategory == null || youtubeData == null) {
+        return
+    }
+
+    view.isEnabled = selectedCategory.name.isNotEmpty() && youtubeData.items.isNotEmpty()
 }

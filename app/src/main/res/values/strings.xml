@@ -17,10 +17,11 @@
     <string name="movie_info">영상 정보</string>
     <string name="save">저장</string>
     <string name="profile">프로필</string>
+    <string name="management">관리</string>
     <string name="category_management">카테고리 관리</string>
     <string name="bookmark_management">북마크 관리</string>
     <string name="select_category">카테고리</string>
-    <string name="input_movie_url">영상 URL</string>
+    <string name="input_movie_url">유튜브 URL</string>
     <string name="email">이메일</string>
     <string name="display_name">별명</string>
     <string name="change">변경</string>

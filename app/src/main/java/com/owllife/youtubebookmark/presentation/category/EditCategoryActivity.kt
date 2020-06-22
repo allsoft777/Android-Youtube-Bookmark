@@ -1,6 +1,7 @@
 package com.owllife.youtubebookmark.presentation.category
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -26,6 +27,13 @@ class EditCategoryActivity : BaseActivity() {
 
     private lateinit var dataBinding: ActivityEditCategoryBinding
     private var viewModel: EditCategoryViewModel? = null
+
+    companion object {
+        fun callingIntent(context: Context) = run {
+            val intent = Intent(context, EditCategoryActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
