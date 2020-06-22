@@ -19,9 +19,23 @@ class YoutubePlayerViewModel(
     private var _entity: MutableLiveData<BookMarkEntity> = MutableLiveData()
     var entity: LiveData<BookMarkEntity> = _entity
 
+    private var _showUiController: MutableLiveData<Boolean> = MutableLiveData(true)
+    var showUiController: LiveData<Boolean> = _showUiController
+
+    private var _isPipMode: MutableLiveData<Boolean> = MutableLiveData(false)
+    var isPipMode: LiveData<Boolean> = _isPipMode
+
     fun loadData(intent: Intent) {
         val data =
             intent.getParcelableExtra<BookMarkEntity>(PresentationConstants.KEY_BOOKMARK_ENTITY)
         _entity.value = data
+    }
+
+    fun setShowUiController(show: Boolean) {
+        _showUiController.value = show
+    }
+
+    fun setPipMode(isPipMode: Boolean) {
+        _isPipMode.value = isPipMode
     }
 }

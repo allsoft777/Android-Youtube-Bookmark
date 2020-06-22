@@ -1,7 +1,9 @@
 package com.owllife.youtubebookmark.presentation.player
 
 import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
+import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.owllife.youtubebookmark.R
@@ -17,8 +19,10 @@ import com.owllife.youtubebookmark.presentation.common.BaseViewModel
 class YoutubePlayerActivity : BaseActivity() {
 
     private lateinit var dataBinding: ActivityYoutubePlayerBinding
+    private lateinit var youtubePlayerViewManager: YoutubePlayerViewManager
     private var viewModel: YoutubePlayerViewModel? = null
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_youtube_player)
@@ -27,8 +31,13 @@ class YoutubePlayerActivity : BaseActivity() {
         viewModel?.loadData(intent)
 
         lifecycle.addObserver(dataBinding.youtubePlayerView)
-        initFullScreenListener(dataBinding.youtubePlayerView, this)
-        initPipMode(dataBinding.youtubePlayerView, this)
+        youtubePlayerViewManager = YoutubePlayerViewManager(dataBinding.youtubePlayerView, this)
+        youtubePlayerViewManager.initUiButtons()
+        youtubePlayerViewManager.initFullScreenListener()
+        youtubePlayerViewManager.bindPipLiveData(this, getViewModel().isPipMode)
+        youtubePlayerViewManager.bindUiControllerVisibility(
+            this, getViewModel().showUiController
+        )
     }
 
     override fun getBaseViewModel(): BaseViewModel? {
@@ -46,7 +55,13 @@ class YoutubePlayerActivity : BaseActivity() {
             dataBinding.youtubePlayerView.exitFullScreen()
             return
         }
+        getViewModel().setPipMode(false)
         super.onBackPressed()
+    }
+
+    override fun onPause() {
+        getViewModel().setPipMode(true)
+        super.onPause()
     }
 
     override fun onPictureInPictureModeChanged(
@@ -54,12 +69,13 @@ class YoutubePlayerActivity : BaseActivity() {
         newConfig: Configuration?
     ) {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
-        if (isInPictureInPictureMode) {
-            dataBinding.youtubePlayerView.enterFullScreen()
-            dataBinding.youtubePlayerView.getPlayerUiController().showUi(false)
-        } else {
-            dataBinding.youtubePlayerView.exitFullScreen()
-            dataBinding.youtubePlayerView.getPlayerUiController().showUi(true)
+        getViewModel().setShowUiController(!isInPictureInPictureMode)
+        if (!isInPictureInPictureMode) {
+            viewModel!!.setPipMode(false)
         }
+    }
+
+    private fun getViewModel(): YoutubePlayerViewModel {
+        return dataBinding.viewModel!!
     }
 }
