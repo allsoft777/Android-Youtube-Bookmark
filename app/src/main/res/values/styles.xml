@@ -18,6 +18,7 @@
         <item name="android:statusBarColor">#000000</item>
         <item name="android:popupMenuStyle">@style/PopupMenu</item>
         <item name="android:actionOverflowButtonStyle">@style/ActionButtonOverflow</item>
+        <item name="android:actionMenuTextColor">@color/primary_text</item>
     </style>
 
     <style name="AppTheme.NoActionBar.Dim">
@@ -37,7 +38,9 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-    <style name="AppTheme.ToolBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.ToolBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:colorControlHighlight">@color/second_text</item>
+    </style>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
