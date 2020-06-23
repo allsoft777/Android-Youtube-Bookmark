@@ -2,6 +2,7 @@ package com.owllife.youtubebookmark.data.database
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import androidx.room.Transaction
 import com.owllife.youtubebookmark.domain.CategoryRepository
 import com.owllife.youtubebookmark.domain.ResultData
 import com.owllife.youtubebookmark.domain.entity.CategoryEntity
@@ -14,11 +15,10 @@ import kotlinx.coroutines.withContext
  * @since 20. 6. 10
  */
 class CategoryLocalRepository(
-    private var dao: CategoryDao,
+    private var categoryDao: CategoryDao,
+    private var bookmarkDao: BookmarkDao,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : CategoryRepository {
-
-    private val TAG = CategoryLocalRepository::class.java.simpleName
 
     companion object {
 
@@ -30,36 +30,41 @@ class CategoryLocalRepository(
         fun getInstance(context: Context): CategoryRepository {
             if (INSTANCE == null) {
                 INSTANCE =
-                    CategoryLocalRepository(AppDatabase.getInstance(context).getCategoryDao())
+                    CategoryLocalRepository(
+                        AppDatabase.getInstance(context).getCategoryDao(),
+                        AppDatabase.getInstance(context).getBookmarkDao()
+                    )
             }
             return INSTANCE!!
         }
     }
 
     override fun observeCategories(): LiveData<List<CategoryEntity>> {
-        return dao.observeCategories()
+        return categoryDao.observeCategories()
     }
 
     override suspend fun queryCategories(): ResultData<List<CategoryEntity>> =
         withContext(ioDispatcher) {
-            val result = dao.queryCategories()
+            val result = categoryDao.queryCategories()
             return@withContext ResultData.Success(result)
         }
 
     override suspend fun insertNewCategory(item: CategoryEntity) = withContext(ioDispatcher) {
-        dao.insertNewCategory(item)
+        categoryDao.insertNewCategory(item)
     }
 
-    override suspend fun deleteCategory(id: Int) = withContext(ioDispatcher) {
-        dao.deleteCategory(id)
+    @Transaction
+    override suspend fun deleteCategory(id: Int): Int = withContext(ioDispatcher) {
+        categoryDao.deleteCategory(id)
+        bookmarkDao.deleteBookmarkMatchingCategory(id)
     }
 
     override suspend fun updateCategory(category: CategoryEntity): Int =
         withContext(ioDispatcher) {
-            dao.updateCategory(category)
+            categoryDao.updateCategory(category)
         }
 
     override suspend fun updateAll(categoryList: List<CategoryEntity>) = withContext(ioDispatcher) {
-        dao.updateAll(categoryList)
+        categoryDao.updateAll(categoryList)
     }
 }

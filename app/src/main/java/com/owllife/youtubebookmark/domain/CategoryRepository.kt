@@ -1,6 +1,7 @@
 package com.owllife.youtubebookmark.domain
 
 import androidx.lifecycle.LiveData
+import androidx.room.Transaction
 import com.owllife.youtubebookmark.domain.entity.CategoryEntity
 
 /**
@@ -15,7 +16,8 @@ interface CategoryRepository {
 
     suspend fun insertNewCategory(item: CategoryEntity)
 
-    suspend fun deleteCategory(id: Int)
+    @Transaction
+    suspend fun deleteCategory(id: Int) : Int
 
     suspend fun updateCategory(category: CategoryEntity): Int
 

@@ -20,6 +20,9 @@ interface BookmarkDao {
     @Query("DELETE FROM bookmark WHERE id LIKE :id")
     suspend fun deleteBookmark(id: Int)
 
+    @Query("DELETE FROM bookmark WHERE category_id LIKE :categoryId")
+    suspend fun deleteBookmarkMatchingCategory(categoryId: Int): Int
+
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateBookmark(item: BookMarkEntity): Int
 }

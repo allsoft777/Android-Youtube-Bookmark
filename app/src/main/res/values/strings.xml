@@ -36,6 +36,7 @@
     <string name="msg_failed_to_fetch_category_list">카테고리 조회하는것을 실패하였습니다.</string>
     <string name="msg_database_updated">업데이트 하였습니다.</string>
     <string name="msg_database_deleted">삭제하였습니다.</string>
+    <string name="msg_category_deleted">%1$d개의 북마크 항목과 함께 카테고리를 삭제하였습니다.</string>
     <string name="msg_database_inserted">추가하였습니다.</string>
     <string name="msg_sign_in_successfully">SignIn 하였습니다.</string>
     <string name="msg_sign_out_successfully">SignOut 하였습니다.</string>

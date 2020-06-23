@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
  * @since 20. 6. 3
  */
 class EditCategoryViewModel constructor(
-    appContext: Context,
+    private val appContext: Context,
     private val categoryRepository: CategoryRepository
 ) : BaseViewModel(appContext) {
 
@@ -74,8 +74,9 @@ class EditCategoryViewModel constructor(
 
     @SuppressLint("CheckResult")
     fun deleteCategory() = viewModelScope.launch {
-        categoryRepository.deleteCategory(selectedOptionItem.value?.item!!.id)
-        setToastText(getString(R.string.msg_database_deleted))
+        val cnt = categoryRepository.deleteCategory(selectedOptionItem.value?.item!!.id)
+        val msg = appContext.getString(R.string.msg_category_deleted, cnt)
+        setToastText(msg)
     }
 
     fun setEditingCategory() {
