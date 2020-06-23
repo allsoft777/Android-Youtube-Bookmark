@@ -27,11 +27,14 @@ class ProfileViewModel(
     private var _profileData: MutableLiveData<MyProfileData> = MutableLiveData()
     var profileData: LiveData<MyProfileData> = _profileData
 
+    private val _dataLoading: MutableLiveData<Boolean> = MutableLiveData()
+    val dataLoading: LiveData<Boolean> = _dataLoading
+
     fun loadProfile() {
-        handleDataLoading(true)
+        _dataLoading.value = true
         CoroutineScope(Dispatchers.Main).launch {
-            handleDataLoading(false)
             val value = fetchMyProfileUseCase.execute(Unit)
+            _dataLoading.value = false
             if (value is ResultData.Success) {
                 _profileData.value = value.data
             } else if (value is ResultData.Failure) {

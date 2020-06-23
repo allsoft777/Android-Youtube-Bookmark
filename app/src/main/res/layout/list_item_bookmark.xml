@@ -13,7 +13,7 @@
             type="com.owllife.youtubebookmark.domain.entity.BookMarkEntity"/>
 
         <variable
-            name="viewmodel"
+            name="viewModel"
             type="com.owllife.youtubebookmark.presentation.main.BookMarkListViewModel"/>
     </data>
 
@@ -30,7 +30,7 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="@drawable/list_item_background"
-            android:onClick="@{() -> viewmodel.openBookmarkEvent(bookmark)}"
+            android:onClick="@{() -> viewModel.openBookmarkEvent(bookmark)}"
             android:orientation="vertical"
             android:paddingBottom="15dp">
 
@@ -39,7 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                bind:bookmark_thumbnail="@{bookmark}"/>
+                bind:bookmark_list_item_thumbnail="@{bookmark}"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -66,8 +66,8 @@
                     android:paddingEnd="5dp"
                     android:src="@drawable/ic_more"
                     android:tint="@color/primary_text"
-                    bind:bookmark_item="@{bookmark}"
-                    bind:bookmark_viewmodel="@{viewmodel}"/>
+                    bind:bookmark_list_item="@{bookmark}"
+                    bind:bookmark_list_item_viewmodel="@{viewModel}"/>
             </LinearLayout>
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

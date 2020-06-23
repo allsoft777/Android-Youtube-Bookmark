@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
  * @since 20. 6. 3
  */
 class EditCategoryViewModel constructor(
-    private val appContext: Context,
+    appContext: Context,
     private val categoryRepository: CategoryRepository
 ) : BaseViewModel(appContext) {
 
@@ -30,8 +30,10 @@ class EditCategoryViewModel constructor(
     var newCategoryName: MutableLiveData<String> = MutableLiveData()
     var editingCategoryEntity: MutableLiveData<CategoryEntity> = MutableLiveData()
     var selectedOptionItem: MutableLiveData<SelectedCategoryData> = MutableLiveData()
-
     var categoryList: LiveData<List<CategoryEntity>> = MutableLiveData()
+
+    private val _dataLoading: MutableLiveData<Boolean> = MutableLiveData()
+    val dataLoading: MutableLiveData<Boolean> = _dataLoading
 
     init {
         fetchCategoryFromLocalRepository()
@@ -43,7 +45,7 @@ class EditCategoryViewModel constructor(
     }
 
     private fun fetchCategoryFromLocalRepository() {
-        dataLoading.value = true
+        _dataLoading.value = true
         viewModelScope.launch(Dispatchers.IO) {
             categoryList = categoryRepository.observeCategories()
         }

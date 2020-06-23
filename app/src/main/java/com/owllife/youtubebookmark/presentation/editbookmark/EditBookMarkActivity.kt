@@ -36,7 +36,7 @@ class EditBookMarkActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_edit_bookmark)
         dataBinding.lifecycleOwner = this
-        dataBinding.viewmodel = getBaseViewModel() as EditBookMarkViewModel
+        dataBinding.viewModel = getBaseViewModel() as EditBookMarkViewModel
 
         viewModel?.let {
             it.categoryList.observe(this, Observer {

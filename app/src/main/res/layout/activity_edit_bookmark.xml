@@ -7,7 +7,7 @@
         <import type="android.view.View"/>
 
         <variable
-            name="viewmodel"
+            name="viewModel"
             type="com.owllife.youtubebookmark.presentation.editbookmark.EditBookMarkViewModel"/>
 
         <variable
@@ -60,7 +60,7 @@
                             android:layout_height="wrap_content"
                             android:background="@null"
                             android:minHeight="45dp"
-                            android:onItemSelected="@{(parent,view,pos,id) -> viewmodel.setSelectedCategory(pos)}"/>
+                            android:onItemSelected="@{(parent,view,pos,id) -> viewModel.setSelectedCategory(pos)}"/>
 
                         <ImageView
                             android:layout_width="22dp"
@@ -76,7 +76,7 @@
                         android:id="@+id/edit_category_btn"
                         style="@style/OutlineButtonStyle"
                         android:layout_marginStart="5dp"
-                        android:onClick="@{() -> viewmodel.handleCategoryManagement()}"
+                        android:onClick="@{() -> viewModel.handleCategoryManagement()}"
                         android:text="@string/management"
                         android:textColor="@color/primary_text"/>
                 </LinearLayout>
@@ -100,14 +100,14 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:maxLines="3"
-                        android:onTextChanged="@{(text, start, before, count) -> viewmodel.onMovieUrlTextChanged()}"
-                        android:text="@={viewmodel.movieUrl}"/>
+                        android:onTextChanged="@{(text, start, before, count) -> viewModel.onMovieUrlTextChanged()}"
+                        android:text="@={viewModel.movieUrl}"/>
 
                     <TextView
                         android:id="@+id/check_btn"
                         style="@style/OutlineButtonStyle"
                         android:layout_marginStart="5dp"
-                        android:onClick="@{() -> viewmodel.queryYouTubeVideoInfo()}"
+                        android:onClick="@{() -> viewModel.queryYouTubeVideoInfo()}"
                         android:text="@string/query"
                         android:textColor="@color/primary_text"/>
                 </LinearLayout>
@@ -117,7 +117,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp"
                     android:orientation="vertical"
-                    android:visibility="@{viewmodel.movieData.items != null ? View.VISIBLE : View.GONE, default = gone}">
+                    bind:youtube_resp_data="@{viewModel.movieData}">
 
                     <TextView
                         style="@style/PrimaryLabelTextStyle"
@@ -127,18 +127,18 @@
                         android:text="@string/movie_info"/>
 
                     <ImageView
+                        android:id="@+id/thumbnail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:adjustViewBounds="true"
-                        android:minHeight="100dp"
-                        bind:thumbnail="@{viewmodel.movieData}"/>
+                        android:minHeight="100dp"/>
 
                     <TextView
+                        android:id="@+id/title"
                         style="@style/SecondaryLabelTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="@{viewmodel.movieData.items.get(0).snippet.title}"/>
+                        android:layout_marginTop="10dp"/>
 
                 </LinearLayout>
             </LinearLayout>
@@ -152,15 +152,15 @@
             android:clickable="true"
             android:focusable="true"
             android:gravity="center"
-            android:onClick="@{v -> viewmodel.saveToLocalDb()}"
+            android:onClick="@{v -> viewModel.saveToLocalDb()}"
             android:orientation="vertical"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:text="@string/save"
             android:textColor="@color/primary_text_color_selector"
             android:textSize="@dimen/common_big_size_button_text_size"
-            bind:selected_category="@{viewmodel.selectedCategory}"
-            bind:youtube_video_resp="@{viewmodel.movieData}"/>
+            bind:edit_bookmark_selected_category="@{viewModel.selectedCategory}"
+            bind:edit_bookmark_youtube_video_resp="@{viewModel.movieData}"/>
 
     </LinearLayout>
 

@@ -28,7 +28,7 @@ class CategoryAdapter(private val viewModel: EditCategoryViewModel) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(viewModel: EditCategoryViewModel, item: CategoryEntity) {
-            binding.viewmodel = viewModel
+            binding.viewModel = viewModel
             binding.category = item
             binding.executePendingBindings()
         }

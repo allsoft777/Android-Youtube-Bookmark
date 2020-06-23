@@ -9,7 +9,7 @@
             type="com.owllife.youtubebookmark.domain.entity.CategoryEntity"/>
 
         <variable
-            name="viewmodel"
+            name="viewModel"
             type="com.owllife.youtubebookmark.presentation.category.EditCategoryViewModel"/>
     </data>
 
@@ -43,8 +43,8 @@
             android:paddingBottom="5dp"
             android:src="@drawable/ic_more"
             android:tint="@color/primary_text"
-            bind:item="@{category}"
-            bind:viewmodel="@{viewmodel}"/>
+            bind:category_item="@{category}"
+            bind:category_item_viewmodel="@{viewModel}"/>
     </RelativeLayout>
 
 </layout>

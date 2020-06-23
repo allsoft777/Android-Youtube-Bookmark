@@ -26,7 +26,6 @@ class MainViewModel constructor(
     }
 
     private fun fetchCategoryFromLocalRepository() {
-        dataLoading.value = true
         viewModelScope.launch(Dispatchers.IO) {
             categoryList = categoryRepository.observeCategories()
         }

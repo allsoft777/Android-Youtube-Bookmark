@@ -26,9 +26,9 @@
             android:id="@+id/bookmark_listview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{viewmodel.bookmarkList.get(categoryId).size() == 0 ? View.GONE : View.VISIBLE, default = visible}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            bind:bookmark_list="@{viewmodel.bookmarkList.get(categoryId)}"/>
+            bind:bookmark_listview_items="@{viewmodel.getBookmarkListData(categoryId)}"
+            bind:listview_visibility="@{viewmodel.getBookmarkListData(categoryId)}"/>
 
         <TextView
             android:id="@+id/empty_text"
@@ -40,7 +40,16 @@
             android:text="@string/no_items"
             android:textColor="@color/second_text"
             android:textSize="15sp"
-            android:visibility="@{viewmodel.bookmarkList.get(categoryId).size() == 0 ? View.VISIBLE : View.GONE, default = gone}"/>
+            bind:no_items_visibility="@{viewmodel.getBookmarkListData(categoryId)}"/>
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/progressbar"
+            style="?android:progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@android:color/transparent"
+            bind:progressbar_visibility="@{viewmodel.getDataLoading(categoryId)}"/>
 
     </RelativeLayout>
 </layout>

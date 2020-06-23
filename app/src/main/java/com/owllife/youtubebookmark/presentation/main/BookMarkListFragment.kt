@@ -50,11 +50,8 @@ class BookMarkListFragment : Fragment() {
 
         @Suppress("ReplaceGetOrSet")
         dataBinding.viewmodel?.let { vm ->
-            if (vm.bookmarkList.isEmpty() || vm.bookmarkList.get(categoryId) == null) {
-                return
-            }
-            vm.bookmarkList.get(categoryId)!!.observe(requireActivity(), Observer {
-                vm.dataLoading.value = false
+            vm.getBookmarkListData(categoryId).observe(requireActivity(), Observer {
+                vm.setDataLoading(getCategoryId(), false)
             })
             vm.openBookmarkEvent.observe(requireActivity(), EventObserver { entity ->
                 val intent = Intent(activity, YoutubePlayerActivity::class.java)
@@ -80,18 +77,19 @@ class BookMarkListFragment : Fragment() {
 
     private fun bindOptionMenuLiveData() {
         dataBinding.viewmodel?.let { vm ->
-            vm.getSelectedBookmarkData()?.observe(viewLifecycleOwner, Observer { it ->
-                val popup = PopupMenu(context, it.anchor)
-                popup.menuInflater.inflate(R.menu.menu_bookmark_list, popup.menu)
-                popup.setOnMenuItemClickListener {
-                    when (it.itemId) {
-                        R.id.delete -> vm.deleteSelectedBookmark()
+            vm.getSelectedBookmarkData(getCategoryId())
+                ?.observe(viewLifecycleOwner, Observer { it ->
+                    val popup = PopupMenu(context, it.anchor)
+                    popup.menuInflater.inflate(R.menu.menu_bookmark_list, popup.menu)
+                    popup.setOnMenuItemClickListener {
+                        when (it.itemId) {
+                            R.id.delete -> vm.deleteSelectedBookmark(getCategoryId())
 
+                        }
+                        true
                     }
-                    true
-                }
-                popup.show()
-            })
+                    popup.show()
+                })
         }
     }
 }

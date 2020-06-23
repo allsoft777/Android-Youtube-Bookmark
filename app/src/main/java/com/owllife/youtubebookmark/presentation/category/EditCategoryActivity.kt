@@ -39,7 +39,7 @@ class EditCategoryActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_edit_category)
         dataBinding.lifecycleOwner = this
-        dataBinding.viewmodel = getBaseViewModel() as EditCategoryViewModel
+        dataBinding.viewModel = getBaseViewModel() as EditCategoryViewModel
 
         configureListView(viewModel!!, dataBinding.categoryListView)
         configureDefaultToolbar(toolbar, getString(R.string.category_management))
@@ -70,7 +70,7 @@ class EditCategoryActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.create -> {
-                CreateCategoryDialogView().show(this, dataBinding.viewmodel!!)
+                CreateCategoryDialogView().show(this, dataBinding.viewModel!!)
                 return true
             }
         }

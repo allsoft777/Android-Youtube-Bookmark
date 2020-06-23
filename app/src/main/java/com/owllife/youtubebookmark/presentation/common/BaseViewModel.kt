@@ -14,9 +14,6 @@ import com.owllife.youtubebookmark.presentation.data.FinishScreenData
  */
 open class BaseViewModel(private val appContext: Context) : ViewModel() {
 
-    private val _dataLoading: MutableLiveData<Boolean> = MutableLiveData(false)
-    val dataLoading: MutableLiveData<Boolean> = _dataLoading
-
     private val _toastText: MutableLiveData<String> = MutableLiveData()
     val toastText: LiveData<String> = _toastText
 
@@ -25,10 +22,6 @@ open class BaseViewModel(private val appContext: Context) : ViewModel() {
 
     private var _finishScreenData: MutableLiveData<FinishScreenData> = MutableLiveData()
     var finishScreenData: LiveData<FinishScreenData> = _finishScreenData
-
-    protected fun handleDataLoading(loading: Boolean) {
-        _dataLoading.value = loading
-    }
 
     protected fun setToastText(text: String) {
         _toastText.value = text

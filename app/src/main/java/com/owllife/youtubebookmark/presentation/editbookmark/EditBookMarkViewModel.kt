@@ -48,6 +48,9 @@ class EditBookMarkViewModel(
     private var _categoryList: MutableLiveData<List<CategoryEntity>> = MutableLiveData()
     var categoryList: LiveData<List<CategoryEntity>> = _categoryList
 
+    private val _dataLoading: MutableLiveData<Boolean> = MutableLiveData()
+    val dataLoading: LiveData<Boolean> = _dataLoading
+
     private var _videoId = String.empty()
 
     init {
@@ -81,7 +84,7 @@ class EditBookMarkViewModel(
         }
 
         _hideInputMethod.value = true
-        handleDataLoading(true)
+        _dataLoading.value = true
 
         viewModelScope.launch {
             val resp = youtubeRemoteRepository.getMovieInfo(_videoId)
@@ -91,7 +94,7 @@ class EditBookMarkViewModel(
             } else if (resp is ResultData.Failure) {
                 setToastText(resp.exception.message!!)
             }
-            handleDataLoading(false)
+            _dataLoading.value = false
         }
     }
 
@@ -104,7 +107,7 @@ class EditBookMarkViewModel(
             setToastText(getString(R.string.msg_selected_category))
             return
         }
-        handleDataLoading(true)
+        _dataLoading.value = true
 
         viewModelScope.launch {
             val bookMarkEntity = mapYoutubeVideoRespToBookMarkEntity(movieData.value!!)
@@ -112,7 +115,7 @@ class EditBookMarkViewModel(
             bookMarkEntity.videoId = _videoId
             bookmarkRepository.insertNewBookmark(bookMarkEntity)
 
-            handleDataLoading(false)
+            _dataLoading.value = false
             _savedToLocalDb.value = true
             setToastText(getString(R.string.msg_database_inserted))
         }

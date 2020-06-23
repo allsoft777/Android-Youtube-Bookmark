@@ -28,7 +28,7 @@ class BookMarkListAdapter(private var viewModel: BookMarkListViewModel) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: BookMarkEntity, viewModel: BookMarkListViewModel) {
             binding.bookmark = item
-            binding.viewmodel = viewModel
+            binding.viewModel = viewModel
             binding.executePendingBindings()
         }
 

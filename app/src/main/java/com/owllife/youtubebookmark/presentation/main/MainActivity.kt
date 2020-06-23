@@ -28,11 +28,9 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         dataBinding.lifecycleOwner = this
-        dataBinding.viewmodel = getBaseViewModel() as MainViewModel
 
         viewModel?.let { vm ->
             vm.categoryList.observe(this, Observer {
-                vm.dataLoading.value = false
                 configureViewPager()
             })
         }

@@ -11,7 +11,7 @@ import com.owllife.youtubebookmark.presentation.data.SelectedCategoryData
  * @since 20. 6. 5
  */
 
-@BindingAdapter("category_list")
+@BindingAdapter("edit_category_list")
 fun setCategoryList(listView: RecyclerView, items: List<CategoryEntity>?) {
     if (items.isNullOrEmpty() || listView.adapter == null) {
         return
@@ -19,7 +19,7 @@ fun setCategoryList(listView: RecyclerView, items: List<CategoryEntity>?) {
     (listView.adapter as CategoryAdapter).submitList(items)
 }
 
-@BindingAdapter(value = ["viewmodel", "item"], requireAll = true)
+@BindingAdapter(value = ["category_item_viewmodel", "category_item"], requireAll = true)
 fun setSelectedOptionItem(view: View, viewModel: EditCategoryViewModel, item: CategoryEntity) {
     view.setOnClickListener {
         val data = SelectedCategoryData(view, item)

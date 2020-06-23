@@ -2,6 +2,7 @@ package com.owllife.youtubebookmark.presentation.editbookmark
 
 import com.owllife.youtubebookmark.core.empty
 import com.owllife.youtubebookmark.domain.entity.BookMarkEntity
+import com.owllife.youtubebookmark.domain.resp.Snippet
 import com.owllife.youtubebookmark.domain.resp.YoutubeVideoResp
 
 /**
@@ -23,20 +24,21 @@ fun extractYouTubeVideoIdFromUrl(movieUrl: String): String {
 }
 
 fun mapYoutubeVideoRespToBookMarkEntity(youtubeVideoResp: YoutubeVideoResp): BookMarkEntity {
-    var thumbnailUrl = ""
-    if (youtubeVideoResp.items[0].snippet.thumbnails.maxres != null) {
-        thumbnailUrl = youtubeVideoResp.items[0].snippet.thumbnails.maxres!!.url
+    val snippet: Snippet = youtubeVideoResp.items[0].snippet!!
+    var thumbnailUrl = String.empty()
+    if (snippet.thumbnails.maxres != null) {
+        thumbnailUrl = snippet.thumbnails.maxres.url
     }
-    if (thumbnailUrl.isEmpty() && youtubeVideoResp.items[0].snippet.thumbnails.high != null) {
-        thumbnailUrl = youtubeVideoResp.items[0].snippet.thumbnails.high!!.url
+    if (thumbnailUrl.isEmpty() && snippet.thumbnails.high != null) {
+        thumbnailUrl = snippet.thumbnails.high.url
     }
     if (thumbnailUrl.isEmpty()) {
-        thumbnailUrl = youtubeVideoResp.items[0].snippet.thumbnails.default.url
+        thumbnailUrl = snippet.thumbnails.default.url
     }
 
-    val title = youtubeVideoResp.items[0].snippet.title
-    val desc = youtubeVideoResp.items[0].snippet.description
-    val tagsList = youtubeVideoResp.items[0].snippet.tags
+    val title = snippet.title
+    val desc = snippet.description
+    val tagsList = snippet.tags
     val sb = StringBuilder()
     for (i in tagsList.indices) {
         if (i != 0) {
@@ -45,8 +47,8 @@ fun mapYoutubeVideoRespToBookMarkEntity(youtubeVideoResp: YoutubeVideoResp): Boo
         sb.append(tagsList[i])
     }
     val tagsStr = sb.toString()
-    val channelId = youtubeVideoResp.items[0].snippet.channelId
-    val publishedAt = youtubeVideoResp.items[0].snippet.publishedAt
+    val channelId = snippet.channelId
+    val publishedAt = snippet.publishedAt
     return BookMarkEntity(
         thumbnailUrl = thumbnailUrl,
         title = title,

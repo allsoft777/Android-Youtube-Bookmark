@@ -44,6 +44,9 @@ class LoginViewModel(
     private var _profileData: MutableLiveData<MyProfileData> = MutableLiveData()
     var profileData: LiveData<MyProfileData> = _profileData
 
+    private val _dataLoading: MutableLiveData<Boolean> = MutableLiveData()
+    val dataLoading: LiveData<Boolean> = _dataLoading
+
     fun loadGoogleSignInClient(activity: Activity) {
         auth = FirebaseAuth.getInstance()
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -58,10 +61,10 @@ class LoginViewModel(
     }
 
     fun loadProfile() {
-        handleDataLoading(true)
+        _dataLoading.value = true
         CoroutineScope(Dispatchers.Main).launch {
             val value = fetchMyProfileUseCase.execute(Unit)
-            handleDataLoading(false)
+            _dataLoading.value = false
             if (value is ResultData.Success) {
                 _profileData.value = value.data
                 setToastText(getString(R.string.msg_sign_in_successfully))
@@ -76,14 +79,14 @@ class LoginViewModel(
     }
 
     fun fireBaseAuthWithGoogle(data: Intent?, activity: Activity?) {
-        handleDataLoading(true)
+        _dataLoading.value = true
         CoroutineScope(Dispatchers.Main).launch {
             val params = SignInWithGoogleParams(data, activity)
             val ret = signInWithGoogleUseCase.execute(params)
             if (ret is ResultData.Success) {
                 uploadUserInfoToRemoteDb()
             } else {
-                handleDataLoading(false)
+                _dataLoading.value = false
                 handleFailure(ret as ResultData.Failure)
             }
         }
@@ -95,7 +98,7 @@ class LoginViewModel(
             if (value is ResultData.Success) {
                 loadProfile()
             } else if (value is ResultData.Failure) {
-                handleDataLoading(false)
+                _dataLoading.value = false
                 handleFailure(value)
             }
         }

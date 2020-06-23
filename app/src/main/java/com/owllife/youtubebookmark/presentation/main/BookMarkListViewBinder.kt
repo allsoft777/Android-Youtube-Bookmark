@@ -1,18 +1,18 @@
 package com.owllife.youtubebookmark.presentation.main
 
-import android.view.View
-import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.widget.ContentLoadingProgressBar
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import com.owllife.youtubebookmark.core.gone
+import com.owllife.youtubebookmark.core.visible
 import com.owllife.youtubebookmark.domain.entity.BookMarkEntity
-import com.owllife.youtubebookmark.presentation.data.SelectedBookmarkData
 
 /**
  * @author owllife.dev
  * @since 20. 6. 15
  */
-@BindingAdapter("bookmark_list")
+@BindingAdapter("bookmark_listview_items")
 fun setBookmarkList(listView: RecyclerView, items: List<BookMarkEntity>?) {
     if (items == null || listView.adapter == null) {
         return
@@ -20,23 +20,35 @@ fun setBookmarkList(listView: RecyclerView, items: List<BookMarkEntity>?) {
     (listView.adapter as BookMarkListAdapter).submitList(items)
 }
 
-@BindingAdapter("bookmark_thumbnail")
-fun renderThumbnail(view: ImageView, data: BookMarkEntity?) {
-    if (data == null) {
-        return
+@BindingAdapter("listview_visibility")
+fun setListViewVisibility(
+    view: RecyclerView, items: List<BookMarkEntity>?
+) {
+    if (items.isNullOrEmpty()) {
+        view.gone()
+    } else {
+        view.visible()
     }
-    Glide.with(view.context)
-        .load(data.thumbnailUrl)
-        .into(view)
 }
 
-@BindingAdapter(value = ["bookmark_viewmodel", "bookmark_item"], requireAll = true)
-fun setSelectedBookmarkOption(
-    view: View, viewModel: BookMarkListViewModel,
-    item: BookMarkEntity
+@BindingAdapter("progressbar_visibility")
+fun setProgressBarVisibility(
+    view: ContentLoadingProgressBar,
+    isLoading: Boolean
 ) {
-    view.setOnClickListener {
-        val data = SelectedBookmarkData(view, item)
-        viewModel.setSelectedOptionItem(data)
+    when (isLoading) {
+        true -> view.visible()
+        false -> view.gone()
+    }
+}
+
+@BindingAdapter("no_items_visibility")
+fun setNoItemsVisibility(
+    view: TextView,
+    items: List<BookMarkEntity>?
+) {
+    when (items.isNullOrEmpty()) {
+        true -> view.visible()
+        false -> view.gone()
     }
 }

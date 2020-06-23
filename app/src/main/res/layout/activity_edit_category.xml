@@ -7,7 +7,7 @@
     <data>
 
         <variable
-            name="viewmodel"
+            name="viewModel"
             type="com.owllife.youtubebookmark.presentation.category.EditCategoryViewModel"/>
 
     </data>
@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            bind:category_list="@{viewmodel.categoryList}"/>
+            bind:edit_category_list="@{viewModel.categoryList}"/>
 
     </LinearLayout>
 

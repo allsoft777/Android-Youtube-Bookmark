@@ -28,13 +28,12 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="20dp"
-            android:visibility="@{viewModel.profileData == null ? View.GONE : View.VISIBLE, default=gone}">
+            bind:profile_data="@{viewModel.profileData}">
 
             <ImageView
                 android:id="@+id/profile_img"
                 android:layout_width="96dp"
-                android:layout_height="96dp"
-                bind:profile_thumbnail="@{viewModel.profileData}"/>
+                android:layout_height="96dp"/>
 
             <TextView
                 style="@style/InputDialogLabelTextStyle"
@@ -43,8 +42,7 @@
 
             <TextView
                 android:id="@+id/email"
-                style="@style/CommonDataTextStyle1"
-                android:text="@{viewModel.profileData.email}"/>
+                style="@style/CommonDataTextStyle1"/>
 
             <TextView
                 style="@style/InputDialogLabelTextStyle"
@@ -54,11 +52,9 @@
             <TextView
                 android:id="@+id/display_name"
                 style="@style/CommonDataTextStyle1"
-                android:ellipsize="end"
-                android:text="@{viewModel.profileData.displayName}"/>
+                android:ellipsize="end"/>
 
             <TextView
-                android:id="@+id/logout"
                 style="@style/OutlineButtonStyle"
                 android:layout_gravity="end"
                 android:layout_marginTop="40dp"
