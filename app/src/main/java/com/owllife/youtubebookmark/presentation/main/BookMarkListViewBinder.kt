@@ -1,9 +1,11 @@
 package com.owllife.youtubebookmark.presentation.main
 
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.owllife.youtubebookmark.R
 import com.owllife.youtubebookmark.core.gone
 import com.owllife.youtubebookmark.core.visible
 import com.owllife.youtubebookmark.domain.entity.BookMarkEntity
@@ -20,35 +22,26 @@ fun setBookmarkList(listView: RecyclerView, items: List<BookMarkEntity>?) {
     (listView.adapter as BookMarkListAdapter).submitList(items)
 }
 
-@BindingAdapter("listview_visibility")
+@BindingAdapter(value = ["bookmark_listview_items", "bookmark_listview_loading"], requireAll = true)
 fun setListViewVisibility(
-    view: RecyclerView, items: List<BookMarkEntity>?
+    view: RelativeLayout, items: List<BookMarkEntity>?, isLoading: Boolean
 ) {
-    if (items.isNullOrEmpty()) {
-        view.gone()
-    } else {
-        view.visible()
+    val listView: RecyclerView = view.findViewById(R.id.bookmark_listview)
+    val emptyTv: TextView = view.findViewById(R.id.empty_text)
+    val loadingView: ContentLoadingProgressBar = view.findViewById(R.id.progressbar)
+    if (isLoading) {
+        loadingView.visible()
+        listView.gone()
+        emptyTv.gone()
+        return
     }
-}
-
-@BindingAdapter("progressbar_visibility")
-fun setProgressBarVisibility(
-    view: ContentLoadingProgressBar,
-    isLoading: Boolean
-) {
-    when (isLoading) {
-        true -> view.visible()
-        false -> view.gone()
+    if (items!!.isEmpty()) {
+        emptyTv.visible()
+        loadingView.gone()
+        listView.gone()
+        return
     }
-}
-
-@BindingAdapter("no_items_visibility")
-fun setNoItemsVisibility(
-    view: TextView,
-    items: List<BookMarkEntity>?
-) {
-    when (items.isNullOrEmpty()) {
-        true -> view.visible()
-        false -> view.gone()
-    }
+    emptyTv.gone()
+    loadingView.gone()
+    listView.visible()
 }
