@@ -1,6 +1,6 @@
 package com.owllife.youtubebookmark.data.server
 
-import com.owllife.youtubebookmark.domain.resp.YoutubeMovieResp
+import com.owllife.youtubebookmark.domain.resp.YoutubeVideoResp
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -12,5 +12,5 @@ import retrofit2.http.Query
 interface YoutubeService {
 
     @GET("videos?part=snippet")
-    fun getVideoInfo(@Query("id") id: String, @Query("key") key: String): Call<YoutubeMovieResp>
+    fun getVideoInfo(@Query("id") id: String, @Query("key") key: String): Call<YoutubeVideoResp>
 }

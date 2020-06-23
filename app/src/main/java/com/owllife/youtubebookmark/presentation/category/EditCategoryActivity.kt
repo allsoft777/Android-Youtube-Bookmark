@@ -42,8 +42,9 @@ class EditCategoryActivity : BaseActivity() {
         dataBinding.viewmodel = getBaseViewModel() as EditCategoryViewModel
 
         configureListView(viewModel!!, dataBinding.categoryListView)
-        configureDefaultToolbar(toolbar, getString(R.string.bookmark_management))
+        configureDefaultToolbar(toolbar, getString(R.string.category_management))
         bindOptionMenuLiveData(this, this)
+
         viewModel?.let { vm ->
             vm.categoryList.observe(this, Observer {
                 vm.dataLoading.value = false

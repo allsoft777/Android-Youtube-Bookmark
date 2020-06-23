@@ -107,7 +107,7 @@
                         android:id="@+id/check_btn"
                         style="@style/OutlineButtonStyle"
                         android:layout_marginStart="5dp"
-                        android:onClick="@{() -> viewmodel.handleQueryBtn()}"
+                        android:onClick="@{() -> viewmodel.queryYouTubeVideoInfo()}"
                         android:text="@string/query"
                         android:textColor="@color/primary_text"/>
                 </LinearLayout>
@@ -160,7 +160,7 @@
             android:textColor="@color/primary_text_color_selector"
             android:textSize="@dimen/common_big_size_button_text_size"
             bind:selected_category="@{viewmodel.selectedCategory}"
-            bind:youtube_movie_resp="@{viewmodel.movieData}"/>
+            bind:youtube_video_resp="@{viewmodel.movieData}"/>
 
     </LinearLayout>
 

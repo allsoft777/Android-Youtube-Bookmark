@@ -1,10 +1,13 @@
 package com.owllife.youtubebookmark.core
 
-import android.view.View
-import android.widget.Toast
+import android.widget.ImageView
+import com.bumptech.glide.Glide
 
 /**
  * @author owllife.dev
  * @since 20. 6. 10
  */
-fun View.showToastMsg(msg: String) = Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+fun ImageView.loadFromUrl(url: String?) =
+    Glide.with(this.context.applicationContext)
+        .load(url)
+        .into(this)

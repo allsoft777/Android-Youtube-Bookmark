@@ -10,9 +10,8 @@ import com.owllife.youtubebookmark.domain.BookmarkRepository
 import com.owllife.youtubebookmark.domain.CategoryRepository
 import com.owllife.youtubebookmark.domain.ResultData
 import com.owllife.youtubebookmark.domain.YoutubeRemoteRepository
-import com.owllife.youtubebookmark.domain.entity.BookMarkEntity
 import com.owllife.youtubebookmark.domain.entity.CategoryEntity
-import com.owllife.youtubebookmark.domain.resp.YoutubeMovieResp
+import com.owllife.youtubebookmark.domain.resp.YoutubeVideoResp
 import com.owllife.youtubebookmark.presentation.common.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,17 +27,17 @@ class EditBookMarkViewModel(
     private val youtubeRemoteRepository: YoutubeRemoteRepository
 ) : BaseViewModel(appContext) {
 
+    // two-way data binding
+    var movieUrl: MutableLiveData<String> = MutableLiveData()
+
     private var _selectedCategory: MutableLiveData<CategoryEntity> = MutableLiveData()
     var selectedCategory: LiveData<CategoryEntity> = _selectedCategory
 
-    private var _movieData: MutableLiveData<YoutubeMovieResp> = MutableLiveData()
-    var movieData: LiveData<YoutubeMovieResp> = _movieData
-
-    private var _movieUrl: MutableLiveData<String> = MutableLiveData()
-    var movieUrl: LiveData<String> = _movieUrl
+    private var _movieData: MutableLiveData<YoutubeVideoResp> = MutableLiveData()
+    var movieData: LiveData<YoutubeVideoResp> = _movieData
 
     private var _categoryManagement: MutableLiveData<Boolean> = MutableLiveData()
-    var categoryManagement: LiveData<Boolean> = MutableLiveData()
+    var categoryManagement: LiveData<Boolean> = _categoryManagement
 
     private var _hideInputMethod: MutableLiveData<Boolean> = MutableLiveData()
     var hideInputMethod: LiveData<Boolean> = _hideInputMethod
@@ -69,24 +68,13 @@ class EditBookMarkViewModel(
         _categoryManagement.value = true
     }
 
-    fun handleQueryBtn() {
-        _movieUrl.value =
-            "https://www.youtube.com/watch?v=4bmUFRxNEIg"
+    fun queryYouTubeVideoInfo() {
+        movieUrl.value = "https://www.youtube.com/watch?v=4bmUFRxNEIg"
         if (movieUrl.value.isNullOrEmpty()) {
             setToastText(getString(R.string.msg_input_youtube_url))
             return
         }
-
-        _videoId = String.empty()
-        if (movieUrl.value!!.contains("youtu.be/")) {
-            val split = movieUrl.value!!.split("/")
-            _videoId = split[split.size - 1]
-        } else if (movieUrl.value!!.contains("watch?v=")) {
-            val split = movieUrl.value!!.split("watch?v=")
-            if (split.size == 2) {
-                _videoId = split[split.size - 1]
-            }
-        }
+        _videoId = extractYouTubeVideoIdFromUrl(movieUrl.value!!)
         if (_videoId.isEmpty()) {
             setToastText(getString(R.string.msg_input_youtube_url_correctly))
             return
@@ -118,48 +106,12 @@ class EditBookMarkViewModel(
         }
         handleDataLoading(true)
 
-        @Suppress("SENSELESS_COMPARISON")
         viewModelScope.launch {
-            val categoryId = selectedCategory.value!!.id
-            val videoId = _videoId
-            var thumbnailUrl = ""
-            if (movieData.value!!.items[0].snippet.thumbnails.maxres != null) {
-                thumbnailUrl = movieData.value!!.items[0].snippet.thumbnails.maxres.url
-            }
-            if (thumbnailUrl.isEmpty() && movieData.value!!.items[0].snippet.thumbnails.high != null) {
-                thumbnailUrl = movieData.value!!.items[0].snippet.thumbnails.high.url
-            }
-            if (thumbnailUrl.isEmpty()) {
-                thumbnailUrl = movieData.value!!.items[0].snippet.thumbnails.default.url
-            }
-
-            val title = movieData.value!!.items[0].snippet.title
-            val desc = movieData.value!!.items[0].snippet.description
-            val tagsList = movieData.value!!.items[0].snippet.tags
-            val sb = StringBuilder()
-            for (i in tagsList.indices) {
-                if (i != 0) {
-                    sb.append(",")
-                }
-                sb.append(tagsList[i])
-            }
-            val tagsStr = sb.toString()
-            val channelId = movieData.value!!.items[0].snippet.channelId
-            val publishedAt = movieData.value!!.items[0].snippet.publishedAt
-
-            val bookMarkEntity = BookMarkEntity(
-                categoryId = categoryId,
-                videoId = videoId,
-                thumbnailUrl = thumbnailUrl,
-                title = title,
-                description = desc,
-                tags = tagsStr,
-                channelId = channelId,
-                publishedAt = publishedAt,
-                bookmarked_at = System.currentTimeMillis()
-            )
-
+            val bookMarkEntity = mapYoutubeVideoRespToBookMarkEntity(movieData.value!!)
+            bookMarkEntity.categoryId = _selectedCategory.value!!.id
+            bookMarkEntity.videoId = _videoId
             bookmarkRepository.insertNewBookmark(bookMarkEntity)
+
             handleDataLoading(false)
             _savedToLocalDb.value = true
             setToastText(getString(R.string.msg_database_inserted))

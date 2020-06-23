@@ -36,7 +36,7 @@ class CreateCategoryDialogView {
 
         val alertDialog = builder.create()
         alertDialog.setView(dataBinding.root)
-        alertDialog.setCancelable(true)
+        alertDialog.setCancelable(false)
         alertDialog.setOnShowListener {
             dataBinding.inputText.requestFocus()
             val pos: Int = dataBinding.inputText.text.length

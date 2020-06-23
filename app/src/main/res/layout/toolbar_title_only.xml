@@ -29,7 +29,7 @@
                 android:id="@+id/center_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="@dimen/common_activity_horizontal_margin"
                 android:fontFamily="@string/sans_serif_medium"
                 android:includeFontPadding="false"
                 android:text="@string/app_name"

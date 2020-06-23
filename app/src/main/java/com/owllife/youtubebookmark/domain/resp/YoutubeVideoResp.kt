@@ -1,6 +1,6 @@
 package com.owllife.youtubebookmark.domain.resp
 
-data class YoutubeMovieResp(
+data class YoutubeVideoResp(
     val etag: String,
     val items: List<Item>,
     val kind: String,

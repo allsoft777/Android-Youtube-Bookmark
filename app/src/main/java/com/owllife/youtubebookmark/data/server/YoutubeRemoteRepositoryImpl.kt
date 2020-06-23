@@ -4,7 +4,7 @@ import android.content.Context
 import com.owllife.youtubebookmark.R
 import com.owllife.youtubebookmark.domain.ResultData
 import com.owllife.youtubebookmark.domain.YoutubeRemoteRepository
-import com.owllife.youtubebookmark.domain.resp.YoutubeMovieResp
+import com.owllife.youtubebookmark.domain.resp.YoutubeVideoResp
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -34,12 +34,12 @@ class YoutubeRemoteRepositoryImpl(
         }
     }
 
-    override suspend fun getMovieInfo(movieId: String): ResultData<YoutubeMovieResp> =
+    override suspend fun getMovieInfo(movieId: String): ResultData<YoutubeVideoResp> =
         withContext(ioDispatcher) {
             val key = context.getString(R.string.youtube_api_key)
             val resp = YoutubeRetrofit.getService().getVideoInfo(movieId, key).execute()
             if (resp.isSuccessful) {
-                return@withContext ResultData.Success(resp.body() as YoutubeMovieResp)
+                return@withContext ResultData.Success(resp.body() as YoutubeVideoResp)
             }
             return@withContext ResultData.Failure(Exception(resp.errorBody().toString()))
         }

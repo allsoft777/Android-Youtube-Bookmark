@@ -15,10 +15,10 @@ import kotlinx.android.parcel.Parcelize
 data class BookMarkEntity(
 
     @ColumnInfo(name = "category_id")
-    var categoryId: Int,
+    var categoryId: Int = 0,
 
     @ColumnInfo(name = "video_id")
-    var videoId: String,
+    var videoId: String = "",
 
     @ColumnInfo(name = "thumbnail_url")
     var thumbnailUrl: String,

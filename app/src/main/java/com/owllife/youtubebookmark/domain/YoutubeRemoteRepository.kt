@@ -1,6 +1,6 @@
 package com.owllife.youtubebookmark.domain
 
-import com.owllife.youtubebookmark.domain.resp.YoutubeMovieResp
+import com.owllife.youtubebookmark.domain.resp.YoutubeVideoResp
 
 /**
  * @author owllife.dev
@@ -8,5 +8,5 @@ import com.owllife.youtubebookmark.domain.resp.YoutubeMovieResp
  */
 interface YoutubeRemoteRepository {
 
-    suspend fun getMovieInfo(movieId: String): ResultData<YoutubeMovieResp>
+    suspend fun getMovieInfo(movieId: String): ResultData<YoutubeVideoResp>
 }
