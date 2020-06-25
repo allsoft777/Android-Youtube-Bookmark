@@ -37,6 +37,11 @@ class BookmarkLocalRepository(
         return dao.observeBookmarks(categoryId)
     }
 
+    override suspend fun fetchBookmarks(categoryId: Int): List<BookMarkEntity> =
+        withContext(ioDispatcher) {
+            dao.fetchBookmarks(categoryId)
+        }
+
     override suspend fun insertNewBookmark(item: BookMarkEntity) = withContext(ioDispatcher) {
         dao.insertNewBookmark(item)
     }

@@ -19,13 +19,25 @@
 
         <include layout="@layout/toolbar_title_only"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/category_list_view"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            bind:edit_category_list="@{viewModel.categoryList}"/>
+            android:layout_height="match_parent">
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/category_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                bind:category_listview_items="@{viewModel.categoryList}"/>
+
+            <include
+                layout="@layout/merge_no_items"
+                bind:isEmpty="@{viewModel.categoryList.empty}"/>
+
+            <include
+                layout="@layout/merge_loading"
+                bind:isLoading="@{viewModel.dataLoading}"/>
+        </RelativeLayout>
     </LinearLayout>
 
 </layout>

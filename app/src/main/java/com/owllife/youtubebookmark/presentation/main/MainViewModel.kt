@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.owllife.youtubebookmark.domain.CategoryRepository
 import com.owllife.youtubebookmark.domain.entity.CategoryEntity
 import com.owllife.youtubebookmark.presentation.common.BaseViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 /**
@@ -26,7 +25,7 @@ class MainViewModel constructor(
     }
 
     private fun fetchCategoryFromLocalRepository() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             categoryList = categoryRepository.observeCategories()
         }
     }

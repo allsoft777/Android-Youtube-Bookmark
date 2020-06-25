@@ -24,7 +24,7 @@ class EditCategoryDialogView {
             LayoutInflater.from(parentContext),
             R.layout.dialog_edit_category_info, null, false
         )
-        dataBinding.viewmodel = viewModel
+        dataBinding.viewModel = viewModel
         builder.setNegativeButton(R.string.cancel) { dialog, _ ->
             hideKeyboard(parentContext, dataBinding.inputText.windowToken)
             dialog.dismiss()

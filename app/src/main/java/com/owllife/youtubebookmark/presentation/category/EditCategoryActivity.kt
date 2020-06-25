@@ -6,10 +6,12 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.PopupMenu
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import com.owllife.youtubebookmark.R
 import com.owllife.youtubebookmark.core.configureDefaultToolbar
 import com.owllife.youtubebookmark.databinding.ActivityEditCategoryBinding
@@ -27,10 +29,11 @@ class EditCategoryActivity : BaseActivity() {
 
     private lateinit var dataBinding: ActivityEditCategoryBinding
     private var viewModel: EditCategoryViewModel? = null
+    private var questionAlertDialog: AlertDialog? = null
 
     companion object {
-        fun callingIntent(context: Context) = run {
-            val intent = Intent(context, EditCategoryActivity::class.java)
+        fun callingIntent(parentContext: Context) = run {
+            val intent = Intent(parentContext, EditCategoryActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
         }
     }
@@ -62,6 +65,11 @@ class EditCategoryActivity : BaseActivity() {
         return viewModel
     }
 
+    fun configureListView(viewModel: EditCategoryViewModel, categoryListView: RecyclerView) {
+        val listAdapter = CategoryAdapter(viewModel)
+        categoryListView.adapter = listAdapter
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_add, menu)
         return true
@@ -87,7 +95,7 @@ class EditCategoryActivity : BaseActivity() {
                 popup.menuInflater.inflate(R.menu.menu_category, popup.menu)
                 popup.setOnMenuItemClickListener {
                     when (it.itemId) {
-                        R.id.delete -> vm.deleteCategory()
+                        R.id.delete -> showDeleteQuestionDialog()
                         R.id.modify -> {
                             vm.setEditingCategory()
                             EditCategoryDialogView().show(context, vm)
@@ -98,5 +106,20 @@ class EditCategoryActivity : BaseActivity() {
                 popup.show()
             })
         }
+    }
+
+    override fun onDestroy() {
+        questionAlertDialog?.dismiss()
+        super.onDestroy()
+    }
+
+    private fun showDeleteQuestionDialog() {
+        questionAlertDialog = AlertDialog.Builder(this)
+            .setTitle(R.string.category_deletion)
+            .setMessage(R.string.msg_delete_category)
+            .setPositiveButton(R.string.confirm) { _, _ ->
+                viewModel?.deleteCategory()
+            }.setNegativeButton(R.string.cancel) { _, _ ->
+            }.show()
     }
 }

@@ -11,6 +11,8 @@ interface BookmarkRepository {
 
     fun observeBookmarks(categoryId: Int): LiveData<List<BookMarkEntity>>
 
+    suspend fun fetchBookmarks(categoryId: Int): List<BookMarkEntity>
+
     suspend fun insertNewBookmark(item: BookMarkEntity)
 
     suspend fun deleteBookmark(id: Int)

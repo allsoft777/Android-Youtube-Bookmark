@@ -4,10 +4,6 @@
 
     <data>
 
-        <import type="android.text.TextUtils"/>
-
-        <import type="android.view.View"/>
-
         <variable
             name="viewModel"
             type="com.owllife.youtubebookmark.presentation.login.LoginViewModel"/>

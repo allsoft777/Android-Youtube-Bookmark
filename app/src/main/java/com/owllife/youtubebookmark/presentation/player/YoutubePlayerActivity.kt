@@ -1,5 +1,7 @@
 package com.owllife.youtubebookmark.presentation.player
 
+import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
@@ -8,9 +10,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.owllife.youtubebookmark.R
 import com.owllife.youtubebookmark.databinding.ActivityYoutubePlayerBinding
+import com.owllife.youtubebookmark.domain.entity.BookMarkEntity
 import com.owllife.youtubebookmark.injection.ViewModelFactory
 import com.owllife.youtubebookmark.presentation.common.BaseActivity
 import com.owllife.youtubebookmark.presentation.common.BaseViewModel
+import com.owllife.youtubebookmark.presentation.util.PresentationConstants
 
 /**
  * @author owllife.dev
@@ -21,6 +25,14 @@ class YoutubePlayerActivity : BaseActivity() {
     private lateinit var dataBinding: ActivityYoutubePlayerBinding
     private lateinit var youtubePlayerViewManager: YoutubePlayerViewManager
     private var viewModel: YoutubePlayerViewModel? = null
+
+    companion object {
+        fun callingIntent(parentContext: Context, item: BookMarkEntity) = run {
+            val intent = Intent(parentContext, YoutubePlayerActivity::class.java)
+            intent.putExtra(PresentationConstants.KEY_BOOKMARK_ENTITY, item)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {

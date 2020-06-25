@@ -5,7 +5,7 @@
     <data>
 
         <variable
-            name="viewmodel"
+            name="viewModel"
             type="com.owllife.youtubebookmark.presentation.category.EditCategoryViewModel"/>
     </data>
 
@@ -19,7 +19,7 @@
         <EditText
             android:id="@+id/input_text"
             style="@style/InputDialogEditTextStyle"
-            android:text="@={viewmodel.editingCategoryEntity.name}"/>
+            android:text="@={viewModel.editingCategoryEntity.name}"/>
 
     </LinearLayout>
 </layout>

@@ -26,8 +26,8 @@ class EditBookMarkActivity : BaseActivity() {
     private var viewModel: EditBookMarkViewModel? = null
 
     companion object {
-        fun callingIntent(context: Context) = run {
-            val intent = Intent(context, EditBookMarkActivity::class.java)
+        fun callingIntent(parentContext: Context) = run {
+            val intent = Intent(parentContext, EditBookMarkActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
         }
     }
@@ -39,8 +39,8 @@ class EditBookMarkActivity : BaseActivity() {
         dataBinding.viewModel = getBaseViewModel() as EditBookMarkViewModel
 
         viewModel?.let {
-            it.categoryList.observe(this, Observer {
-                dataBinding.categorySelector.adapter = CategorySpinnerAdapter(viewModel!!, this, it)
+            it.categoryList.observe(this, Observer { categoryList ->
+                dataBinding.categorySelector.adapter = CategorySpinnerAdapter(this, categoryList)
             })
             it.hideInputMethod.observe(this, Observer { method ->
                 if (method) {

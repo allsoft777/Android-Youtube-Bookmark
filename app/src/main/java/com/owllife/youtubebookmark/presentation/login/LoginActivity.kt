@@ -24,8 +24,8 @@ class LoginActivity : BaseActivity() {
     companion object {
         const val REQ_CODE_SIGN_IN = 1
 
-        fun callingIntent(context: Context) = run {
-            val intent = Intent(context, LoginActivity::class.java)
+        fun callingIntent(parentContext: Context) = run {
+            val intent = Intent(parentContext, LoginActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
         }
     }
@@ -55,11 +55,6 @@ class LoginActivity : BaseActivity() {
     override fun onStart() {
         super.onStart()
         viewModel?.loadProfile()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        overridePendingTransition(0, 0)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

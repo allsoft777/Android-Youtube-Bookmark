@@ -25,9 +25,6 @@ abstract class BaseActivity : AppCompatActivity() {
     private fun bindViewModel() {
         val viewModel = getBaseViewModel()
         viewModel?.let { vm ->
-//            vm.dataLoading.observe(this, Observer { show ->
-//                if (show) loadingView.show() else loadingView.dismiss()
-//            })
             vm.toastText.observe(this, Observer {
                 showToastMsg(it)
             })
@@ -41,5 +38,10 @@ abstract class BaseActivity : AppCompatActivity() {
                 finish()
             })
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        overridePendingTransition(0, 0)
     }
 }

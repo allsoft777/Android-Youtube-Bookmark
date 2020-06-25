@@ -1,6 +1,5 @@
 package com.owllife.youtubebookmark.presentation.main
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,9 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.owllife.youtubebookmark.R
-import com.owllife.youtubebookmark.core.EventObserver
+import com.owllife.youtubebookmark.data.logger.Logger
 import com.owllife.youtubebookmark.databinding.FragBookmarkListBinding
+import com.owllife.youtubebookmark.domain.entity.BookMarkEntity
 import com.owllife.youtubebookmark.injection.ViewModelFactory
+import com.owllife.youtubebookmark.presentation.data.SelectedBookmarkData
 import com.owllife.youtubebookmark.presentation.player.YoutubePlayerActivity
 import com.owllife.youtubebookmark.presentation.util.PresentationConstants
 
@@ -31,7 +32,7 @@ class BookMarkListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         dataBinding = FragBookmarkListBinding.inflate(inflater, container, false).apply {
-            viewmodel = ViewModelProvider(
+            viewModel = ViewModelProvider(
                 requireActivity().viewModelStore,
                 ViewModelFactory(requireActivity(), requireActivity().application)
             ).get(BookMarkListViewModel::class.java)
@@ -46,26 +47,38 @@ class BookMarkListFragment : Fragment() {
         val categoryId = getCategoryId()
         dataBinding.categoryId = categoryId
 
-        loadData()
-
         @Suppress("ReplaceGetOrSet")
-        dataBinding.viewmodel?.let { vm ->
+        dataBinding.viewModel?.let { vm ->
             vm.getBookmarkListData(categoryId).observe(requireActivity(), Observer {
                 vm.setDataLoading(getCategoryId(), false)
             })
-            vm.openBookmarkEvent.observe(requireActivity(), EventObserver { entity ->
-                val intent = Intent(activity, YoutubePlayerActivity::class.java)
-                intent.putExtra(PresentationConstants.KEY_BOOKMARK_ENTITY, entity)
-                startActivity(intent)
+
+            vm.getBookmarkListData(getCategoryId()).observe(this, Observer {
+                Logger.d("KSI", "main ------ " + getCategoryId())
             })
         }
-        listAdapter = BookMarkListAdapter(dataBinding.viewmodel!!)
+
+        listAdapter = BookMarkListAdapter(object : OnItemClickListener {
+            override fun onItemClicked(item: BookMarkEntity) {
+                startActivity(YoutubePlayerActivity.callingIntent(activity!!, item))
+            }
+
+            override fun onOptionItemClicked(data: SelectedBookmarkData) {
+                dataBinding.viewModel?.setSelectedOptionItem(data)
+            }
+        })
+
         dataBinding.bookmarkListview.adapter = listAdapter
         bindOptionMenuLiveData()
     }
 
+    override fun onResume() {
+        super.onResume()
+        loadData()
+    }
+
     private fun loadData() {
-        dataBinding.viewmodel!!.fetchDataFromLocalDb(getCategoryId())
+        dataBinding.viewModel!!.fetchDataFromLocalDb(getCategoryId())
     }
 
     private fun getCategoryId(): Int {
@@ -76,7 +89,7 @@ class BookMarkListFragment : Fragment() {
     }
 
     private fun bindOptionMenuLiveData() {
-        dataBinding.viewmodel?.let { vm ->
+        dataBinding.viewModel?.let { vm ->
             vm.getSelectedBookmarkData(getCategoryId())
                 ?.observe(viewLifecycleOwner, Observer { it ->
                     val popup = PopupMenu(context, it.anchor)
@@ -84,8 +97,8 @@ class BookMarkListFragment : Fragment() {
                     popup.setOnMenuItemClickListener {
                         when (it.itemId) {
                             R.id.delete -> vm.deleteSelectedBookmark(getCategoryId())
-
                         }
+                        popup.dismiss()
                         true
                     }
                     popup.show()

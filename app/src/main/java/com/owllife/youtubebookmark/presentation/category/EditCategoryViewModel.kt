@@ -24,7 +24,9 @@ class EditCategoryViewModel constructor(
     private val categoryRepository: CategoryRepository
 ) : BaseViewModel(appContext) {
 
-    private val TAG = EditCategoryViewModel::class.java.simpleName
+    companion object {
+        private val TAG = EditCategoryViewModel::class.java.simpleName
+    }
 
     // Two-way dataBinding, exposing MutableLiveData
     var newCategoryName: MutableLiveData<String> = MutableLiveData()

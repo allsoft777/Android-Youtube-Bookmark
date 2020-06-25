@@ -22,17 +22,17 @@ import kotlinx.android.synthetic.main.toolbar_title_only.*
  */
 class ProfileActivity : BaseActivity() {
 
+    private lateinit var dataBinding: ActivityMyProfileBinding
+    private var viewModel: ProfileViewModel? = null
+
     companion object {
         private const val REQ_CODE_SIGN_IN = 1
 
-        fun callingIntent(context: Context) = run {
-            val intent = Intent(context, ProfileActivity::class.java)
+        fun callingIntent(parentContext: Context) = run {
+            val intent = Intent(parentContext, ProfileActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
         }
     }
-
-    private lateinit var dataBinding: ActivityMyProfileBinding
-    private var viewModel: ProfileViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,11 +73,6 @@ class ProfileActivity : BaseActivity() {
             return
         }
         return super.onActivityResult(requestCode, resultCode, data)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        overridePendingTransition(0, 0)
     }
 
     override fun onStart() {

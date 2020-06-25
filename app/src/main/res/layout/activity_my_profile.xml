@@ -5,10 +5,6 @@
 
     <data>
 
-        <import type="android.view.View"/>
-
-        <import type="android.text.TextUtils"/>
-
         <variable
             name="viewModel"
             type="com.owllife.youtubebookmark.presentation.profile.ProfileViewModel"/>

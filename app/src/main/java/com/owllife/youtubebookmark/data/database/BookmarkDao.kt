@@ -14,6 +14,9 @@ interface BookmarkDao {
     @Query("SELECT * FROM bookmark WHERE category_id LIKE :categoryId")
     fun observeBookmarks(categoryId: Int): LiveData<List<BookMarkEntity>>
 
+    @Query("SELECT * FROM bookmark WHERE category_id LIKE :categoryId")
+    suspend fun fetchBookmarks(categoryId: Int): List<BookMarkEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNewBookmark(item: BookMarkEntity)
 

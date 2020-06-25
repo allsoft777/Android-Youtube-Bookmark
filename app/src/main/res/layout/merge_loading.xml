@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="isLoading"
+            type="androidx.lifecycle.LiveData&lt;Boolean&gt;"/>
+    </data>
+
+    <merge>
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/progressbar"
+            style="?android:progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@android:color/transparent"
+            bind:common_loading="@{isLoading}"/>
+
+    </merge>
+</layout>

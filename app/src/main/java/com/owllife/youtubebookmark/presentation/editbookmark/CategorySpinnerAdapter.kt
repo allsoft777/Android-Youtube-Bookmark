@@ -13,17 +13,10 @@ import com.owllife.youtubebookmark.domain.entity.CategoryEntity
  * @author owllife.dev
  * @since 20. 6. 12
  */
-class CategorySpinnerAdapter : ArrayAdapter<CategoryEntity> {
-
-    private var viewModel: EditBookMarkViewModel? = null
-
-    constructor(
-        viewModel: EditBookMarkViewModel,
-        context: Context,
-        items: List<CategoryEntity>
-    ) : super(context, 0, items) {
-        this.viewModel = viewModel
-    }
+class CategorySpinnerAdapter(
+    context: Context,
+    items: List<CategoryEntity>
+) : ArrayAdapter<CategoryEntity>(context, 0, items) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val holder = DropDownViewHolder.from(parent)

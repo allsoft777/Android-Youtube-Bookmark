@@ -10,6 +10,7 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems
 import com.owllife.youtubebookmark.R
 import com.owllife.youtubebookmark.core.configureDefaultToolbar
+import com.owllife.youtubebookmark.data.logger.Logger
 import com.owllife.youtubebookmark.databinding.ActivityMainBinding
 import com.owllife.youtubebookmark.injection.ViewModelFactory
 import com.owllife.youtubebookmark.presentation.common.BaseActivity
@@ -28,26 +29,24 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         dataBinding.lifecycleOwner = this
+        dataBinding.viewModel = viewModel
 
         viewModel?.let { vm ->
             vm.categoryList.observe(this, Observer {
-                configureViewPager()
+                Logger.d("KSI", "categorylist!")
+                val pagerAdapter = FragmentPagerItemAdapter(
+                    supportFragmentManager, getFragmentItems()
+                )
+                dataBinding.viewpager.apply {
+                    adapter = pagerAdapter
+                    offscreenPageLimit = 3
+                }
+                dataBinding.viewPagerTab.setViewPager(dataBinding.viewpager)
             })
         }
 
         dataBinding.viewPagerTab.setDefaultTabTextColor(getColor(R.color.primary_text))
         configureDefaultToolbar(toolbar)
-    }
-
-    private fun configureViewPager() {
-        val pagerAdapter = FragmentPagerItemAdapter(
-            supportFragmentManager, getFragmentItems()
-        )
-        dataBinding.viewpager.apply {
-            adapter = pagerAdapter
-            offscreenPageLimit = 3
-        }
-        dataBinding.viewPagerTab.setViewPager(dataBinding.viewpager)
     }
 
     private fun getFragmentItems(): FragmentPagerItems {
