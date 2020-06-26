@@ -52,7 +52,7 @@
         <item name="android:tint">@color/primary_text</item>
     </style>
 
-    <style name="InputDialogEditTextStyle">
+    <style name="CategoryNameEditTextStyle">
         <item name="android:layout_marginTop">5dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -60,6 +60,7 @@
         <item name="android:textSize">15sp</item>
         <item name="android:textColor">@color/second_text</item>
         <item name="android:fontFamily">@string/sans_serif</item>
+        <item name="android:maxLength">@integer/category_name_max_length</item>
     </style>
 
     <style name="DialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
