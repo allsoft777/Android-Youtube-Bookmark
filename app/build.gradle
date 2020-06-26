@@ -12,8 +12,13 @@ android {
         applicationId "com.owllife.youtubebookmark"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+
+        def versionPropsFile = file('version.properties')
+        Properties versionProps = new Properties()
+        versionProps.load(new FileInputStream(versionPropsFile))
+
+        versionCode versionProps['VERSION_CODE_APP'] as int
+        versionName versionProps['VERSION_NAME_APP'].toString()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -25,8 +30,14 @@ android {
         }
     }
 
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding = true
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "YoutubeBookmark-${defaultConfig.versionName}-${variant.buildType.name}.apk"
+        }
     }
 
     compileOptions {
@@ -81,7 +92,6 @@ dependencies {
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.16'
     implementation 'com.squareup.retrofit2:retrofit:2.6.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5'
     implementation('com.crashlytics.sdk.android:crashlytics:2.10.1@aar') {
         transitive = true
