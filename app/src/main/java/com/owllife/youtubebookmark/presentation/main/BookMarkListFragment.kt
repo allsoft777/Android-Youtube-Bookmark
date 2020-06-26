@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.owllife.youtubebookmark.R
-import com.owllife.youtubebookmark.data.logger.Logger
 import com.owllife.youtubebookmark.databinding.FragBookmarkListBinding
 import com.owllife.youtubebookmark.domain.entity.BookMarkEntity
 import com.owllife.youtubebookmark.injection.ViewModelFactory
@@ -51,10 +50,6 @@ class BookMarkListFragment : Fragment() {
         dataBinding.viewModel?.let { vm ->
             vm.getBookmarkListData(categoryId).observe(requireActivity(), Observer {
                 vm.setDataLoading(getCategoryId(), false)
-            })
-
-            vm.getBookmarkListData(getCategoryId()).observe(this, Observer {
-                Logger.d("KSI", "main ------ " + getCategoryId())
             })
         }
 

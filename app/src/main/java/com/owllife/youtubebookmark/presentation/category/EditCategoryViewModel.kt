@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.owllife.youtubebookmark.R
 import com.owllife.youtubebookmark.core.empty
-import com.owllife.youtubebookmark.data.logger.Logger
+import com.owllife.youtubebookmark.data.logger.MainLogger
 import com.owllife.youtubebookmark.domain.CategoryRepository
 import com.owllife.youtubebookmark.domain.entity.CategoryEntity
 import com.owllife.youtubebookmark.presentation.common.BaseViewModel
@@ -43,7 +43,7 @@ class EditCategoryViewModel constructor(
 
     override fun onCleared() {
         super.onCleared()
-        Logger.d(TAG, "onCleared")
+        MainLogger.d(TAG, "onCleared")
     }
 
     private fun fetchCategoryFromLocalRepository() {

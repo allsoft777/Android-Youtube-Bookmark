@@ -3,7 +3,7 @@ package com.owllife.youtubebookmark.domain.interactor
 import android.text.TextUtils
 import com.google.firebase.auth.FirebaseAuth
 import com.owllife.youtubebookmark.core.interactor.UseCase
-import com.owllife.youtubebookmark.data.logger.Logger
+import com.owllife.youtubebookmark.data.logger.MainLogger
 import com.owllife.youtubebookmark.domain.ProfileRepository
 import com.owllife.youtubebookmark.domain.ResultData
 import com.owllife.youtubebookmark.domain.SharedPref
@@ -33,7 +33,7 @@ class FetchMyProfileUseCase(
 
         val userInfoVO: MyProfileData? = sharedPref.getUserInfo()
         if (userInfoVO != null && !TextUtils.isEmpty(userInfoVO.email)) {
-            Logger.d(TAG, "fetchProfileData - already cached.")
+            MainLogger.d(TAG, "fetchProfileData - already cached.")
             return ResultData.Success(userInfoVO)
         }
 

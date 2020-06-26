@@ -22,30 +22,30 @@ class BookMarkListViewModel constructor(
     private val bookmarkRepository: BookmarkRepository
 ) : BaseViewModel(appContext) {
 
-    private var bookmarkList: HashMap<Int, MutableLiveData<List<BookMarkEntity>>> = HashMap()
-    private val dataLoading: HashMap<Int, MutableLiveData<Boolean>> = HashMap()
-    private var selectedOptionItem: HashMap<Int, MutableLiveData<SelectedBookmarkData>> = HashMap()
+    private var _bookmarkList: HashMap<Int, MutableLiveData<List<BookMarkEntity>>> = HashMap()
+    private val _dataLoading: HashMap<Int, MutableLiveData<Boolean>> = HashMap()
+    private var _selectedOptionItem: HashMap<Int, MutableLiveData<SelectedBookmarkData>> = HashMap()
 
     fun setDataLoading(categoryId: Int, value: Boolean) {
-        if (dataLoading.get(categoryId) == null) {
-            dataLoading.put(categoryId, MutableLiveData(value))
+        if (_dataLoading.get(categoryId) == null) {
+            _dataLoading.put(categoryId, MutableLiveData(value))
         } else {
-            dataLoading.get(categoryId)!!.value = value
+            _dataLoading.get(categoryId)!!.value = value
         }
     }
 
     fun getDataLoading(categoryId: Int): LiveData<Boolean> {
-        if (dataLoading.get(categoryId) == null) {
-            dataLoading.put(categoryId, MutableLiveData(false))
+        if (_dataLoading.get(categoryId) == null) {
+            _dataLoading.put(categoryId, MutableLiveData())
         }
-        return dataLoading.get(categoryId)!!
+        return _dataLoading.get(categoryId)!!
     }
 
     fun getBookmarkListData(categoryId: Int): MutableLiveData<List<BookMarkEntity>> {
-        if (bookmarkList.get(categoryId) == null) {
-            bookmarkList.put(categoryId, MutableLiveData())
+        if (_bookmarkList.get(categoryId) == null) {
+            _bookmarkList.put(categoryId, MutableLiveData())
         }
-        return bookmarkList.get(categoryId)!!
+        return _bookmarkList.get(categoryId)!!
     }
 
     fun fetchDataFromLocalDb(categoryId: Int) {
@@ -57,24 +57,24 @@ class BookMarkListViewModel constructor(
     }
 
     fun getSelectedBookmarkData(categoryId: Int): LiveData<SelectedBookmarkData>? {
-        val ret = selectedOptionItem.get(categoryId)
+        val ret = _selectedOptionItem.get(categoryId)
         if (ret == null) {
             val newData = MutableLiveData<SelectedBookmarkData>()
-            selectedOptionItem.put(categoryId, newData)
+            _selectedOptionItem.put(categoryId, newData)
             return newData
         }
         return ret
     }
 
     fun setSelectedOptionItem(selectedBookmarkData: SelectedBookmarkData) {
-        val data = selectedOptionItem.get(selectedBookmarkData.item.categoryId)
+        val data = _selectedOptionItem.get(selectedBookmarkData.item.categoryId)
         data!!.value = selectedBookmarkData
     }
 
     fun deleteSelectedBookmark(categoryId: Int) {
         setDataLoading(categoryId, true)
         viewModelScope.launch(Dispatchers.Main) {
-            bookmarkRepository.deleteBookmark(selectedOptionItem.get(categoryId)!!.value!!.item.id)
+            bookmarkRepository.deleteBookmark(_selectedOptionItem.get(categoryId)!!.value!!.item.id)
             setDataLoading(categoryId, false)
             setToastText(getString(R.string.msg_database_deleted))
             fetchDataFromLocalDb(categoryId)

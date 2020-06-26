@@ -6,7 +6,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.owllife.youtubebookmark.core.interactor.UseCase
-import com.owllife.youtubebookmark.data.logger.Logger
+import com.owllife.youtubebookmark.data.logger.MainLogger
 import com.owllife.youtubebookmark.domain.ResultData
 import com.owllife.youtubebookmark.domain.makeFailureData
 import com.owllife.youtubebookmark.presentation.login.LoginViewModel
@@ -23,7 +23,7 @@ class SignInWithGoogleUseCase : UseCase<Unit, SignInWithGoogleParams>() {
         val account: GoogleSignInAccount = try {
             task.getResult(ApiException::class.java)
         } catch (e: ApiException) {
-            Logger.e(LoginViewModel.TAG, "fireBaseAuthWithGoogle - " + e.message)
+            MainLogger.e(LoginViewModel.TAG, "fireBaseAuthWithGoogle - " + e.message)
             return ResultData.Failure(e as Exception)
         } ?: return makeFailureData("fireBaseAuthWithGoogle - account is null.")
 

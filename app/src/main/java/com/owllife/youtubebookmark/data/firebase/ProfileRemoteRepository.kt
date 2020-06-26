@@ -3,7 +3,7 @@ package com.owllife.youtubebookmark.data.firebase
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.owllife.youtubebookmark.data.logger.Logger
+import com.owllife.youtubebookmark.data.logger.MainLogger
 import com.owllife.youtubebookmark.domain.ProfileRepository
 import com.owllife.youtubebookmark.domain.ResultData
 import com.owllife.youtubebookmark.domain.firebase.FirestoreTable.UserProfile
@@ -29,10 +29,10 @@ class ProfileRemoteRepository : ProfileRepository {
         return try {
             val ret = eventDocument.get().await()
             if (ret != null && ret.exists()) {
-                Logger.d(TAG, "uid is already exists. : " + firebaseUser.uid)
+                MainLogger.d(TAG, "uid is already exists. : " + firebaseUser.uid)
                 ResultData.Success(true)
             } else {
-                Logger.d(TAG, "there is no uid. need to add data")
+                MainLogger.d(TAG, "there is no uid. need to add data")
                 insertUserInfoToRemote(firebaseUser)
             }
         } catch (e: java.lang.Exception) {

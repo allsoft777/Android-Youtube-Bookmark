@@ -7,8 +7,8 @@ import com.owllife.youtubebookmark.BuildConfig
  * @author owllife.dev
  * @since 20. 6. 10
  */
-
-object Logger {
+@Suppress("unused")
+object MainLogger {
 
     private const val TAG = "YOUTUBE_BOOKMARK"
 

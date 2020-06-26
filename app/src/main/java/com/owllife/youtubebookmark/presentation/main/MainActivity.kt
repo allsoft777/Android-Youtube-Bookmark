@@ -10,7 +10,6 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems
 import com.owllife.youtubebookmark.R
 import com.owllife.youtubebookmark.core.configureDefaultToolbar
-import com.owllife.youtubebookmark.data.logger.Logger
 import com.owllife.youtubebookmark.databinding.ActivityMainBinding
 import com.owllife.youtubebookmark.injection.ViewModelFactory
 import com.owllife.youtubebookmark.presentation.common.BaseActivity
@@ -33,7 +32,6 @@ class MainActivity : BaseActivity() {
 
         viewModel?.let { vm ->
             vm.categoryList.observe(this, Observer {
-                Logger.d("KSI", "categorylist!")
                 val pagerAdapter = FragmentPagerItemAdapter(
                     supportFragmentManager, getFragmentItems()
                 )
