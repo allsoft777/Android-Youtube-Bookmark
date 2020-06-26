@@ -7,10 +7,10 @@ import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.owllife.youtubebookmark.R
 import com.owllife.youtubebookmark.databinding.ActivityYoutubePlayerBinding
-import com.owllife.youtubebookmark.domain.entity.BookMarkEntity
 import com.owllife.youtubebookmark.injection.ViewModelFactory
 import com.owllife.youtubebookmark.presentation.common.BaseActivity
 import com.owllife.youtubebookmark.presentation.common.BaseViewModel
@@ -27,9 +27,9 @@ class YoutubePlayerActivity : BaseActivity() {
     private var viewModel: YoutubePlayerViewModel? = null
 
     companion object {
-        fun callingIntent(parentContext: Context, item: BookMarkEntity) = run {
+        fun callingIntent(parentContext: Context, dbId: Int) = run {
             val intent = Intent(parentContext, YoutubePlayerActivity::class.java)
-            intent.putExtra(PresentationConstants.KEY_BOOKMARK_ENTITY, item)
+            intent.putExtra(PresentationConstants.KEY_DB_ID, dbId)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
         }
     }
@@ -50,6 +50,9 @@ class YoutubePlayerActivity : BaseActivity() {
         youtubePlayerViewManager.bindUiControllerVisibility(
             this, getViewModel().showUiController
         )
+        viewModel!!.dataLoading.observe(this, Observer { isLoading ->
+            if (isLoading) loadingDialog.value.show() else loadingDialog.value.dismiss()
+        })
     }
 
     override fun getBaseViewModel(): BaseViewModel? {

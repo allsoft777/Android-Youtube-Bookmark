@@ -1,9 +1,9 @@
 package com.owllife.youtubebookmark.presentation.editbookmark
 
 import com.owllife.youtubebookmark.core.empty
-import com.owllife.youtubebookmark.domain.entity.BookMarkEntity
 import com.owllife.youtubebookmark.domain.resp.Snippet
 import com.owllife.youtubebookmark.domain.resp.YoutubeVideoResp
+import com.owllife.youtubebookmark.entity.BookMarkEntireVO
 
 /**
  * @author owllife.dev
@@ -23,7 +23,7 @@ fun extractYouTubeVideoIdFromUrl(movieUrl: String): String {
     return videoId
 }
 
-fun mapYoutubeVideoRespToBookMarkEntity(youtubeVideoResp: YoutubeVideoResp): BookMarkEntity {
+fun mapYoutubeVideoRespToBookMarkEntity(youtubeVideoResp: YoutubeVideoResp): BookMarkEntireVO {
     val snippet: Snippet = youtubeVideoResp.items[0].snippet!!
     var thumbnailUrl = String.empty()
     if (snippet.thumbnails.maxres != null) {
@@ -49,7 +49,7 @@ fun mapYoutubeVideoRespToBookMarkEntity(youtubeVideoResp: YoutubeVideoResp): Boo
     val tagsStr = sb.toString()
     val channelId = snippet.channelId
     val publishedAt = snippet.publishedAt
-    return BookMarkEntity(
+    return BookMarkEntireVO(
         thumbnailUrl = thumbnailUrl,
         title = title,
         description = desc,

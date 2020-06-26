@@ -6,14 +6,14 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.owllife.youtubebookmark.databinding.ListItemCategoryBinding
-import com.owllife.youtubebookmark.domain.entity.CategoryEntity
+import com.owllife.youtubebookmark.entity.CategoryEntireVO
 
 /**
  * @author owllife.dev
  * @since 20. 6. 5
  */
 class CategoryAdapter(private val viewModel: EditCategoryViewModel) :
-    ListAdapter<CategoryEntity, CategoryAdapter.ViewHolder>(TaskDiffCallback()) {
+    ListAdapter<CategoryEntireVO, CategoryAdapter.ViewHolder>(TaskDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
@@ -27,7 +27,7 @@ class CategoryAdapter(private val viewModel: EditCategoryViewModel) :
     class ViewHolder private constructor(private val binding: ListItemCategoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(viewModel: EditCategoryViewModel, item: CategoryEntity) {
+        fun bind(viewModel: EditCategoryViewModel, item: CategoryEntireVO) {
             binding.viewModel = viewModel
             binding.category = item
             binding.executePendingBindings()
@@ -43,12 +43,12 @@ class CategoryAdapter(private val viewModel: EditCategoryViewModel) :
     }
 }
 
-class TaskDiffCallback : DiffUtil.ItemCallback<CategoryEntity>() {
-    override fun areItemsTheSame(oldItem: CategoryEntity, newItem: CategoryEntity): Boolean {
+class TaskDiffCallback : DiffUtil.ItemCallback<CategoryEntireVO>() {
+    override fun areItemsTheSame(oldItem: CategoryEntireVO, newItem: CategoryEntireVO): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: CategoryEntity, newItem: CategoryEntity): Boolean {
+    override fun areContentsTheSame(oldItem: CategoryEntireVO, newItem: CategoryEntireVO): Boolean {
         return oldItem == newItem
     }
 }

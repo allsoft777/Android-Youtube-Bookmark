@@ -12,13 +12,12 @@ import com.owllife.youtubebookmark.presentation.data.FinishScreenData
  */
 abstract class BaseActivity : AppCompatActivity() {
 
-    private lateinit var loadingView: LoadingDialogView
+    var loadingDialog: Lazy<LoadingDialogView> = lazy { LoadingDialogView(this) }
 
     abstract fun getBaseViewModel(): BaseViewModel?
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        loadingView = LoadingDialogView(this)
         bindViewModel()
     }
 
@@ -38,6 +37,11 @@ abstract class BaseActivity : AppCompatActivity() {
                 finish()
             })
         }
+    }
+
+    override fun onDestroy() {
+        loadingDialog.value.dismiss()
+        super.onDestroy()
     }
 
     override fun onPause() {

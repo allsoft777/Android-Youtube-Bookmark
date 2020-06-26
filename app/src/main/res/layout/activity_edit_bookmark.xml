@@ -10,7 +10,7 @@
 
         <variable
             name="bookmarkEntity"
-            type="com.owllife.youtubebookmark.domain.entity.BookMarkEntity"/>
+            type="com.owllife.youtubebookmark.entity.BookMarkEntireVO"/>
     </data>
 
     <LinearLayout

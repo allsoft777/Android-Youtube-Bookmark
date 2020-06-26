@@ -9,7 +9,7 @@ import com.owllife.youtubebookmark.R
 import com.owllife.youtubebookmark.core.empty
 import com.owllife.youtubebookmark.data.logger.MainLogger
 import com.owllife.youtubebookmark.domain.CategoryRepository
-import com.owllife.youtubebookmark.domain.entity.CategoryEntity
+import com.owllife.youtubebookmark.entity.CategoryEntireVO
 import com.owllife.youtubebookmark.presentation.common.BaseViewModel
 import com.owllife.youtubebookmark.presentation.data.SelectedCategoryData
 import kotlinx.coroutines.Dispatchers
@@ -30,9 +30,10 @@ class EditCategoryViewModel constructor(
 
     // Two-way dataBinding, exposing MutableLiveData
     var newCategoryName: MutableLiveData<String> = MutableLiveData()
-    var editingCategoryEntity: MutableLiveData<CategoryEntity> = MutableLiveData()
+    var editingCategoryEntity: MutableLiveData<CategoryEntireVO> = MutableLiveData()
     var selectedOptionItem: MutableLiveData<SelectedCategoryData> = MutableLiveData()
-    var categoryList: LiveData<List<CategoryEntity>> = MutableLiveData()
+
+    var categoryList: LiveData<List<CategoryEntireVO>> = MutableLiveData()
 
     private val _dataLoading: MutableLiveData<Boolean> = MutableLiveData()
     val dataLoading: MutableLiveData<Boolean> = _dataLoading
@@ -57,10 +58,7 @@ class EditCategoryViewModel constructor(
         newCategoryName.value?.let {
             val order =
                 if (categoryList.value.isNullOrEmpty()) 0 else categoryList.value!!.size.plus(1)
-            val entity = CategoryEntity(
-                order,
-                newCategoryName.value!!
-            )
+            val entity = CategoryEntireVO(order, newCategoryName.value!!)
             categoryRepository.insertNewCategory(entity)
             newCategoryName.value = String.empty()
             setToastText(getString(R.string.msg_database_inserted))
@@ -82,6 +80,6 @@ class EditCategoryViewModel constructor(
     }
 
     fun setEditingCategory() {
-        editingCategoryEntity.value = CategoryEntity.copy(selectedOptionItem.value?.item!!)
+        editingCategoryEntity.value = selectedOptionItem.value?.item!!.copy()
     }
 }

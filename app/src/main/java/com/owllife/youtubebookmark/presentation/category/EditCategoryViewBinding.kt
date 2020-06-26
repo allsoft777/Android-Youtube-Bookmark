@@ -4,7 +4,7 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.owllife.youtubebookmark.core.gone
 import com.owllife.youtubebookmark.core.visible
-import com.owllife.youtubebookmark.domain.entity.CategoryEntity
+import com.owllife.youtubebookmark.entity.CategoryEntireVO
 
 /**
  * @author owllife.dev
@@ -12,7 +12,7 @@ import com.owllife.youtubebookmark.domain.entity.CategoryEntity
  */
 
 @BindingAdapter("category_listview_items")
-fun setCategoryList(listView: RecyclerView, items: List<CategoryEntity>?) {
+fun setCategoryList(listView: RecyclerView, items: List<CategoryEntireVO>?) {
     if (items.isNullOrEmpty() || listView.adapter == null) {
         listView.gone()
         return

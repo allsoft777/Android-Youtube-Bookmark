@@ -2,10 +2,12 @@ package com.owllife.youtubebookmark.data.database
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import androidx.room.Transaction
+import com.owllife.youtubebookmark.data.database.entity.CategoryEntity
 import com.owllife.youtubebookmark.domain.CategoryRepository
 import com.owllife.youtubebookmark.domain.ResultData
-import com.owllife.youtubebookmark.domain.entity.CategoryEntity
+import com.owllife.youtubebookmark.entity.CategoryEntireVO
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -39,18 +41,20 @@ class CategoryLocalRepository(
         }
     }
 
-    override fun observeCategories(): LiveData<List<CategoryEntity>> {
-        return categoryDao.observeCategories()
+    override fun observeCategories(): LiveData<List<CategoryEntireVO>> {
+        return Transformations.map(categoryDao.observeCategories()) { items ->
+            items.map { it.toEntireVO() }
+        }
     }
 
-    override suspend fun queryCategories(): ResultData<List<CategoryEntity>> =
+    override suspend fun queryCategories(): ResultData<List<CategoryEntireVO>> =
         withContext(ioDispatcher) {
-            val result = categoryDao.queryCategories()
+            val result = categoryDao.queryCategories().map { it.toEntireVO() }
             return@withContext ResultData.Success(result)
         }
 
-    override suspend fun insertNewCategory(item: CategoryEntity) = withContext(ioDispatcher) {
-        categoryDao.insertNewCategory(item)
+    override suspend fun insertNewCategory(item: CategoryEntireVO) = withContext(ioDispatcher) {
+        categoryDao.insertNewCategory(CategoryEntity.newEntityWith(item))
     }
 
     @Transaction
@@ -59,12 +63,10 @@ class CategoryLocalRepository(
         bookmarkDao.deleteBookmarkMatchingCategory(id)
     }
 
-    override suspend fun updateCategory(category: CategoryEntity): Int =
+    override suspend fun updateCategory(category: CategoryEntireVO): Int =
         withContext(ioDispatcher) {
-            categoryDao.updateCategory(category)
+            val target = CategoryEntity(category.order, category.name)
+            target.id = category.id
+            categoryDao.updateCategory(target)
         }
-
-    override suspend fun updateAll(categoryList: List<CategoryEntity>) = withContext(ioDispatcher) {
-        categoryDao.updateAll(categoryList)
-    }
 }

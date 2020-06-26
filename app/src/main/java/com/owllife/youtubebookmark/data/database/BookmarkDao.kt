@@ -2,7 +2,7 @@ package com.owllife.youtubebookmark.data.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.owllife.youtubebookmark.domain.entity.BookMarkEntity
+import com.owllife.youtubebookmark.data.database.entity.BookMarkEntity
 
 /**
  * @author owllife.dev
@@ -16,6 +16,9 @@ interface BookmarkDao {
 
     @Query("SELECT * FROM bookmark WHERE category_id LIKE :categoryId")
     suspend fun fetchBookmarks(categoryId: Int): List<BookMarkEntity>
+
+    @Query("SELECT * FROM bookmark WHERE id LIKE :dbId")
+    suspend fun fetchBookmark(dbId: Int): BookMarkEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNewBookmark(item: BookMarkEntity)

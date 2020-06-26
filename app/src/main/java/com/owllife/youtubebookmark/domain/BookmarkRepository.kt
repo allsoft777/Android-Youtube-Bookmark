@@ -1,7 +1,9 @@
 package com.owllife.youtubebookmark.domain
 
 import androidx.lifecycle.LiveData
-import com.owllife.youtubebookmark.domain.entity.BookMarkEntity
+import com.owllife.youtubebookmark.data.database.entity.BookMarkEntity
+import com.owllife.youtubebookmark.entity.BookMarkEntireVO
+import com.owllife.youtubebookmark.entity.BookMarkSimpleVO
 
 /**
  * @author owllife.dev
@@ -11,9 +13,11 @@ interface BookmarkRepository {
 
     fun observeBookmarks(categoryId: Int): LiveData<List<BookMarkEntity>>
 
-    suspend fun fetchBookmarks(categoryId: Int): List<BookMarkEntity>
+    suspend fun fetchBookMarksSimpleType(categoryId: Int): List<BookMarkSimpleVO>
 
-    suspend fun insertNewBookmark(item: BookMarkEntity)
+    suspend fun fetchBookMarkEntireType(categoryId: Int): BookMarkEntireVO
+
+    suspend fun insertNewBookmark(item: BookMarkEntireVO)
 
     suspend fun deleteBookmark(id: Int)
 

@@ -13,7 +13,6 @@ import com.owllife.youtubebookmark.injection.ViewModelFactory
 import com.owllife.youtubebookmark.presentation.category.EditCategoryActivity
 import com.owllife.youtubebookmark.presentation.common.BaseActivity
 import com.owllife.youtubebookmark.presentation.common.BaseViewModel
-import com.owllife.youtubebookmark.presentation.common.LoadingDialogView
 import com.owllife.youtubebookmark.presentation.util.hideKeyboard
 import kotlinx.android.synthetic.main.toolbar_title_only.*
 
@@ -25,7 +24,6 @@ class EditBookMarkActivity : BaseActivity() {
 
     private lateinit var dataBinding: ActivityEditBookmarkBinding
     private var viewModel: EditBookMarkViewModel? = null
-    private var loadingDialog: Lazy<LoadingDialogView> = lazy { LoadingDialogView(this) }
 
     companion object {
         fun callingIntent(parentContext: Context) = run {
@@ -48,14 +46,10 @@ class EditBookMarkActivity : BaseActivity() {
                 dataBinding.categorySelector.adapter = CategorySpinnerAdapter(this, categoryList)
             })
             it.hideInputMethod.observe(this, Observer { method ->
-                if (method) {
-                    hideKeyboard(this, dataBinding.inputUrlEt.windowToken)
-                }
+                if (method) hideKeyboard(this, dataBinding.inputUrlEt.windowToken)
             })
             it.savedToLocalDb.observe(this, Observer { saved ->
-                if (saved) {
-                    finish()
-                }
+                if (saved) finish()
             })
             it.categoryManagement.observe(this, Observer {
                 startActivity(EditCategoryActivity.callingIntent(this))

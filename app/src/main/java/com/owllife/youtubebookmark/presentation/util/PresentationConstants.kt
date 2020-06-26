@@ -7,4 +7,5 @@ package com.owllife.youtubebookmark.presentation.util
 object PresentationConstants {
     val KEY_CATEGORY_ID = "category_id"
     val KEY_BOOKMARK_ENTITY = "bookmark_entity"
+    val KEY_DB_ID = "db_id";
 }

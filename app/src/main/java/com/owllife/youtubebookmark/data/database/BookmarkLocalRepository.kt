@@ -2,8 +2,10 @@ package com.owllife.youtubebookmark.data.database
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import com.owllife.youtubebookmark.data.database.entity.BookMarkEntity
 import com.owllife.youtubebookmark.domain.BookmarkRepository
-import com.owllife.youtubebookmark.domain.entity.BookMarkEntity
+import com.owllife.youtubebookmark.entity.BookMarkEntireVO
+import com.owllife.youtubebookmark.entity.BookMarkSimpleVO
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -37,13 +39,18 @@ class BookmarkLocalRepository(
         return dao.observeBookmarks(categoryId)
     }
 
-    override suspend fun fetchBookmarks(categoryId: Int): List<BookMarkEntity> =
+    override suspend fun fetchBookMarksSimpleType(categoryId: Int): List<BookMarkSimpleVO> =
         withContext(ioDispatcher) {
-            dao.fetchBookmarks(categoryId)
+            dao.fetchBookmarks(categoryId).map { it.toSimpleVO() }
         }
 
-    override suspend fun insertNewBookmark(item: BookMarkEntity) = withContext(ioDispatcher) {
-        dao.insertNewBookmark(item)
+    override suspend fun fetchBookMarkEntireType(categoryId: Int): BookMarkEntireVO =
+        withContext(ioDispatcher) {
+            dao.fetchBookmark(categoryId).toEntireVO()
+        }
+
+    override suspend fun insertNewBookmark(item: BookMarkEntireVO) = withContext(ioDispatcher) {
+        dao.insertNewBookmark(BookMarkEntity.newEntityWith(item))
     }
 
     override suspend fun deleteBookmark(id: Int) = withContext(ioDispatcher) {

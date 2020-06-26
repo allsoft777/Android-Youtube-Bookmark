@@ -2,7 +2,7 @@ package com.owllife.youtubebookmark.data.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.owllife.youtubebookmark.domain.entity.CategoryEntity
+import com.owllife.youtubebookmark.data.database.entity.CategoryEntity
 
 /**
  * @author owllife.dev
@@ -25,7 +25,4 @@ interface CategoryDao {
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateCategory(category: CategoryEntity): Int
-
-    @Update
-    suspend fun updateAll(categoryList: List<CategoryEntity>)
 }

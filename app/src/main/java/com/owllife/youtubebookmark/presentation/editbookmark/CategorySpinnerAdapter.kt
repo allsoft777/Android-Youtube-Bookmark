@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.owllife.youtubebookmark.databinding.SpinnerGetviewItemCategoryBinding
-import com.owllife.youtubebookmark.domain.entity.CategoryEntity
+import com.owllife.youtubebookmark.entity.CategoryEntireVO
 
 /**
  * @author owllife.dev
@@ -15,8 +15,8 @@ import com.owllife.youtubebookmark.domain.entity.CategoryEntity
  */
 class CategorySpinnerAdapter(
     context: Context,
-    items: List<CategoryEntity>
-) : ArrayAdapter<CategoryEntity>(context, 0, items) {
+    items: List<CategoryEntireVO>
+) : ArrayAdapter<CategoryEntireVO>(context, 0, items) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val holder = DropDownViewHolder.from(parent)
@@ -35,7 +35,7 @@ class CategorySpinnerAdapter(
     class DropDownViewHolder private constructor(private val binding: SpinnerGetviewItemCategoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: CategoryEntity?) {
+        fun bind(item: CategoryEntireVO?) {
             binding.category = item
             binding.executePendingBindings()
         }

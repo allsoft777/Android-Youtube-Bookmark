@@ -8,8 +8,8 @@ import com.owllife.youtubebookmark.R
 import com.owllife.youtubebookmark.core.gone
 import com.owllife.youtubebookmark.core.loadFromUrl
 import com.owllife.youtubebookmark.core.visible
-import com.owllife.youtubebookmark.domain.entity.CategoryEntity
 import com.owllife.youtubebookmark.domain.resp.YoutubeVideoResp
+import com.owllife.youtubebookmark.entity.CategoryEntireVO
 
 /**
  * @author owllife.dev
@@ -21,7 +21,7 @@ import com.owllife.youtubebookmark.domain.resp.YoutubeVideoResp
 )
 fun renderSaveBtnEnableState(
     view: TextView,
-    selectedCategory: CategoryEntity?,
+    selectedCategory: CategoryEntireVO?,
     youtubeData: YoutubeVideoResp?
 ) {
     if (selectedCategory == null || youtubeData == null) {
@@ -31,6 +31,7 @@ fun renderSaveBtnEnableState(
     view.isEnabled = selectedCategory.name.isNotEmpty() && youtubeData.items.isNotEmpty()
 }
 
+@Suppress("ReplaceGetOrSet")
 @BindingAdapter("youtube_resp_data")
 fun renderYoutubeResp(view: LinearLayout, resp: YoutubeVideoResp?) {
     if (resp == null || resp.items.isNullOrEmpty()) {

@@ -18,13 +18,13 @@ import com.owllife.youtubebookmark.presentation.profile.ProfileViewModel
  * @author owllife.dev
  * @since 20. 6. 10
  */
-@Suppress("UNCHECKED_CAST")
 class ViewModelFactory(
     owner: SavedStateRegistryOwner,
     private val appContext: Application,
     defaultArgs: Bundle? = null
 ) : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
 
+    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(
         key: String,
         modelClass: Class<T>,
@@ -42,7 +42,10 @@ class ViewModelFactory(
                     provideCategoryLocalRepository(appContext)
                 )
             isAssignableFrom(YoutubePlayerViewModel::class.java) ->
-                YoutubePlayerViewModel(appContext)
+                YoutubePlayerViewModel(
+                    appContext,
+                    provideBookmarkLocalRepository(appContext)
+                )
             isAssignableFrom(EditBookMarkViewModel::class.java) ->
                 EditBookMarkViewModel(
                     appContext,

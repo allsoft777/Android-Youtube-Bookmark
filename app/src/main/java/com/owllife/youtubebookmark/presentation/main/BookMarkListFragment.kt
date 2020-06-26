@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.owllife.youtubebookmark.R
 import com.owllife.youtubebookmark.databinding.FragBookmarkListBinding
-import com.owllife.youtubebookmark.domain.entity.BookMarkEntity
+import com.owllife.youtubebookmark.entity.BookMarkSimpleVO
 import com.owllife.youtubebookmark.injection.ViewModelFactory
 import com.owllife.youtubebookmark.presentation.data.SelectedBookmarkData
 import com.owllife.youtubebookmark.presentation.player.YoutubePlayerActivity
@@ -54,8 +54,8 @@ class BookMarkListFragment : Fragment() {
         }
 
         listAdapter = BookMarkListAdapter(object : OnItemClickListener {
-            override fun onItemClicked(item: BookMarkEntity) {
-                startActivity(YoutubePlayerActivity.callingIntent(activity!!, item))
+            override fun onItemClicked(item: BookMarkSimpleVO) {
+                startActivity(YoutubePlayerActivity.callingIntent(activity!!, item.id))
             }
 
             override fun onOptionItemClicked(data: SelectedBookmarkData) {

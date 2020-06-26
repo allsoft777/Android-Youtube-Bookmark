@@ -1,8 +1,9 @@
-package com.owllife.youtubebookmark.domain.entity
+package com.owllife.youtubebookmark.data.database.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.owllife.youtubebookmark.entity.CategoryEntireVO
 
 /**
  * @author owllife.dev
@@ -19,7 +20,7 @@ data class CategoryEntity(
     var id: Int = 0
 
     companion object {
-        fun copy(target: CategoryEntity): CategoryEntity {
+        fun copy(target: CategoryEntireVO): CategoryEntity {
             val ret = CategoryEntity(
                 target.order,
                 target.name
@@ -27,5 +28,10 @@ data class CategoryEntity(
             ret.id = target.id
             return ret
         }
+
+        fun newEntityWith(target: CategoryEntireVO): CategoryEntity =
+            CategoryEntity(target.order, target.name)
     }
+
+    fun toEntireVO(): CategoryEntireVO = CategoryEntireVO(order, name, id)
 }

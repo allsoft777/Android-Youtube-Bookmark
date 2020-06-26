@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.owllife.youtubebookmark.domain.entity.BookMarkEntity
-import com.owllife.youtubebookmark.domain.entity.CategoryEntity
+import com.owllife.youtubebookmark.data.database.entity.BookMarkEntity
+import com.owllife.youtubebookmark.data.database.entity.CategoryEntity
 
 /**
  * @author owllife.dev

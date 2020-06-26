@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.owllife.youtubebookmark.databinding.ListItemBookmarkBinding
-import com.owllife.youtubebookmark.domain.entity.BookMarkEntity
+import com.owllife.youtubebookmark.entity.BookMarkSimpleVO
 import com.owllife.youtubebookmark.presentation.data.SelectedBookmarkData
 
 /**
@@ -14,7 +14,7 @@ import com.owllife.youtubebookmark.presentation.data.SelectedBookmarkData
  * @since 20. 6. 15
  */
 class BookMarkListAdapter(private var onClickListener: OnItemClickListener) :
-    ListAdapter<BookMarkEntity, BookMarkListAdapter.ViewHolder>(TaskDiffCallback()) {
+    ListAdapter<BookMarkSimpleVO, BookMarkListAdapter.ViewHolder>(TaskDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val li = LayoutInflater.from(parent.context)
@@ -24,7 +24,7 @@ class BookMarkListAdapter(private var onClickListener: OnItemClickListener) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item, position)
+        holder.bind(item)
     }
 
     class ViewHolder constructor(
@@ -32,7 +32,7 @@ class BookMarkListAdapter(private var onClickListener: OnItemClickListener) :
         private val onClickListener: OnItemClickListener
     ) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: BookMarkEntity, pos: Int) {
+        fun bind(item: BookMarkSimpleVO) {
             binding.bookmark = item
             binding.bodyContainer.setOnClickListener { onClickListener.onItemClicked(item) }
 
@@ -43,17 +43,17 @@ class BookMarkListAdapter(private var onClickListener: OnItemClickListener) :
     }
 }
 
-class TaskDiffCallback : DiffUtil.ItemCallback<BookMarkEntity>() {
-    override fun areItemsTheSame(oldItem: BookMarkEntity, newItem: BookMarkEntity): Boolean {
+class TaskDiffCallback : DiffUtil.ItemCallback<BookMarkSimpleVO>() {
+    override fun areItemsTheSame(oldItem: BookMarkSimpleVO, newItem: BookMarkSimpleVO): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: BookMarkEntity, newItem: BookMarkEntity): Boolean {
+    override fun areContentsTheSame(oldItem: BookMarkSimpleVO, newItem: BookMarkSimpleVO): Boolean {
         return oldItem == newItem
     }
 }
 
 interface OnItemClickListener {
-    fun onItemClicked(item: BookMarkEntity)
+    fun onItemClicked(item: BookMarkSimpleVO)
     fun onOptionItemClicked(data: SelectedBookmarkData)
 }

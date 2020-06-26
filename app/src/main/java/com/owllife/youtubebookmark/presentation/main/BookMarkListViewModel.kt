@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.owllife.youtubebookmark.R
 import com.owllife.youtubebookmark.domain.BookmarkRepository
-import com.owllife.youtubebookmark.domain.entity.BookMarkEntity
+import com.owllife.youtubebookmark.entity.BookMarkSimpleVO
 import com.owllife.youtubebookmark.presentation.common.BaseViewModel
 import com.owllife.youtubebookmark.presentation.data.SelectedBookmarkData
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +22,7 @@ class BookMarkListViewModel constructor(
     private val bookmarkRepository: BookmarkRepository
 ) : BaseViewModel(appContext) {
 
-    private var _bookmarkList: HashMap<Int, MutableLiveData<List<BookMarkEntity>>> = HashMap()
+    private var _bookmarkList: HashMap<Int, MutableLiveData<List<BookMarkSimpleVO>>> = HashMap()
     private val _dataLoading: HashMap<Int, MutableLiveData<Boolean>> = HashMap()
     private var _selectedOptionItem: HashMap<Int, MutableLiveData<SelectedBookmarkData>> = HashMap()
 
@@ -41,7 +41,7 @@ class BookMarkListViewModel constructor(
         return _dataLoading.get(categoryId)!!
     }
 
-    fun getBookmarkListData(categoryId: Int): MutableLiveData<List<BookMarkEntity>> {
+    fun getBookmarkListData(categoryId: Int): MutableLiveData<List<BookMarkSimpleVO>> {
         if (_bookmarkList.get(categoryId) == null) {
             _bookmarkList.put(categoryId, MutableLiveData())
         }
@@ -51,7 +51,7 @@ class BookMarkListViewModel constructor(
     fun fetchDataFromLocalDb(categoryId: Int) {
         setDataLoading(categoryId, true)
         viewModelScope.launch {
-            val data = bookmarkRepository.fetchBookmarks(categoryId)
+            val data = bookmarkRepository.fetchBookMarksSimpleType(categoryId)
             getBookmarkListData(categoryId).value = data
         }
     }

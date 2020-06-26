@@ -10,8 +10,8 @@ import com.owllife.youtubebookmark.domain.BookmarkRepository
 import com.owllife.youtubebookmark.domain.CategoryRepository
 import com.owllife.youtubebookmark.domain.ResultData
 import com.owllife.youtubebookmark.domain.YoutubeRemoteRepository
-import com.owllife.youtubebookmark.domain.entity.CategoryEntity
 import com.owllife.youtubebookmark.domain.resp.YoutubeVideoResp
+import com.owllife.youtubebookmark.entity.CategoryEntireVO
 import com.owllife.youtubebookmark.presentation.common.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,8 +30,8 @@ class EditBookMarkViewModel(
     // two-way data binding
     var movieUrl: MutableLiveData<String> = MutableLiveData()
 
-    private var _selectedCategory: MutableLiveData<CategoryEntity> = MutableLiveData()
-    var selectedCategory: LiveData<CategoryEntity> = _selectedCategory
+    private var _selectedCategory: MutableLiveData<CategoryEntireVO> = MutableLiveData()
+    var selectedCategory: LiveData<CategoryEntireVO> = _selectedCategory
 
     private var _movieData: MutableLiveData<YoutubeVideoResp> = MutableLiveData()
     var movieData: LiveData<YoutubeVideoResp> = _movieData
@@ -45,8 +45,8 @@ class EditBookMarkViewModel(
     private val _savedToLocalDb: MutableLiveData<Boolean> = MutableLiveData()
     var savedToLocalDb: LiveData<Boolean> = _savedToLocalDb
 
-    private var _categoryList: MutableLiveData<List<CategoryEntity>> = MutableLiveData()
-    var categoryList: LiveData<List<CategoryEntity>> = _categoryList
+    private var _categoryList: MutableLiveData<List<CategoryEntireVO>> = MutableLiveData()
+    var categoryList: LiveData<List<CategoryEntireVO>> = _categoryList
 
     private val _dataLoading: MutableLiveData<Boolean> = MutableLiveData()
     val dataLoading: LiveData<Boolean> = _dataLoading

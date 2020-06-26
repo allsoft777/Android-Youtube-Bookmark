@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.owllife.youtubebookmark.domain.CategoryRepository
-import com.owllife.youtubebookmark.domain.entity.CategoryEntity
+import com.owllife.youtubebookmark.entity.CategoryEntireVO
 import com.owllife.youtubebookmark.presentation.common.BaseViewModel
 import kotlinx.coroutines.launch
 
@@ -18,7 +18,7 @@ class MainViewModel constructor(
     private val categoryRepository: CategoryRepository
 ) : BaseViewModel(appContext) {
 
-    var categoryList: LiveData<List<CategoryEntity>> = MutableLiveData()
+    var categoryList: LiveData<List<CategoryEntireVO>> = MutableLiveData()
 
     init {
         fetchCategoryFromLocalRepository()

@@ -6,7 +6,7 @@
 
         <variable
             name="category"
-            type="com.owllife.youtubebookmark.domain.entity.CategoryEntity"/>
+            type="com.owllife.youtubebookmark.entity.CategoryEntireVO"/>
 
         <variable
             name="viewModel"
