@@ -1,6 +1,9 @@
 package com.owllife.youtubebookmark.core
 
 import android.app.Activity
+import android.app.ActivityManager
+import android.content.Context
+import android.content.Intent
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -23,4 +26,17 @@ fun AppCompatActivity.configureDefaultToolbar(
     supportActionBar!!.setDisplayHomeAsUpEnabled(false)
     supportActionBar!!.setDisplayShowTitleEnabled(false)
     toolbar.center_title.text = title
+}
+
+fun Activity.navToLauncherTask() {
+    val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+    val appTasks = activityManager.appTasks
+    for (task in appTasks) {
+        val baseIntent = task.taskInfo.baseIntent
+        val categories = baseIntent.categories
+        if (categories != null && categories.contains(Intent.CATEGORY_LAUNCHER)) {
+            task.moveToFront()
+            return
+        }
+    }
 }

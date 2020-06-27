@@ -27,8 +27,8 @@ class YoutubePlayerViewModel(
     private var _showUiController: MutableLiveData<Boolean> = MutableLiveData(true)
     var showUiController: LiveData<Boolean> = _showUiController
 
-    private var _isPipMode: MutableLiveData<Boolean> = MutableLiveData(false)
-    var isPipMode: LiveData<Boolean> = _isPipMode
+    private var _pipMode: MutableLiveData<Boolean> = MutableLiveData(false)
+    var pipMode: LiveData<Boolean> = _pipMode
 
     private val _dataLoading: MutableLiveData<Boolean> = MutableLiveData()
     val dataLoading: LiveData<Boolean> = _dataLoading
@@ -48,6 +48,6 @@ class YoutubePlayerViewModel(
     }
 
     fun setPipMode(isPipMode: Boolean) {
-        _isPipMode.value = isPipMode
+        _pipMode.value = isPipMode
     }
 }

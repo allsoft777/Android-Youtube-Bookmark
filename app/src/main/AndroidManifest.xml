@@ -39,9 +39,10 @@
 
         <activity
             android:name=".presentation.player.YoutubePlayerActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:configChanges="screenLayout|screenSize|fontScale|uiMode|layoutDirection|keyboard|keyboardHidden|orientation"
             android:hardwareAccelerated="true"
             android:label="@string/player"
+            android:launchMode="singleTask"
             android:resizeableActivity="true"
             android:supportsPictureInPicture="true"
             tools:ignore="UnusedAttribute"/>

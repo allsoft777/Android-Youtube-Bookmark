@@ -9,7 +9,6 @@ import com.owllife.youtubebookmark.domain.BookmarkRepository
 import com.owllife.youtubebookmark.entity.BookMarkSimpleVO
 import com.owllife.youtubebookmark.presentation.common.BaseViewModel
 import com.owllife.youtubebookmark.presentation.data.SelectedBookmarkData
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 /**
@@ -72,8 +71,8 @@ class BookMarkListViewModel constructor(
     }
 
     fun deleteSelectedBookmark(categoryId: Int) {
-        setDataLoading(categoryId, true)
-        viewModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch {
+            setDataLoading(categoryId, true)
             bookmarkRepository.deleteBookmark(_selectedOptionItem.get(categoryId)!!.value!!.item.id)
             setDataLoading(categoryId, false)
             setToastText(getString(R.string.msg_database_deleted))

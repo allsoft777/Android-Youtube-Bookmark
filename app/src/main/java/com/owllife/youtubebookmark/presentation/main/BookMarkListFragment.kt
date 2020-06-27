@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.owllife.youtubebookmark.R
+import com.owllife.youtubebookmark.core.showToastMsg
 import com.owllife.youtubebookmark.databinding.FragBookmarkListBinding
 import com.owllife.youtubebookmark.entity.BookMarkSimpleVO
 import com.owllife.youtubebookmark.injection.ViewModelFactory
@@ -46,10 +47,12 @@ class BookMarkListFragment : Fragment() {
         val categoryId = getCategoryId()
         dataBinding.categoryId = categoryId
 
-        @Suppress("ReplaceGetOrSet")
         dataBinding.viewModel?.let { vm ->
-            vm.getBookmarkListData(categoryId).observe(requireActivity(), Observer {
+            vm.getBookmarkListData(categoryId).observe(viewLifecycleOwner, Observer {
                 vm.setDataLoading(getCategoryId(), false)
+            })
+            vm.toastText.observe(viewLifecycleOwner, Observer {
+                activity?.showToastMsg(it)
             })
         }
 

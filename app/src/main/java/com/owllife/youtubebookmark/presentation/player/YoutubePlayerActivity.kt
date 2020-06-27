@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.owllife.youtubebookmark.R
+import com.owllife.youtubebookmark.core.navToLauncherTask
 import com.owllife.youtubebookmark.databinding.ActivityYoutubePlayerBinding
 import com.owllife.youtubebookmark.injection.ViewModelFactory
 import com.owllife.youtubebookmark.presentation.common.BaseActivity
@@ -46,7 +47,7 @@ class YoutubePlayerActivity : BaseActivity() {
         youtubePlayerViewManager = YoutubePlayerViewManager(dataBinding.youtubePlayerView, this)
         youtubePlayerViewManager.initUiButtons()
         youtubePlayerViewManager.initFullScreenListener()
-        youtubePlayerViewManager.bindPipLiveData(this, getViewModel().isPipMode)
+        youtubePlayerViewManager.bindPipLiveData(this, getViewModel().pipMode)
         youtubePlayerViewManager.bindUiControllerVisibility(
             this, getViewModel().showUiController
         )
@@ -70,7 +71,8 @@ class YoutubePlayerActivity : BaseActivity() {
             dataBinding.youtubePlayerView.exitFullScreen()
             return
         }
-        getViewModel().setPipMode(false)
+        youtubePlayerViewManager.removeFullScreenListener()
+        youtubePlayerViewManager.removeObservers(this, viewModel!!.pipMode)
         super.onBackPressed()
     }
 
@@ -92,5 +94,10 @@ class YoutubePlayerActivity : BaseActivity() {
 
     private fun getViewModel(): YoutubePlayerViewModel {
         return dataBinding.viewModel!!
+    }
+
+    override fun finish() {
+        super.finish()
+        navToLauncherTask()
     }
 }

@@ -23,6 +23,8 @@ class YoutubePlayerViewManager(
 ) {
 
     private var pictureInPictureIcon: ImageView = ImageView(activity)
+    private var youTubePlayerFullScreenListener: YouTubePlayerFullScreenListener =
+        YouTubePlayerFullScreenListenerImpl()
 
     init {
         activity.lifecycle.addObserver(youTubePlayerView)
@@ -58,18 +60,16 @@ class YoutubePlayerViewManager(
         })
     }
 
-    fun initFullScreenListener() {
-        youTubePlayerView.addFullScreenListener(object : YouTubePlayerFullScreenListener {
-            override fun onYouTubePlayerEnterFullScreen() {
-                activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                youTubePlayerView.enterFullScreen()
-            }
+    fun removeObservers(lifecycleOwner: LifecycleOwner, liveData: LiveData<Boolean>) {
+        liveData.removeObservers(lifecycleOwner)
+    }
 
-            override fun onYouTubePlayerExitFullScreen() {
-                activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                youTubePlayerView.exitFullScreen()
-            }
-        })
+    fun initFullScreenListener() {
+        youTubePlayerView.addFullScreenListener(youTubePlayerFullScreenListener)
+    }
+
+    fun removeFullScreenListener() {
+        youTubePlayerView.removeFullScreenListener(youTubePlayerFullScreenListener)
     }
 
     fun bindUiControllerVisibility(lifecycleOwner: LifecycleOwner, liveData: LiveData<Boolean>) {
@@ -80,5 +80,18 @@ class YoutubePlayerViewManager(
 
     private fun supportPipMode(): Boolean {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+    }
+
+    inner class YouTubePlayerFullScreenListenerImpl : YouTubePlayerFullScreenListener {
+
+        override fun onYouTubePlayerEnterFullScreen() {
+            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            youTubePlayerView.enterFullScreen()
+        }
+
+        override fun onYouTubePlayerExitFullScreen() {
+            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            youTubePlayerView.exitFullScreen()
+        }
     }
 }
