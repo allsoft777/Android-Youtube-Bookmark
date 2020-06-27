@@ -9,7 +9,6 @@ import com.owllife.youtubebookmark.domain.BookmarkRepository
 import com.owllife.youtubebookmark.entity.BookMarkEntireVO
 import com.owllife.youtubebookmark.presentation.common.BaseViewModel
 import com.owllife.youtubebookmark.presentation.util.PresentationConstants
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 /**
@@ -35,11 +34,11 @@ class YoutubePlayerViewModel(
 
     fun loadData(intent: Intent) {
         _dataLoading.value = true
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val dbId = intent.getIntExtra(PresentationConstants.KEY_DB_ID, -1)
             val data = bookmarkRepository.fetchBookMarkEntireType(dbId)
-            _entity.postValue(data)
-            _dataLoading.postValue(false)
+            _entity.value = data
+            _dataLoading.value = false
         }
     }
 
