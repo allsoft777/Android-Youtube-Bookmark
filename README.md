@@ -10,6 +10,14 @@
 - [Android-CleanArchitecture-Kotlin] (https://github.com/android10/Android-CleanArchitecture-Kotlin)
 - [architecture-samples] (https://github.com/android/architecture-samples)
 
+#### 샘플앱 기능
+- Google 계정을 통한 Firebase 로그인
+- Youtube 영상 URL 입력을 통해 영상 정보를 가져옴 
+- youtube 영상 정보를 Local DB에 저장
+- 영상 카테고리를 생성 및 수정
+- 유튜브 영상을 플레이
+- PIP (Picture-In-Picture)
+
 
 ## 라이브러리
 ###### Firebase
@@ -53,3 +61,131 @@ git clone https://github.com/allsoft777/Android-Youtube-Bookmark
 ## 패키지 레이어
 ![https://github.com/allsoft777/Android-Youtube-Bookmark/](https://github.com/allsoft777/Android-Youtube-Bookmark/blob/master/materials/package_layer.png)
 
+
+### 레이어 설명
+
+#### Presentation Layer
+ViewModel, View 관련 클래스들이 모여있는 패키지입니다.
+Activity, Fragment, View Widget 등이 위치하고, sub package는 기능별로 분류하게 됩니다.
+Data 레이어와 직접적인 의존관계를 없애기 위하여 contract interface, usecase가 포함된 Domain 레이어에 의존하고 있습니다.
+또한, ViewModel 을 생성하는 factory 클래스가 위치한 Injection package 또한 의존하고 있고, Entity class가 포함된 패키지에 의존하고 있습니다.
+
+##### ViewModel 에서의 async 작업
+Async 작업중 ViewModel을 사용하는 context가 종료하면 더이상 async 작업을 수행할 필요가 없습니다. 리소스가 낭비되기 때문인데요.
+viewModel에서는 이러한 기능을 아주 적은양의 코드로 실행 할 수 있도록 제공해주고 있습니다.
+```
+private var _entity: MutableLiveData<BookMarkEntireVO> = MutableLiveData()
+var entity: LiveData<BookMarkEntireVO> = _entity
+
+private val _dataLoading: MutableLiveData<Boolean> = MutableLiveData()
+val dataLoading: LiveData<Boolean> = _dataLoading
+
+fun loadData(intent: Intent) {
+    _dataLoading.value = true
+    viewModelScope.launch {
+        val dbId = intent.getIntExtra(PresentationConstants.KEY_DB_ID, -1)
+        val data = bookmarkRepository.fetchBookMarkEntireType(dbId)
+        _entity.value = data
+        _dataLoading.value = false
+    }
+}
+```
+loadData를 보면 viewModelScope.launch 를 통하여 내부적으로 heavy logic을 수행합니다.
+이 scope 자체는 main thread에서 동작하기 때문에, repository 내부적으로 async하게 동작하게끔 기능을 구현해야 합니다.
+_dataLoading은 progressbar view를 보여주기 위하여 사용하는 live data이고, _entity는 repository로부터 전달받은 결과를 저장하는 live data입니다.
+
+ 
+#### Domain Layer
+presentation 레이어에 repository interface 또는 UseCase를 제공하여 CRUD를 할 수 있도록 합니다.
+둘 중에 한개로 통일해서 사용해도 되지만, 두가지 사용 방법을 보여주기 위하여 둘다 구현한 샘플입니다.
+Coroutine을 사용하여 async 작업을 하였고, RxJava로 대체하여 사용해도 됩니다.
+
+##### Entity 클래스의 변환 작업
+Room Db의 경우 entity annotation을 사용한 entity 클래스가 있지만 이를 presentation 레이어에서 바로 사용하지 않고 caller에서 필요한 최소 정보로만 변환하여 넘겨줍니다.
+프로젝트가 커질수록 화면이 늘어나고, caller의 성격에 따라서 db entity 전체를 요구할수도 있지만 일부 몇몇 field만 요구하는 경우도 있습니다.
+만약 room db의 entity 클래스를 그대로 presentation 레이어에서 사용한다면 모든 필드에 접근이 가능하기 때문에 필요한 최소한의 필드만 볼 수 있도록 제한시켜야 하는 경우가 발생할 수 있습니다.
+이 때에는 domain 레이어에서 적절히 mapping하여 반환하도록 구현하도록 합니다. 
+
+```
+override suspend fun fetchBookMarksSimpleType(categoryId: Int): List<BookMarkSimpleVO> =
+    withContext(ioDispatcher) {
+        dao.fetchBookmarks(categoryId).map { it.toSimpleVO() }
+    }
+
+override suspend fun fetchBookMarkEntireType(categoryId: Int): BookMarkEntireVO =
+    withContext(ioDispatcher) {
+        dao.fetchBookmark(categoryId).toEntireVO()
+    }
+```
+
+```
+@Parcelize
+@Entity(tableName = "bookmark")
+data class BookMarkEntity(
+   // .....
+)
+   fun toEntireVO(): BookMarkEntireVO {
+       return BookMarkEntireVO(
+           categoryId,
+           videoId,
+           thumbnailUrl,
+           title,
+           description,
+           tags,
+           channelId,
+           publishedAt,
+           bookmarked_at,
+           id
+       )
+   }
+
+   fun toSimpleVO(): BookMarkSimpleVO {
+       return BookMarkSimpleVO(
+           categoryId,
+           thumbnailUrl,
+           title,
+           id
+       )
+   }
+}
+
+```
+
+#### Data Layer
+Network, Database, Memory cache 등 CRUD 작업을 하는 레이어 입니다.
+
+
+#### Entity Layer
+entity class를 모아놓은 레이어입니다.
+ROOM 에서 사용하는 entity 클래스는 포함하지 않습니다.
+
+
+#### Injection Layer
+가독성을 위하여(?) dagger와 같은 injection library를 사용하지 않았습니다.
+단순히 클래스를 생성하여 반환하는 역할만을 하고 있습니다.
+대상은 usecase, repository, viewmodel 클래스들입니다. 
+
+
+#### Core Layer
+안드로이드 프레임워크의 주요 컴포넌트들을 대상으로 기능을 확장하는 역할을 담당합니다.
+Activity, Framework, View 등이 있습니다.
+또한 Application 을 상속받아서 구현하는 클래스도 위치하고 있습니다.
+이 클래스는 레이어상으로 가장 최 하위에 위치한 기반 클래스이기 때문에 다른 레이어와 의존관계에 있어서는 안됩니다.
+
+
+## License
+```
+Copyright 2020 owllife.dev
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
