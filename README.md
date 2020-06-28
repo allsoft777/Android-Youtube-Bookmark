@@ -51,5 +51,5 @@ git clone https://github.com/allsoft777/Android-Youtube-Bookmark
 
 
 ## 패키지 레이어
-![https://github.com/allsoft777/Android-Youtube-Bookmark/](https://github.com/allsoft777/Android-Youtube-Bookmark/tree/master/materials/package_layer.png)
+![https://github.com/allsoft777/Android-Youtube-Bookmark/](https://github.com/allsoft777/Android-Youtube-Bookmark/blob/master/materials/package_layer.png)
 
