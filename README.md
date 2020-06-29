@@ -13,7 +13,7 @@
 #### 샘플앱 기능
 - Google 계정을 통한 Firebase 로그인
 - Youtube 영상 URL 입력을 통해 영상 정보를 가져옴 
-- youtube 영상 정보를 Local DB에 저장
+- Youtube 영상 정보를 Local DB에 저장
 - 영상 카테고리를 생성 및 수정
 - 유튜브 영상을 플레이
 - PIP (Picture-In-Picture)
@@ -70,27 +70,33 @@ Activity, Fragment, View Widget 등이 위치하고, sub package는 기능별로
 Data 레이어와 직접적인 의존관계를 없애기 위하여 contract interface, usecase가 포함된 Domain 레이어에 의존하고 있습니다.
 또한, ViewModel 을 생성하는 factory 클래스가 위치한 Injection package 또한 의존하고 있고, Entity class가 포함된 패키지에 의존하고 있습니다.
 
-##### ViewModel 에서의 async 작업
-Async 작업중 ViewModel을 사용하는 context가 종료하면 더이상 async 작업을 수행할 필요가 없습니다. 리소스가 낭비되기 때문인데요.
-viewModel에서는 이러한 기능을 아주 적은양의 코드로 실행 할 수 있도록 제공해주고 있습니다.
+##### ViewModel 에서의 async 작업 (ViewModelScope 사용)
+ViewModelScope은 앱의 각 ViewModel을 대상으로 정의됩니다. 이 범위에서 시작된 모든 코루틴은 ViewModel이 삭제되면 자동으로 취소됩니다.
+코루틴은 ViewModel이 활성 상태인 경우에만 실행해야 할 작업이 있을 때 유용합니다.
+예를 들어 레이아웃의 일부 데이터를 계산한다면 작업의 범위를 ViewModel로 지정하여 ViewModel을 삭제하면 리소스를 소모하지 않도록 작업이 자동으로 취소됩니다.
+
+다음 예에서와 같이 ViewModel의 viewModelScope 속성을 통해 ViewModel의 CoroutineScope에 액세스할 수 있습니다. ![Google Doc](https://developer.android.com/topic/libraries/architecture/coroutines)
 ```
-private var _entity: MutableLiveData<BookMarkEntireVO> = MutableLiveData()
-var entity: LiveData<BookMarkEntireVO> = _entity
+class YoutubePlayerViewModel: ViewModel() {
 
-private val _dataLoading: MutableLiveData<Boolean> = MutableLiveData()
-val dataLoading: LiveData<Boolean> = _dataLoading
-
-fun loadData(intent: Intent) {
-    _dataLoading.value = true
-    viewModelScope.launch {
-        val dbId = intent.getIntExtra(PresentationConstants.KEY_DB_ID, -1)
-        val data = bookmarkRepository.fetchBookMarkEntireType(dbId)
-        _entity.value = data
-        _dataLoading.value = false
+    private var _entity: MutableLiveData<BookMarkEntireVO> = MutableLiveData()
+    var entity: LiveData<BookMarkEntireVO> = _entity
+    
+    private val _dataLoading: MutableLiveData<Boolean> = MutableLiveData()
+    val dataLoading: LiveData<Boolean> = _dataLoading
+    
+    fun loadData(intent: Intent) {
+        _dataLoading.value = true
+        viewModelScope.launch {
+            val dbId = intent.getIntExtra(PresentationConstants.KEY_DB_ID, -1)
+            val data = bookmarkRepository.fetchBookMarkEntireType(dbId)
+            _entity.value = data
+            _dataLoading.value = false
+        }
     }
 }
 ```
-loadData를 보면 viewModelScope.launch 를 통하여 내부적으로 heavy logic을 수행합니다.
+loadData 메서드에서 viewModelScope.launch 를 통하여 내부적으로 heavy logic을 수행합니다.
 이 scope 자체는 main thread에서 동작하기 때문에, repository 내부적으로 async하게 동작하게끔 기능을 구현해야 합니다.
 _dataLoading은 progressbar view를 보여주기 위하여 사용하는 live data이고, _entity는 repository로부터 전달받은 결과를 저장하는 live data입니다.
 
