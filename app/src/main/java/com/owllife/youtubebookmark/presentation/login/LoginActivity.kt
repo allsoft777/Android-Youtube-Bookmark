@@ -38,7 +38,7 @@ class LoginActivity : BaseActivity() {
         dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         dataBinding.lifecycleOwner = this
         lazyInitViewModel()
-        bindProfileData()
+        bindViewModelData()
         bindSignInBtn()
     }
 
@@ -69,14 +69,19 @@ class LoginActivity : BaseActivity() {
         viewModel?.loadGoogleSignInClient(this)
     }
 
-    private fun bindProfileData() {
-        viewModel?.profileData?.observe(this, Observer {
-            if (it == null || it.email.isNullOrEmpty()) {
-                dataBinding.loginTriggerContainer.visibility = View.VISIBLE
-            } else {
-                viewModel!!.finishScreen(FinishScreenData.WithData(Activity.RESULT_OK))
-            }
-        })
+    private fun bindViewModelData() {
+        viewModel?.let {
+            it.profileData.observe(this, Observer { profileData ->
+                if (profileData == null || profileData.email.isNullOrEmpty()) {
+                    dataBinding.loginTriggerContainer.visibility = View.VISIBLE
+                } else {
+                    viewModel!!.finishScreen(FinishScreenData.WithData(Activity.RESULT_OK))
+                }
+            })
+            it.dataLoading.observe(this, Observer { isLoading ->
+                if (isLoading) loadingDialog.value.show() else loadingDialog.value.dismiss()
+            })
+        }
     }
 
     private fun bindSignInBtn() {

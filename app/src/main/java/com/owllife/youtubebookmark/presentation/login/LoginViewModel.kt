@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -18,8 +19,6 @@ import com.owllife.youtubebookmark.domain.interactor.InsertProfileDataUseCase
 import com.owllife.youtubebookmark.domain.interactor.SignInWithGoogleParams
 import com.owllife.youtubebookmark.domain.interactor.SignInWithGoogleUseCase
 import com.owllife.youtubebookmark.presentation.common.BaseViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 /**
@@ -61,8 +60,8 @@ class LoginViewModel(
     }
 
     fun loadProfile() {
-        _dataLoading.value = true
-        CoroutineScope(Dispatchers.Main).launch {
+        viewModelScope.launch {
+            _dataLoading.value = true
             val value = fetchMyProfileUseCase.execute(Unit)
             _dataLoading.value = false
             if (value is ResultData.Success) {
@@ -79,8 +78,8 @@ class LoginViewModel(
     }
 
     fun fireBaseAuthWithGoogle(data: Intent?, activity: Activity?) {
-        _dataLoading.value = true
-        CoroutineScope(Dispatchers.Main).launch {
+        viewModelScope.launch {
+            _dataLoading.value = true
             val params = SignInWithGoogleParams(data, activity)
             val ret = signInWithGoogleUseCase.execute(params)
             if (ret is ResultData.Success) {
@@ -93,7 +92,7 @@ class LoginViewModel(
     }
 
     private fun uploadUserInfoToRemoteDb() {
-        CoroutineScope(Dispatchers.Main).launch {
+        viewModelScope.launch {
             val value = insertProfileDataUseCase.execute(Unit)
             if (value is ResultData.Success) {
                 loadProfile()

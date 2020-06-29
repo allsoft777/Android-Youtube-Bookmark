@@ -6,8 +6,6 @@
     <color name="colorPrimaryDark">@color/gui_key_color</color>
     <color name="colorAccent">@color/gui_key_color</color>
     <color name="app_background_dim">#9900060a</color>
-    <color name="text_white_color">@color/grey_100</color>
-    <color name="web_view_text_color">#212121</color>
 
     <!-- Needed to apply DARK mode -->
     <color name="primary_text">#212121</color>
@@ -16,18 +14,13 @@
 
     <color name="default_background">@color/grey_100</color>
     <color name="default_background_2nd">@color/grey_100</color>
-    <color name="default_divider">@color/grey_300</color>
-    <color name="detail_view_refresh_ic">@color/grey_500</color>
-    <color name="detail_view_refresh_container_background">@color/default_background</color>
 
     <!-- [ref] material color palette -->
     <color name="grey_100">#F5F5F5</color>
     <color name="grey_200">#EEEEEE</color>
     <color name="grey_300">#E0E0E0</color>
-    <color name="grey_400">#BDBDBD</color>
     <color name="grey_500">#9E9E9E</color>
     <color name="grey_700">#616161</color>
-    <color name="grey_700_alpha50">#80616161</color>
     <color name="grey_800">#424242</color>
     <color name="grey_900">#212121</color>
 </resources>

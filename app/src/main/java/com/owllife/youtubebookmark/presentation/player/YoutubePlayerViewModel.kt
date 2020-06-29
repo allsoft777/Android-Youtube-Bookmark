@@ -33,8 +33,8 @@ class YoutubePlayerViewModel(
     val dataLoading: LiveData<Boolean> = _dataLoading
 
     fun loadData(intent: Intent) {
-        _dataLoading.value = true
         viewModelScope.launch {
+            _dataLoading.value = true
             val dbId = intent.getIntExtra(PresentationConstants.KEY_DB_ID, -1)
             val data = bookmarkRepository.fetchBookMarkEntireType(dbId)
             _entity.value = data

@@ -13,7 +13,6 @@ import com.owllife.youtubebookmark.domain.YoutubeRemoteRepository
 import com.owllife.youtubebookmark.domain.resp.YoutubeVideoResp
 import com.owllife.youtubebookmark.entity.CategoryEntireVO
 import com.owllife.youtubebookmark.presentation.common.BaseViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 /**
@@ -58,7 +57,7 @@ class EditBookMarkViewModel(
     }
 
     private fun loadCategoryData() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             categoryList = categoryRepository.observeCategories()
         }
     }
@@ -82,11 +81,10 @@ class EditBookMarkViewModel(
             setToastText(getString(R.string.msg_input_youtube_url_correctly))
             return
         }
-
         _hideInputMethod.value = true
-        _dataLoading.value = true
 
         viewModelScope.launch {
+            _dataLoading.value = true
             val resp = youtubeRemoteRepository.getMovieInfo(_videoId)
             if (resp is ResultData.Success) {
                 val data = resp.data
@@ -107,9 +105,9 @@ class EditBookMarkViewModel(
             setToastText(getString(R.string.msg_selected_category))
             return
         }
-        _dataLoading.value = true
 
         viewModelScope.launch {
+            _dataLoading.value = true
             val bookMarkEntity = mapYoutubeVideoRespToBookMarkEntity(movieData.value!!)
             bookMarkEntity.categoryId = _selectedCategory.value!!.id
             bookMarkEntity.videoId = _videoId

@@ -10,6 +10,8 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems
 import com.owllife.youtubebookmark.R
 import com.owllife.youtubebookmark.core.configureDefaultToolbar
+import com.owllife.youtubebookmark.core.gone
+import com.owllife.youtubebookmark.core.visible
 import com.owllife.youtubebookmark.databinding.ActivityMainBinding
 import com.owllife.youtubebookmark.injection.ViewModelFactory
 import com.owllife.youtubebookmark.presentation.common.BaseActivity
@@ -18,6 +20,7 @@ import com.owllife.youtubebookmark.presentation.editbookmark.EditBookMarkActivit
 import com.owllife.youtubebookmark.presentation.profile.ProfileActivity
 import com.owllife.youtubebookmark.presentation.util.PresentationConstants
 import kotlinx.android.synthetic.main.toolbar_title_only.*
+import kotlinx.android.synthetic.main.toolbar_title_only.view.*
 
 class MainActivity : BaseActivity() {
 
@@ -42,9 +45,11 @@ class MainActivity : BaseActivity() {
                 dataBinding.viewPagerTab.setViewPager(dataBinding.viewpager)
             })
         }
-
         dataBinding.viewPagerTab.setDefaultTabTextColor(getColor(R.color.primary_text))
+
         configureDefaultToolbar(toolbar)
+        toolbar.toolbar_logo.visible()
+        toolbar.center_title.gone()
     }
 
     private fun getFragmentItems(): FragmentPagerItems {
