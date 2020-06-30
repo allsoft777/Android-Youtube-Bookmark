@@ -27,7 +27,7 @@ class YoutubePlayerActivity : BaseActivity() {
     private val viewModel: YoutubePlayerViewModel by lazy {
         ViewModelProvider(
             this,
-            ViewModelFactory(this, application)
+            ViewModelFactory(application)
         ).get(YoutubePlayerViewModel::class.java)
     }
 

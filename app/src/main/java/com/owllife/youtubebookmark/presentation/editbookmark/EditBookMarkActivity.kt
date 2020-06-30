@@ -26,7 +26,7 @@ class EditBookMarkActivity : BaseActivity() {
     private val viewModel: EditBookMarkViewModel by lazy {
         ViewModelProvider(
             this,
-            ViewModelFactory(this, application)
+            ViewModelFactory(application)
         ).get(EditBookMarkViewModel::class.java)
     }
 

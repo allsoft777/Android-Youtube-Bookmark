@@ -1,11 +1,8 @@
 package com.owllife.youtubebookmark.injection
 
 import android.app.Application
-import android.os.Bundle
-import androidx.lifecycle.AbstractSavedStateViewModelFactory
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.savedstate.SavedStateRegistryOwner
+import androidx.lifecycle.ViewModelProvider
 import com.owllife.youtubebookmark.presentation.category.EditCategoryViewModel
 import com.owllife.youtubebookmark.presentation.editbookmark.EditBookMarkViewModel
 import com.owllife.youtubebookmark.presentation.login.LoginViewModel
@@ -18,46 +15,38 @@ import com.owllife.youtubebookmark.presentation.profile.ProfileViewModel
  * @author owllife.dev
  * @since 20. 6. 10
  */
-class ViewModelFactory(
-    owner: SavedStateRegistryOwner,
-    private val appContext: Application,
-    defaultArgs: Bundle? = null
-) : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
+class ViewModelFactory(private val appContext: Application) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(
-        key: String,
-        modelClass: Class<T>,
-        handle: SavedStateHandle
-    ) = with(modelClass) {
-        when {
-            isAssignableFrom(EditCategoryViewModel::class.java) ->
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return when {
+            modelClass.isAssignableFrom(EditCategoryViewModel::class.java) ->
                 EditCategoryViewModel(
                     appContext,
                     provideCategoryLocalRepository(appContext)
                 )
-            isAssignableFrom(MainViewModel::class.java) ->
+            modelClass.isAssignableFrom(MainViewModel::class.java) ->
                 MainViewModel(
                     provideCategoryLocalRepository(appContext),
                     provideSharedPref(appContext)
                 )
-            isAssignableFrom(YoutubePlayerViewModel::class.java) ->
+            modelClass.isAssignableFrom(YoutubePlayerViewModel::class.java) ->
                 YoutubePlayerViewModel(
                     provideBookmarkLocalRepository(appContext)
                 )
-            isAssignableFrom(EditBookMarkViewModel::class.java) ->
+            modelClass.isAssignableFrom(EditBookMarkViewModel::class.java) ->
                 EditBookMarkViewModel(
                     appContext,
                     provideCategoryLocalRepository(appContext),
                     provideBookmarkLocalRepository(appContext),
                     provideYoutubeRemoteRepository(appContext)
                 )
-            isAssignableFrom(BookMarkListViewModel::class.java) ->
+            modelClass.isAssignableFrom(BookMarkListViewModel::class.java) ->
                 BookMarkListViewModel(
                     appContext,
                     provideBookmarkLocalRepository(appContext)
                 )
-            isAssignableFrom(LoginViewModel::class.java) -> {
+            modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
                 LoginViewModel(
                     appContext,
                     provideFetchMyProfileUseCase(appContext),
@@ -65,15 +54,14 @@ class ViewModelFactory(
                     provideSignInWithGoogleUseCase()
                 )
             }
-            isAssignableFrom(ProfileViewModel::class.java) -> {
+            modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
                 ProfileViewModel(
                     appContext,
                     provideFetchMyProfileUseCase(appContext),
                     provideSignOutUseCase(appContext)
                 )
             }
-            else ->
-                throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
-        }
-    } as T
+            else -> throw IllegalArgumentException("invalid view model class.")
+        } as T
+    }
 }

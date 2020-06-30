@@ -49,7 +49,7 @@ class ProfileActivity : BaseActivity() {
     private fun getViewModel(): ProfileViewModel? {
         return ViewModelProvider(
             this,
-            ViewModelFactory(this, application)
+            ViewModelFactory(application)
         ).get(ProfileViewModel::class.java)
     }
 

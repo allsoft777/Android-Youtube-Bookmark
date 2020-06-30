@@ -28,7 +28,7 @@ class BookMarkListFragment : Fragment() {
     private val viewModel: BookMarkListViewModel by lazy {
         ViewModelProvider(
             this,
-            ViewModelFactory(this, requireActivity().application)
+            ViewModelFactory(requireActivity().application)
         ).get(BookMarkListViewModel::class.java)
     }
 
@@ -63,7 +63,14 @@ class BookMarkListFragment : Fragment() {
     }
 
     private fun bindViewType() {
-        MainActivity.viewModel!!.viewType.observe(viewLifecycleOwner, Observer { viewType ->
+        val sharedMainViewModel: MainViewModel by lazy {
+            ViewModelProvider(
+                requireActivity(),
+                ViewModelFactory(requireActivity().application)
+            ).get(MainViewModel::class.java)
+        }
+
+        sharedMainViewModel.viewType.observe(viewLifecycleOwner, Observer { viewType ->
             val adapter = dataBinding.bookmarkListview.adapter
             if (adapter == null) {
                 initAdapter(viewType)

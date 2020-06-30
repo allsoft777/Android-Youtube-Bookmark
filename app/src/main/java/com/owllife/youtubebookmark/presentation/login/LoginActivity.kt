@@ -34,7 +34,7 @@ class LoginActivity : BaseActivity() {
     private val viewModel: LoginViewModel by lazy {
         ViewModelProvider(
             this,
-            ViewModelFactory(this, application)
+            ViewModelFactory(application)
         ).get(LoginViewModel::class.java)
     }
 

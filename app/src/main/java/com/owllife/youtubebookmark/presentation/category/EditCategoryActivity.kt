@@ -60,7 +60,7 @@ class EditCategoryActivity : BaseActivity() {
     private fun getViewModel(): EditCategoryViewModel {
         return ViewModelProvider(
             this,
-            ViewModelFactory(this, application)
+            ViewModelFactory(application)
         ).get(EditCategoryViewModel::class.java)
     }
 

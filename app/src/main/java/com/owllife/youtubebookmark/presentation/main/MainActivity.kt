@@ -26,17 +26,15 @@ class MainActivity : BaseActivity() {
     private lateinit var dataBinding: ActivityMainBinding
     private var viewTypeDialog = SelectViewTypeDialog()
 
-    companion object {
-        var viewModel: MainViewModel? = null
+    private val viewModel: MainViewModel by lazy {
+        ViewModelProvider(
+            this,
+            ViewModelFactory(application)
+        ).get(MainViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(
-            this,
-            ViewModelFactory(this, application)
-        ).get(MainViewModel::class.java)
-
         dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         dataBinding.lifecycleOwner = this
         dataBinding.viewModel = viewModel
