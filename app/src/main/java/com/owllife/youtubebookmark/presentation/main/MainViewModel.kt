@@ -1,13 +1,12 @@
 package com.owllife.youtubebookmark.presentation.main
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owllife.youtubebookmark.domain.CategoryRepository
 import com.owllife.youtubebookmark.domain.SharedPref
 import com.owllife.youtubebookmark.entity.CategoryEntireVO
-import com.owllife.youtubebookmark.presentation.common.BaseViewModel
 import kotlinx.coroutines.launch
 
 /**
@@ -15,10 +14,9 @@ import kotlinx.coroutines.launch
  * @since 20. 6. 10
  */
 class MainViewModel constructor(
-    appContext: Context,
     private val categoryRepository: CategoryRepository,
-    sharedPref: SharedPref
-) : BaseViewModel(appContext) {
+    private val sharedPref: SharedPref
+) : ViewModel() {
 
     var categoryList: LiveData<List<CategoryEntireVO>> = MutableLiveData()
 

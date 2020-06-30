@@ -9,10 +9,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.owllife.youtubebookmark.R
+import com.owllife.youtubebookmark.core.showToastMsg
 import com.owllife.youtubebookmark.databinding.ActivityLoginBinding
 import com.owllife.youtubebookmark.injection.ViewModelFactory
 import com.owllife.youtubebookmark.presentation.common.BaseActivity
-import com.owllife.youtubebookmark.presentation.common.BaseViewModel
 import com.owllife.youtubebookmark.presentation.data.FinishScreenData
 
 /**
@@ -31,7 +31,12 @@ class LoginActivity : BaseActivity() {
     }
 
     private lateinit var dataBinding: ActivityLoginBinding
-    private var viewModel: LoginViewModel? = null
+    private val viewModel: LoginViewModel by lazy {
+        ViewModelProvider(
+            this,
+            ViewModelFactory(this, application)
+        ).get(LoginViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,52 +47,52 @@ class LoginActivity : BaseActivity() {
         bindSignInBtn()
     }
 
-    override fun getBaseViewModel(): BaseViewModel? {
-        if (viewModel == null) {
-            viewModel = ViewModelProvider(
-                this,
-                ViewModelFactory(this, application)
-            ).get(LoginViewModel::class.java)
-        }
-        return viewModel
-    }
-
     override fun onStart() {
         super.onStart()
-        viewModel?.loadProfile()
+        viewModel.loadProfile()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQ_CODE_SIGN_IN) {
-            viewModel?.fireBaseAuthWithGoogle(data, this)
+            viewModel.fireBaseAuthWithGoogle(data, this)
             return
         }
         return super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun lazyInitViewModel() {
-        viewModel?.loadGoogleSignInClient(this)
+        viewModel.loadGoogleSignInClient(this)
     }
 
     private fun bindViewModelData() {
-        viewModel?.let {
-            it.profileData.observe(this, Observer { profileData ->
+        viewModel.let { vm ->
+            vm.profileData.observe(this, Observer { profileData ->
                 if (profileData == null || profileData.email.isNullOrEmpty()) {
                     dataBinding.loginTriggerContainer.visibility = View.VISIBLE
                 } else {
-                    viewModel!!.finishScreen(FinishScreenData.WithData(Activity.RESULT_OK))
+                    viewModel.setFinishData(FinishScreenData.WithData(Activity.RESULT_OK))
                 }
             })
-            it.dataLoading.observe(this, Observer { isLoading ->
+            vm.dataLoading.observe(this, Observer { isLoading ->
                 if (isLoading) loadingDialog.value.show() else loadingDialog.value.dismiss()
+            })
+            viewModel.toastText.observe(this, Observer { showToastMsg(it) })
+            viewModel.failureData.observe(this, Observer { data ->
+                data.exception.message?.let { msg -> showToastMsg(msg) }
+            })
+            viewModel.finishScreenData.observe(this, Observer {
+                if (it is FinishScreenData.WithData) {
+                    setResult(it.resultCode)
+                }
+                finish()
             })
         }
     }
 
     private fun bindSignInBtn() {
         dataBinding.googleAccountBtn.setOnClickListener {
-            viewModel?.let {
-                val signInIntent = viewModel?.getGoogleSignInIntent()
+            viewModel.let {
+                val signInIntent = viewModel.getGoogleSignInIntent()
                 startActivityForResult(signInIntent, REQ_CODE_SIGN_IN)
             }
         }

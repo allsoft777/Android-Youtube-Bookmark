@@ -3,6 +3,7 @@ package com.owllife.youtubebookmark.presentation.editbookmark
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owllife.youtubebookmark.R
 import com.owllife.youtubebookmark.core.empty
@@ -12,7 +13,6 @@ import com.owllife.youtubebookmark.domain.ResultData
 import com.owllife.youtubebookmark.domain.YoutubeRemoteRepository
 import com.owllife.youtubebookmark.domain.resp.YoutubeVideoResp
 import com.owllife.youtubebookmark.entity.CategoryEntireVO
-import com.owllife.youtubebookmark.presentation.common.BaseViewModel
 import kotlinx.coroutines.launch
 
 /**
@@ -20,11 +20,11 @@ import kotlinx.coroutines.launch
  * @since 20. 6. 11
  */
 class EditBookMarkViewModel(
-    appContext: Context,
+    private val appContext: Context,
     private val categoryRepository: CategoryRepository,
     private val bookmarkRepository: BookmarkRepository,
     private val youtubeRemoteRepository: YoutubeRemoteRepository
-) : BaseViewModel(appContext) {
+) : ViewModel() {
 
     // two-way data binding
     var movieUrl: MutableLiveData<String> = MutableLiveData()
@@ -50,6 +50,9 @@ class EditBookMarkViewModel(
     private val _dataLoading: MutableLiveData<Boolean> = MutableLiveData()
     val dataLoading: LiveData<Boolean> = _dataLoading
 
+    private val _toastText: MutableLiveData<String> = MutableLiveData()
+    val toastText: LiveData<String> get() = _toastText
+
     private var _videoId = String.empty()
 
     init {
@@ -73,12 +76,12 @@ class EditBookMarkViewModel(
     fun queryYouTubeVideoInfo() {
         movieUrl.value = "https://www.youtube.com/watch?v=4bmUFRxNEIg"
         if (movieUrl.value.isNullOrEmpty()) {
-            setToastText(getString(R.string.msg_input_youtube_url))
+            _toastText.value = appContext.getString(R.string.msg_input_youtube_url)
             return
         }
         _videoId = extractYouTubeVideoIdFromUrl(movieUrl.value!!)
         if (_videoId.isEmpty()) {
-            setToastText(getString(R.string.msg_input_youtube_url_correctly))
+            _toastText.value = appContext.getString(R.string.msg_input_youtube_url_correctly)
             return
         }
         _hideInputMethod.value = true
@@ -90,7 +93,7 @@ class EditBookMarkViewModel(
                 val data = resp.data
                 _movieData.value = data
             } else if (resp is ResultData.Failure) {
-                setToastText(resp.exception.message!!)
+                _toastText.value = resp.exception.message!!
             }
             _dataLoading.value = false
         }
@@ -102,7 +105,7 @@ class EditBookMarkViewModel(
 
     fun saveToLocalDb() {
         if (selectedCategory.value == null) {
-            setToastText(getString(R.string.msg_selected_category))
+            _toastText.value = appContext.getString(R.string.msg_selected_category)
             return
         }
 
@@ -115,7 +118,7 @@ class EditBookMarkViewModel(
 
             _dataLoading.value = false
             _savedToLocalDb.value = true
-            setToastText(getString(R.string.msg_database_inserted))
+            _toastText.value = appContext.getString(R.string.msg_database_inserted)
         }
     }
 }

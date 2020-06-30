@@ -14,10 +14,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.owllife.youtubebookmark.R
 import com.owllife.youtubebookmark.core.configureDefaultToolbar
+import com.owllife.youtubebookmark.core.showToastMsg
 import com.owllife.youtubebookmark.databinding.ActivityEditCategoryBinding
 import com.owllife.youtubebookmark.injection.ViewModelFactory
 import com.owllife.youtubebookmark.presentation.common.BaseActivity
-import com.owllife.youtubebookmark.presentation.common.BaseViewModel
 import kotlinx.android.synthetic.main.toolbar_title_only.*
 
 /**
@@ -40,9 +40,10 @@ class EditCategoryActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel = getViewModel()
         dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_edit_category)
         dataBinding.lifecycleOwner = this
-        dataBinding.viewModel = getBaseViewModel() as EditCategoryViewModel
+        dataBinding.viewModel = viewModel
 
         configureListView(viewModel!!, dataBinding.categoryListView)
         configureDefaultToolbar(toolbar, getString(R.string.category_management))
@@ -52,20 +53,21 @@ class EditCategoryActivity : BaseActivity() {
             vm.categoryList.observe(this, Observer {
                 vm.dataLoading.value = false
             })
+            vm.toastText.observe(this, Observer { msg -> showToastMsg(msg) })
         }
     }
 
-    override fun getBaseViewModel(): BaseViewModel? {
-        if (viewModel == null) {
-            viewModel = ViewModelProvider(
-                this,
-                ViewModelFactory(this, application)
-            ).get(EditCategoryViewModel::class.java)
-        }
-        return viewModel
+    private fun getViewModel(): EditCategoryViewModel {
+        return ViewModelProvider(
+            this,
+            ViewModelFactory(this, application)
+        ).get(EditCategoryViewModel::class.java)
     }
 
-    fun configureListView(viewModel: EditCategoryViewModel, categoryListView: RecyclerView) {
+    private fun configureListView(
+        viewModel: EditCategoryViewModel,
+        categoryListView: RecyclerView
+    ) {
         val listAdapter = CategoryAdapter(viewModel)
         categoryListView.adapter = listAdapter
     }

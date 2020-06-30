@@ -3,11 +3,11 @@ package com.owllife.youtubebookmark.presentation.main
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owllife.youtubebookmark.R
 import com.owllife.youtubebookmark.domain.BookmarkRepository
 import com.owllife.youtubebookmark.entity.BookMarkSimpleVO
-import com.owllife.youtubebookmark.presentation.common.BaseViewModel
 import com.owllife.youtubebookmark.presentation.data.SelectedBookmarkData
 import kotlinx.coroutines.launch
 
@@ -17,13 +17,16 @@ import kotlinx.coroutines.launch
  */
 @Suppress("ReplaceGetOrSet", "ReplacePutWithAssignment")
 class BookMarkListViewModel constructor(
-    appContext: Context,
+    private val appContext: Context,
     private val bookmarkRepository: BookmarkRepository
-) : BaseViewModel(appContext) {
+) : ViewModel() {
 
     private var _bookmarkList: HashMap<Int, MutableLiveData<List<BookMarkSimpleVO>>> = HashMap()
     private val _dataLoading: HashMap<Int, MutableLiveData<Boolean>> = HashMap()
     private var _selectedOptionItem: HashMap<Int, MutableLiveData<SelectedBookmarkData>> = HashMap()
+
+    private val _toastText: MutableLiveData<String> = MutableLiveData()
+    val toastText: LiveData<String> get() = _toastText
 
     fun setDataLoading(categoryId: Int, value: Boolean) {
         if (_dataLoading.get(categoryId) == null) {
@@ -48,8 +51,8 @@ class BookMarkListViewModel constructor(
     }
 
     fun fetchDataFromLocalDb(categoryId: Int) {
-        setDataLoading(categoryId, true)
         viewModelScope.launch {
+            setDataLoading(categoryId, true)
             val data = bookmarkRepository.fetchBookMarksSimpleType(categoryId)
             getBookmarkListData(categoryId).value = data
         }
@@ -75,7 +78,7 @@ class BookMarkListViewModel constructor(
             setDataLoading(categoryId, true)
             bookmarkRepository.deleteBookmark(_selectedOptionItem.get(categoryId)!!.value!!.item.id)
             setDataLoading(categoryId, false)
-            setToastText(getString(R.string.msg_database_deleted))
+            _toastText.value = appContext.getString(R.string.msg_database_deleted)
             fetchDataFromLocalDb(categoryId)
         }
     }

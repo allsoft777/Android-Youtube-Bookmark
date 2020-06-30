@@ -15,7 +15,6 @@ import com.owllife.youtubebookmark.core.visible
 import com.owllife.youtubebookmark.databinding.ActivityMainBinding
 import com.owllife.youtubebookmark.injection.ViewModelFactory
 import com.owllife.youtubebookmark.presentation.common.BaseActivity
-import com.owllife.youtubebookmark.presentation.common.BaseViewModel
 import com.owllife.youtubebookmark.presentation.editbookmark.EditBookMarkActivity
 import com.owllife.youtubebookmark.presentation.profile.ProfileActivity
 import com.owllife.youtubebookmark.presentation.util.PresentationConstants
@@ -27,19 +26,23 @@ class MainActivity : BaseActivity() {
     private lateinit var dataBinding: ActivityMainBinding
     private var viewTypeDialog = SelectViewTypeDialog()
 
-    // TODO refactoring ViewModel
     companion object {
         var viewModel: MainViewModel? = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel = ViewModelProvider(
+            this,
+            ViewModelFactory(this, application)
+        ).get(MainViewModel::class.java)
+
         dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         dataBinding.lifecycleOwner = this
         dataBinding.viewModel = viewModel
 
-        viewModel?.let { vm ->
-            vm.categoryList.observe(this, Observer {
+        viewModel.let { vm ->
+            vm!!.categoryList.observe(this, Observer {
                 val pagerAdapter = FragmentPagerItemAdapter(
                     supportFragmentManager, getFragmentItems()
                 )
@@ -59,24 +62,14 @@ class MainActivity : BaseActivity() {
 
     private fun getFragmentItems(): FragmentPagerItems {
         var creator = FragmentPagerItems.with(this)
-        viewModel?.let {
-            for (item in it.categoryList.value!!) {
+        viewModel.let {
+            for (item in it!!.categoryList.value!!) {
                 val bundle = Bundle()
                 bundle.apply { putInt(PresentationConstants.KEY_CATEGORY_ID, item.id) }
                 creator = creator.add(item.name, BookMarkListFragment::class.java, bundle)
             }
         }
         return creator.create()
-    }
-
-    override fun getBaseViewModel(): BaseViewModel? {
-        if (viewModel == null) {
-            viewModel = ViewModelProvider(
-                this,
-                ViewModelFactory(this, application)
-            ).get(MainViewModel::class.java)
-        }
-        return viewModel
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -88,8 +81,8 @@ class MainActivity : BaseActivity() {
         when (item.itemId) {
             R.id.view_type -> viewTypeDialog.show(
                 this,
-                viewModel?.viewType!!.value,
-                viewModel?.setSelectedViewType!!
+                viewModel!!.viewType.value,
+                viewModel!!.setSelectedViewType
             )
             R.id.bookmark_management -> startActivity(EditBookMarkActivity.callingIntent(this))
             R.id.profile -> startActivity(ProfileActivity.callingIntent(this))

@@ -14,7 +14,6 @@ import com.owllife.youtubebookmark.core.navToLauncherTask
 import com.owllife.youtubebookmark.databinding.ActivityYoutubePlayerBinding
 import com.owllife.youtubebookmark.injection.ViewModelFactory
 import com.owllife.youtubebookmark.presentation.common.BaseActivity
-import com.owllife.youtubebookmark.presentation.common.BaseViewModel
 import com.owllife.youtubebookmark.presentation.util.PresentationConstants
 
 /**
@@ -25,7 +24,12 @@ class YoutubePlayerActivity : BaseActivity() {
 
     private lateinit var dataBinding: ActivityYoutubePlayerBinding
     private lateinit var youtubePlayerViewManager: YoutubePlayerViewManager
-    private var viewModel: YoutubePlayerViewModel? = null
+    private val viewModel: YoutubePlayerViewModel by lazy {
+        ViewModelProvider(
+            this,
+            ViewModelFactory(this, application)
+        ).get(YoutubePlayerViewModel::class.java)
+    }
 
     companion object {
         fun callingIntent(parentContext: Context, dbId: Int) = run {
@@ -41,29 +45,19 @@ class YoutubePlayerActivity : BaseActivity() {
         dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_youtube_player)
         dataBinding.lifecycleOwner = this
         dataBinding.viewModel = viewModel
-        viewModel?.loadData(intent)
+        viewModel.loadData(intent)
 
         lifecycle.addObserver(dataBinding.youtubePlayerView)
         youtubePlayerViewManager = YoutubePlayerViewManager(dataBinding.youtubePlayerView, this)
         youtubePlayerViewManager.initUiButtons()
         youtubePlayerViewManager.initFullScreenListener()
-        youtubePlayerViewManager.bindPipLiveData(this, getViewModel().pipMode)
+        youtubePlayerViewManager.bindPipLiveData(this, viewModel.pipMode)
         youtubePlayerViewManager.bindUiControllerVisibility(
-            this, getViewModel().showUiController
+            this, viewModel.showUiController
         )
-        viewModel!!.dataLoading.observe(this, Observer { isLoading ->
+        viewModel.dataLoading.observe(this, Observer { isLoading ->
             if (isLoading) loadingDialog.value.show() else loadingDialog.value.dismiss()
         })
-    }
-
-    override fun getBaseViewModel(): BaseViewModel? {
-        if (viewModel == null) {
-            viewModel = ViewModelProvider(
-                this,
-                ViewModelFactory(this, application)
-            ).get(YoutubePlayerViewModel::class.java)
-        }
-        return viewModel
     }
 
     override fun onBackPressed() {
@@ -72,12 +66,12 @@ class YoutubePlayerActivity : BaseActivity() {
             return
         }
         youtubePlayerViewManager.removeFullScreenListener()
-        youtubePlayerViewManager.removeObservers(this, viewModel!!.pipMode)
+        youtubePlayerViewManager.removeObservers(this, viewModel.pipMode)
         super.onBackPressed()
     }
 
     override fun onPause() {
-        getViewModel().setPipMode(true)
+        viewModel.setPipMode(true)
         super.onPause()
     }
 
@@ -86,14 +80,10 @@ class YoutubePlayerActivity : BaseActivity() {
         newConfig: Configuration?
     ) {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
-        getViewModel().setShowUiController(!isInPictureInPictureMode)
+        viewModel.setShowUiController(!isInPictureInPictureMode)
         if (!isInPictureInPictureMode) {
-            viewModel!!.setPipMode(false)
+            viewModel.setPipMode(false)
         }
-    }
-
-    private fun getViewModel(): YoutubePlayerViewModel {
-        return dataBinding.viewModel!!
     }
 
     override fun finish() {

@@ -25,18 +25,20 @@ class BookMarkListFragment : Fragment() {
 
     private lateinit var dataBinding: FragBookmarkListBinding
     private lateinit var listAdapter: BookMarkListAdapter
+    private val viewModel: BookMarkListViewModel by lazy {
+        ViewModelProvider(
+            this,
+            ViewModelFactory(this, requireActivity().application)
+        ).get(BookMarkListViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        dataBinding = FragBookmarkListBinding.inflate(inflater, container, false).apply {
-            viewModel = ViewModelProvider(
-                requireActivity().viewModelStore,
-                ViewModelFactory(requireActivity(), requireActivity().application)
-            ).get(BookMarkListViewModel::class.java)
-        }
+        dataBinding = FragBookmarkListBinding.inflate(inflater, container, false)
+        dataBinding.viewModel = viewModel
         return dataBinding.root
     }
 
@@ -61,8 +63,7 @@ class BookMarkListFragment : Fragment() {
     }
 
     private fun bindViewType() {
-        val mainViewModel = MainActivity.viewModel
-        mainViewModel!!.viewType.observe(viewLifecycleOwner, Observer { viewType ->
+        MainActivity.viewModel!!.viewType.observe(viewLifecycleOwner, Observer { viewType ->
             val adapter = dataBinding.bookmarkListview.adapter
             if (adapter == null) {
                 initAdapter(viewType)

@@ -9,10 +9,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.owllife.youtubebookmark.R
 import com.owllife.youtubebookmark.core.configureDefaultToolbar
+import com.owllife.youtubebookmark.core.showToastMsg
 import com.owllife.youtubebookmark.databinding.ActivityMyProfileBinding
 import com.owllife.youtubebookmark.injection.ViewModelFactory
 import com.owllife.youtubebookmark.presentation.common.BaseActivity
-import com.owllife.youtubebookmark.presentation.common.BaseViewModel
+import com.owllife.youtubebookmark.presentation.data.FinishScreenData
 import com.owllife.youtubebookmark.presentation.login.LoginActivity
 import kotlinx.android.synthetic.main.toolbar_title_only.*
 
@@ -36,6 +37,7 @@ class ProfileActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel = getViewModel()
         dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_my_profile)
         dataBinding.lifecycleOwner = this
         dataBinding.viewModel = viewModel
@@ -44,14 +46,11 @@ class ProfileActivity : BaseActivity() {
         bindProfileData()
     }
 
-    override fun getBaseViewModel(): BaseViewModel? {
-        if (viewModel == null) {
-            viewModel = ViewModelProvider(
-                this,
-                ViewModelFactory(this, application)
-            ).get(ProfileViewModel::class.java)
-        }
-        return viewModel
+    private fun getViewModel(): ProfileViewModel? {
+        return ViewModelProvider(
+            this,
+            ViewModelFactory(this, application)
+        ).get(ProfileViewModel::class.java)
     }
 
     private fun bindProfileData() {
@@ -60,6 +59,16 @@ class ProfileActivity : BaseActivity() {
                 val intent = LoginActivity.callingIntent(this)
                 startActivityForResult(intent, REQ_CODE_SIGN_IN)
             }
+        })
+        viewModel?.toastText?.observe(this, Observer { showToastMsg(it) })
+        viewModel?.failureData?.observe(this, Observer {
+            it.exception.message?.let { msg -> showToastMsg(msg) }
+        })
+        viewModel?.finishScreenData?.observe(this, Observer {
+            if (it is FinishScreenData.WithData) {
+                setResult(it.resultCode)
+            }
+            finish()
         })
     }
 

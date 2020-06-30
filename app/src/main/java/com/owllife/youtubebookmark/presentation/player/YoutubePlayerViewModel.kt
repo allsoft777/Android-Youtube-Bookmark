@@ -1,13 +1,12 @@
 package com.owllife.youtubebookmark.presentation.player
 
-import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owllife.youtubebookmark.domain.BookmarkRepository
 import com.owllife.youtubebookmark.entity.BookMarkEntireVO
-import com.owllife.youtubebookmark.presentation.common.BaseViewModel
 import com.owllife.youtubebookmark.presentation.util.PresentationConstants
 import kotlinx.coroutines.launch
 
@@ -16,9 +15,8 @@ import kotlinx.coroutines.launch
  * @since 20. 6. 11
  */
 class YoutubePlayerViewModel(
-    appContext: Context,
     private val bookmarkRepository: BookmarkRepository
-) : BaseViewModel(appContext) {
+) : ViewModel() {
 
     private var _entity: MutableLiveData<BookMarkEntireVO> = MutableLiveData()
     var entity: LiveData<BookMarkEntireVO> = _entity

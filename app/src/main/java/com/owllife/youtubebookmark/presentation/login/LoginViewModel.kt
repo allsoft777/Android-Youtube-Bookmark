@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -18,7 +19,7 @@ import com.owllife.youtubebookmark.domain.interactor.FetchMyProfileUseCase
 import com.owllife.youtubebookmark.domain.interactor.InsertProfileDataUseCase
 import com.owllife.youtubebookmark.domain.interactor.SignInWithGoogleParams
 import com.owllife.youtubebookmark.domain.interactor.SignInWithGoogleUseCase
-import com.owllife.youtubebookmark.presentation.common.BaseViewModel
+import com.owllife.youtubebookmark.presentation.data.FinishScreenData
 import kotlinx.coroutines.launch
 
 /**
@@ -31,7 +32,7 @@ class LoginViewModel(
     private val fetchMyProfileUseCase: FetchMyProfileUseCase,
     private val insertProfileDataUseCase: InsertProfileDataUseCase,
     private val signInWithGoogleUseCase: SignInWithGoogleUseCase
-) : BaseViewModel(appContext) {
+) : ViewModel() {
 
     companion object {
         val TAG: String = LoginViewModel::class.java.simpleName
@@ -45,6 +46,15 @@ class LoginViewModel(
 
     private val _dataLoading: MutableLiveData<Boolean> = MutableLiveData()
     val dataLoading: LiveData<Boolean> = _dataLoading
+
+    private val _toastText: MutableLiveData<String> = MutableLiveData()
+    val toastText: LiveData<String> get() = _toastText
+
+    private var _finishScreenData: MutableLiveData<FinishScreenData> = MutableLiveData()
+    var finishScreenData: LiveData<FinishScreenData> = _finishScreenData
+
+    private var _failureData: MutableLiveData<ResultData.Failure> = MutableLiveData()
+    var failureData: LiveData<ResultData.Failure> = _failureData
 
     fun loadGoogleSignInClient(activity: Activity) {
         auth = FirebaseAuth.getInstance()
@@ -66,12 +76,12 @@ class LoginViewModel(
             _dataLoading.value = false
             if (value is ResultData.Success) {
                 _profileData.value = value.data
-                setToastText(getString(R.string.msg_sign_in_successfully))
+                _toastText.value = appContext.getString(R.string.msg_sign_in_successfully)
             } else if (value is ResultData.Failure) {
                 if (value.exception is ExceptionData.NoErrException) {
                     _profileData.value = null
                 } else {
-                    handleFailure(value)
+                    _failureData.value = value
                 }
             }
         }
@@ -86,7 +96,7 @@ class LoginViewModel(
                 uploadUserInfoToRemoteDb()
             } else {
                 _dataLoading.value = false
-                handleFailure(ret as ResultData.Failure)
+                _failureData.value = ret as ResultData.Failure
             }
         }
     }
@@ -98,8 +108,12 @@ class LoginViewModel(
                 loadProfile()
             } else if (value is ResultData.Failure) {
                 _dataLoading.value = false
-                handleFailure(value)
+                _failureData.value = value
             }
         }
+    }
+
+    fun setFinishData(data: FinishScreenData) {
+        _finishScreenData.value = data
     }
 }

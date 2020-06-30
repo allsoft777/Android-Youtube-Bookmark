@@ -8,11 +8,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.owllife.youtubebookmark.R
 import com.owllife.youtubebookmark.core.configureDefaultToolbar
+import com.owllife.youtubebookmark.core.showToastMsg
 import com.owllife.youtubebookmark.databinding.ActivityEditBookmarkBinding
 import com.owllife.youtubebookmark.injection.ViewModelFactory
 import com.owllife.youtubebookmark.presentation.category.EditCategoryActivity
 import com.owllife.youtubebookmark.presentation.common.BaseActivity
-import com.owllife.youtubebookmark.presentation.common.BaseViewModel
 import com.owllife.youtubebookmark.presentation.util.hideKeyboard
 import kotlinx.android.synthetic.main.toolbar_title_only.*
 
@@ -23,7 +23,12 @@ import kotlinx.android.synthetic.main.toolbar_title_only.*
 class EditBookMarkActivity : BaseActivity() {
 
     private lateinit var dataBinding: ActivityEditBookmarkBinding
-    private var viewModel: EditBookMarkViewModel? = null
+    private val viewModel: EditBookMarkViewModel by lazy {
+        ViewModelProvider(
+            this,
+            ViewModelFactory(this, application)
+        ).get(EditBookMarkViewModel::class.java)
+    }
 
     companion object {
         fun callingIntent(parentContext: Context) = run {
@@ -36,35 +41,26 @@ class EditBookMarkActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_edit_bookmark)
         dataBinding.lifecycleOwner = this
-        dataBinding.viewModel = getBaseViewModel() as EditBookMarkViewModel
+        dataBinding.viewModel = viewModel
 
-        viewModel?.let {
-            it.dataLoading.observe(this, Observer { isLoading ->
+        viewModel.let { vm ->
+            vm.dataLoading.observe(this, Observer { isLoading ->
                 if (isLoading) loadingDialog.value.show() else loadingDialog.value.dismiss()
             })
-            it.categoryList.observe(this, Observer { categoryList ->
+            vm.categoryList.observe(this, Observer { categoryList ->
                 dataBinding.categorySelector.adapter = CategorySpinnerAdapter(this, categoryList)
             })
-            it.hideInputMethod.observe(this, Observer { method ->
+            vm.hideInputMethod.observe(this, Observer { method ->
                 if (method) hideKeyboard(this, dataBinding.inputUrlEt.windowToken)
             })
-            it.savedToLocalDb.observe(this, Observer { saved ->
+            vm.savedToLocalDb.observe(this, Observer { saved ->
                 if (saved) finish()
             })
-            it.categoryManagement.observe(this, Observer {
+            vm.categoryManagement.observe(this, Observer {
                 startActivity(EditCategoryActivity.callingIntent(this))
             })
+            vm.toastText.observe(this, Observer { msg -> showToastMsg(msg) })
         }
         configureDefaultToolbar(toolbar, getString(R.string.bookmark_management))
-    }
-
-    override fun getBaseViewModel(): BaseViewModel? {
-        if (viewModel == null) {
-            viewModel = ViewModelProvider(
-                this,
-                ViewModelFactory(this, application)
-            ).get(EditBookMarkViewModel::class.java)
-        }
-        return viewModel
     }
 }

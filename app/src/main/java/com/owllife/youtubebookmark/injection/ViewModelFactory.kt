@@ -38,13 +38,11 @@ class ViewModelFactory(
                 )
             isAssignableFrom(MainViewModel::class.java) ->
                 MainViewModel(
-                    appContext,
                     provideCategoryLocalRepository(appContext),
                     provideSharedPref(appContext)
                 )
             isAssignableFrom(YoutubePlayerViewModel::class.java) ->
                 YoutubePlayerViewModel(
-                    appContext,
                     provideBookmarkLocalRepository(appContext)
                 )
             isAssignableFrom(EditBookMarkViewModel::class.java) ->
