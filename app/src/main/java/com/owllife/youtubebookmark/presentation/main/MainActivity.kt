@@ -25,7 +25,12 @@ import kotlinx.android.synthetic.main.toolbar_title_only.view.*
 class MainActivity : BaseActivity() {
 
     private lateinit var dataBinding: ActivityMainBinding
-    private var viewModel: MainViewModel? = null
+    private var viewTypeDialog = SelectViewTypeDialog()
+
+    // TODO refactoring ViewModel
+    companion object {
+        var viewModel: MainViewModel? = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,9 +86,19 @@ class MainActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.view_type -> viewTypeDialog.show(
+                this,
+                viewModel?.viewType!!.value,
+                viewModel?.setSelectedViewType!!
+            )
             R.id.bookmark_management -> startActivity(EditBookMarkActivity.callingIntent(this))
             R.id.profile -> startActivity(ProfileActivity.callingIntent(this))
         }
         return true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewTypeDialog.dismiss()
     }
 }

@@ -7,6 +7,10 @@ import com.owllife.youtubebookmark.domain.firebase.MyProfileData
  * @since 20. 6. 17
  */
 interface SharedPref {
+
     fun setUserInfo(info: MyProfileData?)
     fun getUserInfo(): MyProfileData?
+
+    fun setViewType(type: Int)
+    fun getViewType(): Int
 }

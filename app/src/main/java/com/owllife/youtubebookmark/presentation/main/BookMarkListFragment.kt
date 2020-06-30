@@ -56,6 +56,24 @@ class BookMarkListFragment : Fragment() {
             })
         }
 
+        bindViewType()
+        bindOptionMenuLiveData()
+    }
+
+    private fun bindViewType() {
+        val mainViewModel = MainActivity.viewModel
+        mainViewModel!!.viewType.observe(viewLifecycleOwner, Observer { viewType ->
+            val adapter = dataBinding.bookmarkListview.adapter
+            if (adapter == null) {
+                initAdapter(viewType)
+            } else {
+                (adapter as BookMarkListAdapter).setViewType(viewType)
+                adapter.notifyDataSetChanged()
+            }
+        })
+    }
+
+    private fun initAdapter(viewType: Int) {
         listAdapter = BookMarkListAdapter(object : OnItemClickListener {
             override fun onItemClicked(item: BookMarkSimpleVO) {
                 startActivity(YoutubePlayerActivity.callingIntent(activity!!, item.id))
@@ -64,10 +82,8 @@ class BookMarkListFragment : Fragment() {
             override fun onOptionItemClicked(data: SelectedBookmarkData) {
                 dataBinding.viewModel?.setSelectedOptionItem(data)
             }
-        })
-
+        }, viewType)
         dataBinding.bookmarkListview.adapter = listAdapter
-        bindOptionMenuLiveData()
     }
 
     override fun onResume() {

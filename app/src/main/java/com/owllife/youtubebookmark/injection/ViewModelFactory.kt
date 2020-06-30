@@ -39,7 +39,8 @@ class ViewModelFactory(
             isAssignableFrom(MainViewModel::class.java) ->
                 MainViewModel(
                     appContext,
-                    provideCategoryLocalRepository(appContext)
+                    provideCategoryLocalRepository(appContext),
+                    provideSharedPref(appContext)
                 )
             isAssignableFrom(YoutubePlayerViewModel::class.java) ->
                 YoutubePlayerViewModel(

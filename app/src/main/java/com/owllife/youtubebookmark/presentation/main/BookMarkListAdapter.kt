@@ -5,30 +5,69 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.owllife.youtubebookmark.databinding.ListItemBookmarkBinding
+import com.owllife.youtubebookmark.databinding.ListItemBookmarkFullTypeBinding
+import com.owllife.youtubebookmark.databinding.ListItemBookmarkSimpleTypeBinding
 import com.owllife.youtubebookmark.entity.BookMarkSimpleVO
+import com.owllife.youtubebookmark.entity.EntityConstants
 import com.owllife.youtubebookmark.presentation.data.SelectedBookmarkData
 
 /**
  * @author owllife.dev
  * @since 20. 6. 15
  */
-class BookMarkListAdapter(private var onClickListener: OnItemClickListener) :
-    ListAdapter<BookMarkSimpleVO, BookMarkListAdapter.ViewHolder>(TaskDiffCallback()) {
+class BookMarkListAdapter(
+    private var onClickListener: OnItemClickListener,
+    private var viewType: Int
+) :
+    ListAdapter<BookMarkSimpleVO, RecyclerView.ViewHolder>(TaskDiffCallback()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    fun setViewType(type: Int) {
+        viewType = type
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val li = LayoutInflater.from(parent.context)
-        val binding = ListItemBookmarkBinding.inflate(li, parent, false)
-        return ViewHolder(binding, onClickListener)
+        if (viewType == EntityConstants.VIEW_TYPE_FULL) {
+            val binding = ListItemBookmarkFullTypeBinding.inflate(li, parent, false)
+            return ViewHolderFullType(binding, onClickListener)
+        } else if (viewType == EntityConstants.VIEW_TYPE_SIMPLE) {
+            val binding = ListItemBookmarkSimpleTypeBinding.inflate(li, parent, false)
+            return ViewHolderSimpleType(binding, onClickListener)
+        }
+        throw IllegalArgumentException("view type is invalid : $viewType")
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = getItem(position)
-        holder.bind(item)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is ViewHolderFullType) {
+            val item = getItem(position)
+            holder.bind(item)
+        } else if (holder is ViewHolderSimpleType) {
+            val item = getItem(position)
+            holder.bind(item)
+        }
     }
 
-    class ViewHolder constructor(
-        private val binding: ListItemBookmarkBinding,
+    override fun getItemViewType(position: Int): Int {
+        return viewType
+    }
+
+    class ViewHolderFullType constructor(
+        private val binding: ListItemBookmarkFullTypeBinding,
+        private val onClickListener: OnItemClickListener
+    ) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: BookMarkSimpleVO) {
+            binding.bookmark = item
+            binding.bodyContainer.setOnClickListener { onClickListener.onItemClicked(item) }
+
+            val optionMenu = SelectedBookmarkData(binding.icMore, item)
+            binding.icMore.setOnClickListener { onClickListener.onOptionItemClicked(optionMenu) }
+            binding.executePendingBindings()
+        }
+    }
+
+    class ViewHolderSimpleType constructor(
+        private val binding: ListItemBookmarkSimpleTypeBinding,
         private val onClickListener: OnItemClickListener
     ) :
         RecyclerView.ViewHolder(binding.root) {
