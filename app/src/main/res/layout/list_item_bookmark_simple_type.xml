@@ -25,6 +25,7 @@
             android:id="@+id/body_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/default_background_2nd"
             android:clickable="true"
             android:focusable="true"
             android:foreground="@drawable/list_item_background"

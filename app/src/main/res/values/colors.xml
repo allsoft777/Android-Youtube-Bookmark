@@ -2,16 +2,13 @@
 <resources>
     <!-- No needed to apply DARK mode -->
     <color name="gui_key_color">#43A047</color>
-    <color name="colorPrimary">@color/gui_key_color</color>
-    <color name="colorPrimaryDark">@color/gui_key_color</color>
-    <color name="colorAccent">@color/gui_key_color</color>
+    <color name="colorPrimary">#43A047</color>
     <color name="app_background_dim">#9900060a</color>
 
     <!-- Needed to apply DARK mode -->
     <color name="primary_text">#212121</color>
     <color name="primary_text_disabled">@color/grey_500</color>
     <color name="second_text">#424242</color>
-
     <color name="default_background">@color/grey_100</color>
     <color name="default_background_2nd">@color/grey_100</color>
 

@@ -2,8 +2,8 @@
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorPrimary</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -16,9 +16,11 @@
         <item name="android:windowEnterTransition">@null</item>
         <item name="android:windowExitTransition">@null</item>
         <item name="android:statusBarColor">#000000</item>
-        <item name="android:popupMenuStyle">@style/PopupMenu</item>
         <item name="android:actionOverflowButtonStyle">@style/ActionButtonOverflow</item>
         <item name="android:actionMenuTextColor">@color/primary_text</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+        <item name="android:textAppearanceLargePopupMenu">@style/PopupTextAppearanceLarge</item>
+        <item name="android:textAppearanceSmallPopupMenu">@style/PopupTextAppearanceSmall</item>
     </style>
 
     <style name="AppTheme.NoActionBar.Dim">
@@ -42,10 +44,21 @@
         <item name="android:colorControlHighlight">@color/second_text</item>
     </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:colorBackground">@color/default_background_2nd</item>
+    </style>
 
-    <style name="PopupMenu" parent="android:Widget.Material.PopupMenu">
+    <style name="PopupMenu" parent="Widget.AppCompat.Light.PopupMenu">
         <item name="android:popupElevation">2dp</item>
+        <item name="android:popupBackground">@drawable/popup_background</item>
+    </style>
+
+    <style name="PopupTextAppearanceSmall" parent="@style/TextAppearance.AppCompat.Light.Widget.PopupMenu.Small">
+        <item name="android:textColor">@color/primary_text</item>
+    </style>
+
+    <style name="PopupTextAppearanceLarge" parent="@style/TextAppearance.AppCompat.Light.Widget.PopupMenu.Large">
+        <item name="android:textColor">@color/primary_text</item>
     </style>
 
     <style name="ActionButtonOverflow" parent="android:style/Widget.Holo.Light.ActionButton.Overflow">

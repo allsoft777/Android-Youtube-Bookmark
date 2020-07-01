@@ -32,6 +32,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="@dimen/common_activity_horizontal_margin"
                 android:src="@drawable/app_logo"
+                android:tint="@color/second_text"
                 android:visibility="gone"/>
 
             <TextView
