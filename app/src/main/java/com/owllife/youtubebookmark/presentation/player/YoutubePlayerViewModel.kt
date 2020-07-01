@@ -18,8 +18,8 @@ class YoutubePlayerViewModel(
     private val bookmarkRepository: BookmarkRepository
 ) : ViewModel() {
 
-    private var _entity: MutableLiveData<BookMarkEntireVO> = MutableLiveData()
-    var entity: LiveData<BookMarkEntireVO> = _entity
+    private var _videoData: MutableLiveData<BookMarkEntireVO> = MutableLiveData()
+    var videoData: LiveData<BookMarkEntireVO> = _videoData
 
     private var _showUiController: MutableLiveData<Boolean> = MutableLiveData(true)
     var showUiController: LiveData<Boolean> = _showUiController
@@ -35,7 +35,7 @@ class YoutubePlayerViewModel(
             _dataLoading.value = true
             val dbId = intent.getIntExtra(PresentationConstants.KEY_DB_ID, -1)
             val data = bookmarkRepository.fetchBookMarkEntireType(dbId)
-            _entity.value = data
+            _videoData.value = data
             _dataLoading.value = false
         }
     }

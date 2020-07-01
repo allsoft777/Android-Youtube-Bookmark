@@ -13,12 +13,9 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
  */
 @BindingAdapter("add_player_listener")
 fun addPlayerListener(view: YouTubePlayerView, data: BookMarkEntireVO?) {
-    if (data == null) {
-        return
-    }
     view.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
         override fun onReady(@NonNull youTubePlayer: YouTubePlayer) {
-            youTubePlayer.loadVideo(data.videoId, 0f)
+            data?.let { youTubePlayer.loadVideo(data.videoId, 0f) }
         }
     })
 }

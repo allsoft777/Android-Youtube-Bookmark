@@ -18,7 +18,7 @@
             android:id="@+id/youtube_player_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            bind:add_player_listener="@{viewModel.entity}"/>
+            bind:add_player_listener="@{viewModel.videoData}"/>
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -36,14 +36,14 @@
                     style="@style/PrimaryLabelTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{viewModel.entity.title}"/>
+                    android:text="@{viewModel.videoData.title}"/>
 
                 <TextView
                     style="@style/SecondaryLabelTextStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="@{viewModel.entity.description}"/>
+                    android:text="@{viewModel.videoData.description}"/>
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </RelativeLayout>
