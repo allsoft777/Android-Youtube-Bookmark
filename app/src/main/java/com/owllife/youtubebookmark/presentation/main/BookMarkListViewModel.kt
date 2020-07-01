@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owllife.youtubebookmark.R
+import com.owllife.youtubebookmark.core.Event
 import com.owllife.youtubebookmark.domain.BookmarkRepository
 import com.owllife.youtubebookmark.entity.BookMarkSimpleVO
 import com.owllife.youtubebookmark.presentation.data.SelectedBookmarkData
@@ -15,6 +16,9 @@ import kotlinx.coroutines.launch
  * @author owllife.dev
  * @since 20. 6. 10
  */
+
+typealias SelectedOptionItem = MutableLiveData<Event<SelectedBookmarkData>>
+
 @Suppress("ReplaceGetOrSet", "ReplacePutWithAssignment")
 class BookMarkListViewModel constructor(
     private val appContext: Context,
@@ -23,7 +27,7 @@ class BookMarkListViewModel constructor(
 
     private var _bookmarkList: HashMap<Int, MutableLiveData<List<BookMarkSimpleVO>>> = HashMap()
     private val _dataLoading: HashMap<Int, MutableLiveData<Boolean>> = HashMap()
-    private var _selectedOptionItem: HashMap<Int, MutableLiveData<SelectedBookmarkData>> = HashMap()
+    private var _selectedOptionItem: HashMap<Int, SelectedOptionItem> = HashMap()
 
     private val _toastText: MutableLiveData<String> = MutableLiveData()
     val toastText: LiveData<String> get() = _toastText
@@ -58,10 +62,10 @@ class BookMarkListViewModel constructor(
         }
     }
 
-    fun getSelectedBookmarkData(categoryId: Int): LiveData<SelectedBookmarkData>? {
+    fun getSelectedBookmarkData(categoryId: Int): LiveData<Event<SelectedBookmarkData>>? {
         val ret = _selectedOptionItem.get(categoryId)
         if (ret == null) {
-            val newData = MutableLiveData<SelectedBookmarkData>()
+            val newData = SelectedOptionItem()
             _selectedOptionItem.put(categoryId, newData)
             return newData
         }
@@ -70,13 +74,16 @@ class BookMarkListViewModel constructor(
 
     fun setSelectedOptionItem(selectedBookmarkData: SelectedBookmarkData) {
         val data = _selectedOptionItem.get(selectedBookmarkData.item.categoryId)
-        data!!.value = selectedBookmarkData
+        data!!.value = Event(selectedBookmarkData)
     }
 
     fun deleteSelectedBookmark(categoryId: Int) {
         viewModelScope.launch {
             setDataLoading(categoryId, true)
-            bookmarkRepository.deleteBookmark(_selectedOptionItem.get(categoryId)!!.value!!.item.id)
+            bookmarkRepository.deleteBookmark(
+                _selectedOptionItem.get(categoryId)!!
+                    .value!!.peekContent().item.id
+            )
             setDataLoading(categoryId, false)
             _toastText.value = appContext.getString(R.string.msg_database_deleted)
             fetchDataFromLocalDb(categoryId)
