@@ -13,6 +13,7 @@ import com.owllife.youtubebookmark.databinding.ActivityEditBookmarkBinding
 import com.owllife.youtubebookmark.injection.ViewModelFactory
 import com.owllife.youtubebookmark.presentation.category.EditCategoryActivity
 import com.owllife.youtubebookmark.presentation.common.BaseActivity
+import com.owllife.youtubebookmark.presentation.util.PresentationConstants
 import com.owllife.youtubebookmark.presentation.util.hideKeyboard
 import kotlinx.android.synthetic.main.toolbar_title_only.*
 
@@ -31,9 +32,17 @@ class EditBookMarkActivity : BaseActivity() {
     }
 
     companion object {
-        fun callingIntent(parentContext: Context) = run {
-            val intent = Intent(parentContext, EditBookMarkActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+        fun callingIntent(parentContext: Context, categoryId: Int?) = run {
+            Intent(parentContext, EditBookMarkActivity::class.java).apply {
+                val args = Bundle().apply {
+                    putInt(
+                        PresentationConstants.KEY_CATEGORY_ID,
+                        categoryId ?: EditBookMarkViewModel.INVALID_ID
+                    )
+                }
+                putExtra(PresentationConstants.KEY_ARGS, args)
+                addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            }
         }
     }
 
@@ -49,6 +58,7 @@ class EditBookMarkActivity : BaseActivity() {
             })
             vm.categoryList.observe(this, Observer { categoryList ->
                 dataBinding.categorySelector.adapter = CategorySpinnerAdapter(this, categoryList)
+                viewModel.selectForwardedCategory()
             })
             vm.hideInputMethod.observe(this, Observer { method ->
                 if (method) hideKeyboard(this, dataBinding.inputUrlEt.windowToken)
@@ -62,5 +72,6 @@ class EditBookMarkActivity : BaseActivity() {
             vm.toastText.observe(this, Observer { msg -> showToastMsg(msg) })
         }
         configureDefaultToolbar(toolbar, getString(R.string.bookmark_management))
+        viewModel.loadArgs(intent.getBundleExtra(PresentationConstants.KEY_ARGS))
     }
 }

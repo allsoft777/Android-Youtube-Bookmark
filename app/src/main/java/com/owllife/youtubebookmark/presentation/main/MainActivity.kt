@@ -40,7 +40,7 @@ class MainActivity : BaseActivity() {
         dataBinding.viewModel = viewModel
 
         viewModel.let { vm ->
-            vm!!.categoryList.observe(this, Observer {
+            vm.categoryList.observe(this, Observer {
                 val pagerAdapter = FragmentPagerItemAdapter(
                     supportFragmentManager, getFragmentItems()
                 )
@@ -61,7 +61,7 @@ class MainActivity : BaseActivity() {
     private fun getFragmentItems(): FragmentPagerItems {
         var creator = FragmentPagerItems.with(this)
         viewModel.let {
-            for (item in it!!.categoryList.value!!) {
+            for (item in it.categoryList.value!!) {
                 val bundle = Bundle()
                 bundle.apply { putInt(PresentationConstants.KEY_CATEGORY_ID, item.id) }
                 creator = creator.add(item.name, BookMarkListFragment::class.java, bundle)
@@ -79,10 +79,15 @@ class MainActivity : BaseActivity() {
         when (item.itemId) {
             R.id.view_type -> viewTypeDialog.show(
                 this,
-                viewModel!!.viewType.value,
-                viewModel!!.setSelectedViewType
+                viewModel.viewType.value,
+                viewModel.setSelectedViewType
             )
-            R.id.bookmark_management -> startActivity(EditBookMarkActivity.callingIntent(this))
+            R.id.bookmark_management -> startActivity(
+                EditBookMarkActivity.callingIntent(
+                    this,
+                    viewModel.currentVisibleCategoryId
+                )
+            )
             R.id.profile -> startActivity(ProfileActivity.callingIntent(this))
         }
         return true

@@ -23,6 +23,9 @@ class MainViewModel constructor(
     private var _viewType: MutableLiveData<Int> = MutableLiveData()
     var viewType: LiveData<Int> = _viewType
 
+    // for caching
+    var currentVisibleCategoryId: Int? = null
+
     init {
         _viewType.value = sharedPref.getViewType()
         fetchCategoryFromLocalRepository()

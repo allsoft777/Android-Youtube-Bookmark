@@ -1,6 +1,7 @@
 package com.owllife.youtubebookmark.presentation.editbookmark
 
 import android.content.Context
+import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,6 +14,7 @@ import com.owllife.youtubebookmark.domain.ResultData
 import com.owllife.youtubebookmark.domain.YoutubeRemoteRepository
 import com.owllife.youtubebookmark.domain.resp.YoutubeVideoResp
 import com.owllife.youtubebookmark.entity.CategoryEntireVO
+import com.owllife.youtubebookmark.presentation.util.PresentationConstants
 import kotlinx.coroutines.launch
 
 /**
@@ -26,11 +28,18 @@ class EditBookMarkViewModel(
     private val youtubeRemoteRepository: YoutubeRemoteRepository
 ) : ViewModel() {
 
+    companion object {
+        const val INVALID_ID: Int = -1
+    }
+
     // two-way data binding
     var movieUrl: MutableLiveData<String> = MutableLiveData()
 
     private var _selectedCategory: MutableLiveData<CategoryEntireVO> = MutableLiveData()
     var selectedCategory: LiveData<CategoryEntireVO> = _selectedCategory
+
+    private var _forwardedCategoryIndex: MutableLiveData<Int> = MutableLiveData()
+    var forwardedCategoryIndex: LiveData<Int> = _forwardedCategoryIndex
 
     private var _movieData: MutableLiveData<YoutubeVideoResp> = MutableLiveData()
     var movieData: LiveData<YoutubeVideoResp> = _movieData
@@ -54,6 +63,7 @@ class EditBookMarkViewModel(
     val toastText: LiveData<String> get() = _toastText
 
     private var _videoId = String.empty()
+    private var _forwardedCategoryId: Int? = INVALID_ID
 
     init {
         loadCategoryData()
@@ -65,6 +75,15 @@ class EditBookMarkViewModel(
         }
     }
 
+    fun loadArgs(args: Bundle?) {
+        _forwardedCategoryId = args?.getInt(PresentationConstants.KEY_CATEGORY_ID)
+    }
+
+    fun selectForwardedCategory() {
+        _forwardedCategoryIndex.value =
+            categoryList.value?.indexOfFirst { it.id == _forwardedCategoryId }
+    }
+
     fun onMovieUrlTextChanged() {
         _hideInputMethod.value = false
     }
@@ -74,7 +93,7 @@ class EditBookMarkViewModel(
     }
 
     fun queryYouTubeVideoInfo() {
-        movieUrl.value = "https://www.youtube.com/watch?v=4bmUFRxNEIg"
+        //movieUrl.value = "https://www.youtube.com/watch?v=4bmUFRxNEIg"
         if (movieUrl.value.isNullOrEmpty()) {
             _toastText.value = appContext.getString(R.string.msg_input_youtube_url)
             return

@@ -2,6 +2,7 @@ package com.owllife.youtubebookmark.presentation.editbookmark
 
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.owllife.youtubebookmark.R
@@ -50,4 +51,9 @@ fun renderYoutubeResp(view: LinearLayout, resp: YoutubeVideoResp?) {
         url = thumbnails.high.url
     }
     (view.findViewById(R.id.thumbnail) as ImageView).loadFromUrl(url)
+}
+
+@BindingAdapter("select_category")
+fun setCategory(view: Spinner, idx: Int) {
+    view.setSelection(idx)
 }

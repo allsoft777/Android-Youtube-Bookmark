@@ -32,6 +32,12 @@ class BookMarkListFragment : Fragment() {
             ViewModelFactory(requireActivity().application)
         ).get(BookMarkListViewModel::class.java)
     }
+    private val sharedMainViewModel: MainViewModel by lazy {
+        ViewModelProvider(
+            requireActivity(),
+            ViewModelFactory(requireActivity().application)
+        ).get(MainViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,13 +70,6 @@ class BookMarkListFragment : Fragment() {
     }
 
     private fun bindViewType() {
-        val sharedMainViewModel: MainViewModel by lazy {
-            ViewModelProvider(
-                requireActivity(),
-                ViewModelFactory(requireActivity().application)
-            ).get(MainViewModel::class.java)
-        }
-
         sharedMainViewModel.viewType.observe(viewLifecycleOwner, Observer { viewType ->
             val adapter = dataBinding.bookmarkListview.adapter
             if (adapter == null) {
@@ -98,6 +97,14 @@ class BookMarkListFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         loadData()
+    }
+
+    @Suppress("DEPRECATION")
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isVisibleToUser && ::dataBinding.isInitialized) {
+            sharedMainViewModel.currentVisibleCategoryId = dataBinding.categoryId
+        }
     }
 
     private fun loadData() {

@@ -58,7 +58,8 @@
                             android:layout_height="wrap_content"
                             android:background="@color/grey_200"
                             android:minHeight="45dp"
-                            android:onItemSelected="@{(parent,view,pos,id) -> viewModel.setSelectedCategory(pos)}"/>
+                            android:onItemSelected="@{(parent,view,pos,id) -> viewModel.setSelectedCategory(pos)}"
+                            bind:select_category="@{viewModel.forwardedCategoryIndex}"/>
 
                         <ImageView
                             android:layout_width="22dp"
