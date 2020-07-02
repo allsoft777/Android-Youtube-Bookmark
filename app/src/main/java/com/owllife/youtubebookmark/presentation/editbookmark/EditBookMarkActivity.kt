@@ -72,6 +72,7 @@ class EditBookMarkActivity : BaseActivity() {
             vm.toastText.observe(this, Observer { msg -> showToastMsg(msg) })
         }
         configureDefaultToolbar(toolbar, getString(R.string.bookmark_management))
+        viewModel.loadCategoryData()
         viewModel.loadArgs(intent.getBundleExtra(PresentationConstants.KEY_ARGS))
     }
 }

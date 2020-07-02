@@ -65,11 +65,7 @@ class EditBookMarkViewModel(
     private var _videoId = String.empty()
     private var _forwardedCategoryId: Int? = INVALID_ID
 
-    init {
-        loadCategoryData()
-    }
-
-    private fun loadCategoryData() {
+    fun loadCategoryData() {
         viewModelScope.launch {
             categoryList = categoryRepository.observeCategories()
         }
