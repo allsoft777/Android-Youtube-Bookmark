@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "111111111111",
+    "firebase_url": "https://bookmark-dev-94ffb.firebaseio.com",
+    "project_id": "bookmark-dev-94ffb",
+    "storage_bucket": "bookmark-dev-94ffb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:111111111111:android:1111111111111",
+        "android_client_info": {
+          "package_name": "com.owllife.youtubebookmark"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "111111111111-11111111111111111.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.owllife.youtubebookmark",
+            "certificate_hash": "11111111111111111111111111111111"
+          }
+        },
+        {
+          "client_id": "111111111111-11111111111111111111.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "11111111111111111111111111"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "111111111111-111111111111111111111.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
