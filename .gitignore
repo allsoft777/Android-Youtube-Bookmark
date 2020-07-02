@@ -9,4 +9,4 @@
 .cxx
 
 # private resources
-# google-services.json  temporary disabled to commit the fake file.
+google-services.json
