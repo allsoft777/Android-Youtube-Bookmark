@@ -41,6 +41,12 @@
 - [smarttablayout] (https://github.com/ogaclejapan/SmartTabLayout)
 - [android-gif-drawable] (https://github.com/koral--/android-gif-drawable)
 
+###### Unit test
+- [MockK] (https://mockk.io/)
+- [Robolectic] (http://robolectric.org/)
+- [Kluent] (https://github.com/MarkusAmshove/Kluent)
+- Espresso
+- Kotlinx-coroutines (android, test)
 
 ## 앱 실행 방법
 1. 저장소를 로컬에 복사합니다.
@@ -75,7 +81,7 @@ ViewModelScope은 앱의 각 ViewModel을 대상으로 정의됩니다. 이 범�
 코루틴은 ViewModel이 활성 상태인 경우에만 실행해야 할 작업이 있을 때 유용합니다.
 예를 들어 레이아웃의 일부 데이터를 계산한다면 작업의 범위를 ViewModel로 지정하여 ViewModel을 삭제하면 리소스를 소모하지 않도록 작업이 자동으로 취소됩니다.
 
-다음 예에서와 같이 ViewModel의 viewModelScope 속성을 통해 ViewModel의 CoroutineScope에 액세스할 수 있습니다. ![Google Doc](https://developer.android.com/topic/libraries/architecture/coroutines)
+다음 예에서와 같이 ViewModel의 viewModelScope 속성을 통해 ViewModel의 CoroutineScope에 액세스할 수 있습니다. [Google Doc](https://developer.android.com/topic/libraries/architecture/coroutines)
 ```
 class YoutubePlayerViewModel: ViewModel() {
 
