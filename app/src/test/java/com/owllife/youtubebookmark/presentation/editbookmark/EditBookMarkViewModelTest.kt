@@ -98,4 +98,16 @@ class EditBookMarkViewModelTest : BaseTest() {
         // then
         editBookMarkViewModel.forwardedCategoryIndex.value shouldEqualTo -1
     }
+
+    @Test
+    fun `youtube_url`() {
+        editBookMarkViewModel.movieUrl.value = ""
+
+    }
 }
+
+
+
+
+
+

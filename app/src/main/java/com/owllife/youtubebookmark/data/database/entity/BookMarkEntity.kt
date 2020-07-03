@@ -6,6 +6,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.owllife.youtubebookmark.entity.BookMarkEntireVO
 import com.owllife.youtubebookmark.entity.BookMarkSimpleVO
+import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
 
 /**
@@ -43,6 +44,7 @@ data class BookMarkEntity(
     @ColumnInfo(name = "bookmarked_at")
     var bookmarked_at: Long
 ) : Parcelable {
+    @IgnoredOnParcel
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
 

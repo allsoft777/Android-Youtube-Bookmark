@@ -9,15 +9,21 @@ import com.owllife.youtubebookmark.entity.BookMarkEntireVO
  * @author owllife.dev
  * @since 20. 6. 23
  */
-fun extractYouTubeVideoIdFromUrl(movieUrl: String): String {
+fun extractYouTubeVideoIdFromUrl(movieUrl: String?): String {
     var videoId = String.empty()
-    if (movieUrl.contains("youtu.be/")) {
-        val split = movieUrl.split("/")
-        videoId = split[split.size - 1]
-    } else if (movieUrl.contains("watch?v=")) {
-        val split = movieUrl.split("watch?v=")
-        if (split.size == 2) {
-            videoId = split[split.size - 1]
+    movieUrl?.let {
+        var split: List<String>? = null
+        if (movieUrl.contains("youtu.be/")) {
+            split = movieUrl.split("youtu.be/")
+        } else if (movieUrl.contains("watch?v=")) {
+            split = movieUrl.split("watch?v=")
+        }
+        split?.let {
+            if (split.size == 2) {
+                videoId = split[1]
+            }
+            videoId = videoId.removeSuffix("/")
+            if (videoId.contains('/')) videoId = String.empty()
         }
     }
     return videoId
