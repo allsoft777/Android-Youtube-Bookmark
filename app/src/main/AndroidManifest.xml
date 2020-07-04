@@ -9,7 +9,7 @@
     <application
         android:name=".core.MainApp"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher_round"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -33,9 +33,7 @@
 
         <activity
             android:name=".presentation.editbookmark.EditBookMarkActivity"
-            android:label="@string/bookmark_management">
-
-        </activity>
+            android:label="@string/bookmark_management"/>
 
         <activity
             android:name=".presentation.player.YoutubePlayerActivity"

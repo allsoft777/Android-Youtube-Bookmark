@@ -1,3 +1,5 @@
+![banner](https://github.com/allsoft777/Android-Youtube-Bookmark/blob/master/materials/banner_1024_500.png)
+
 # YoutubeBookmark - Clean Architecture
 이 저장소는 유튜브 영상을 북마크해서 플레이 할 수 있는 안드로이드 어플리케이션입니다. 코틀린으로 작성하였고, Clean Architecture 를 적용하였습니다.
 앱 기능보다는 코드 구조와 얼마나 코틀린 스럽게 작성하였는지를 공유하고 유능한 개발자분들로부터 다른 인사이트를 얻고자 이 저장소를 만들게 되었습니다.
