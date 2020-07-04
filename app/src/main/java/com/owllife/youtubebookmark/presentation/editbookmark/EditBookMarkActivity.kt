@@ -52,6 +52,7 @@ class EditBookMarkActivity : BaseActivity() {
         dataBinding.lifecycleOwner = this
         dataBinding.viewModel = viewModel
 
+        viewModel.loadCategoryData()
         viewModel.let { vm ->
             vm.dataLoading.observe(this, Observer { isLoading ->
                 if (isLoading) loadingDialog.value.show() else loadingDialog.value.dismiss()
@@ -72,7 +73,6 @@ class EditBookMarkActivity : BaseActivity() {
             vm.toastText.observe(this, Observer { msg -> showToastMsg(msg) })
         }
         configureDefaultToolbar(toolbar, getString(R.string.bookmark_management))
-        viewModel.loadCategoryData()
         viewModel.loadArgs(intent.getBundleExtra(PresentationConstants.KEY_ARGS))
     }
 }
