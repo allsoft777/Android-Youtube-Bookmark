@@ -25,9 +25,19 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        release {
+            storeFile file('../keys/bookmark.jks')
+            storePassword System.getenv('APP_YOUTUBE_BOOKMARK_PW')
+            keyAlias System.getenv('APP_YOUTUBE_BOOKMARK_ALIAS')
+            keyPassword System.getenv('APP_YOUTUBE_BOOKMARK_PW')
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
